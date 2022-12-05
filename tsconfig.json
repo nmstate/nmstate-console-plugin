@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": false,
+
+    "target": "es2020",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "jsx": "react",
+
+    "baseUrl": "./",
+    "outDir": "dist"
+  },
+  "include": ["src", "pkg"],
+  "exclude": ["node_modules", "dist"],
+  "ts-node": {
+    "files": true,
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}

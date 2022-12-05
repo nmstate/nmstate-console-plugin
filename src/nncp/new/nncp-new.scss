@@ -1,0 +1,13 @@
+.nncp-new-content {
+  max-width: 700px;
+
+  &__h1 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--pf-global--spacer--md);
+  }
+
+  &__add-new-interface {
+    margin-left: var(--pf-global--spacer--sm);
+  }
+}
