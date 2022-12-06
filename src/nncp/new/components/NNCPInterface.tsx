@@ -1,92 +1,90 @@
 import React, { FC, useState } from 'react';
+import { InterfaceType, NodeNetworkConfigurationInterface } from 'nmstate-ts';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
-import {
-  Button,
-  FormFieldGroupExpandable,
-  FormFieldGroupHeader,
-  FormGroup,
-  Select,
-  SelectOption,
-  SelectVariant,
-  TextInput,
-} from '@patternfly/react-core';
-import { MinusCircleIcon } from '@patternfly/react-icons';
+import { FormGroup, Select, SelectOption, SelectVariant, TextInput } from '@patternfly/react-core';
 
-import { NETWORK_STATES } from './constants';
-import { NodeNetworkConfigurationInterface } from 'nmstate-ts';
+import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
+
+import './nncp-interface.scss';
 
 type NNCPInterfaceProps = {
-  index: number;
-  nncpInterface?: NodeNetworkConfigurationInterface | any;
+  id: number;
+  nncpInterface?: NodeNetworkConfigurationInterface;
   onInterfaceChange?: (
-    updateInterface: (draftInterface: NodeNetworkConfigurationInterface) => void,
+    interfaceId: number,
+    updateInterface: (nncpInterface: NodeNetworkConfigurationInterface) => void,
   ) => void;
 };
 
-const NNCPInterface: FC<NNCPInterfaceProps> = ({ index, nncpInterface, onInterfaceChange }) => {
+const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceChange }) => {
   const { t } = useNMStateTranslation();
-  const [isNetStateOpen, setNetStateOpen] = useState(false);
+  const [isStateOpen, setStateOpen] = useState(false);
+  const [isTypeOpen, setTypeOpen] = useState(false);
 
   const handleStateChange = (
     event: React.MouseEvent<Element, MouseEvent>,
     newState: NETWORK_STATES,
   ) => {
-    onInterfaceChange((draftInterface: NodeNetworkConfigurationInterface) => {
-      draftInterface.state = newState;
-    });
+    onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.state = newState));
   };
 
   const handleNameChange = (newName: string) => {
-    onInterfaceChange((draftInterface: NodeNetworkConfigurationInterface) => {
-      draftInterface.name = newName;
-    });
+    onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.name = newName));
+  };
+
+  const handleTypechange = (event: React.MouseEvent<Element, MouseEvent>, newType: string) => {
+    onInterfaceChange(
+      id,
+      (draftNNCPInterface) => (draftNNCPInterface.type = newType as InterfaceType),
+    );
   };
 
   return (
-    <FormFieldGroupExpandable
-      toggleAriaLabel="Details"
-      isExpanded={true}
-      header={
-        <FormFieldGroupHeader
-          titleText={{
-            text: 'Node network configuration policy interface',
-            id: 'nncp-interface-1',
-          }}
-          actions={
-            <Button variant="plain" aria-label={t('Remove')}>
-              <MinusCircleIcon />
-            </Button>
-          }
-        />
-      }
-    >
-      <FormGroup label={t('Interface name')} isRequired fieldId={`nncp-interface-name-${index}`}>
+    <>
+      <FormGroup label={t('Interface name')} isRequired fieldId={`nncp-interface-name-${id}`}>
         <TextInput
           isRequired
-          id={`nncp-interface-name-input-${index}`}
-          name={`nncp-interface-name-input-${index}`}
+          id={`nncp-interface-name-input-${id}`}
+          name={`nncp-interface-name-input-${id}`}
           value={nncpInterface?.name}
           onChange={handleNameChange}
         />
       </FormGroup>
-      <FormGroup label="Network state" isRequired fieldId={`nncp-interface-network-state-${index}`}>
+      <FormGroup label="Network state" isRequired fieldId={`nncp-interface-network-state-${id}`}>
         <Select
           menuAppendTo="parent"
-          isOpen={isNetStateOpen}
-          onToggle={setNetStateOpen}
+          isOpen={isStateOpen}
+          onToggle={setStateOpen}
           onSelect={handleStateChange}
           variant={SelectVariant.single}
           selections={nncpInterface?.state}
         >
           {Object.entries(NETWORK_STATES).map(([key, value]) => (
+            <SelectOption key={key} value={value}>
+              {key}
+            </SelectOption>
+          ))}
+        </Select>
+      </FormGroup>
+
+      <FormGroup label="Type" isRequired fieldId={`nncp-interface-type-${id}`}>
+        <Select
+          menuAppendTo="parent"
+          isOpen={isTypeOpen}
+          onToggle={setTypeOpen}
+          onSelect={handleTypechange}
+          variant={SelectVariant.single}
+          selections={nncpInterface?.type}
+        >
+          {Object.entries(INTERFACE_TYPE_OPTIONS).map(([key, value]) => (
             <SelectOption key={key} value={key}>
               {value}
             </SelectOption>
           ))}
         </Select>
       </FormGroup>
-    </FormFieldGroupExpandable>
+    </>
   );
 };
 

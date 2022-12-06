@@ -43,18 +43,17 @@ const NNCPList: React.FC = () => {
 
   return (
     <>
-      <ListPageHeader
-        title={t('Node network configuration policy')}
-        badge={
-          <ListPageCreateDropdown
-            items={createItems}
-            onClick={onCreate}
-            createAccessReview={{
-              groupVersionKind: NodeNetworkConfigurationPolicyModelRef,
-            }}
-          ></ListPageCreateDropdown>
-        }
-      ></ListPageHeader>
+      <ListPageHeader title={t('Node network configuration policy')}>
+        <ListPageCreateDropdown
+          items={createItems}
+          onClick={onCreate}
+          createAccessReview={{
+            groupVersionKind: NodeNetworkConfigurationPolicyModelRef,
+          }}
+        >
+          {t('Create')}
+        </ListPageCreateDropdown>
+      </ListPageHeader>
       <ListPageBody>
         <VirtualizedTable<V1NodeNetworkConfigurationPolicy>
           data={nncps}
