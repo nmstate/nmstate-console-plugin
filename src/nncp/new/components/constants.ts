@@ -1,4 +1,4 @@
-import { InterfaceType } from 'nmstate-ts';
+import { InterfaceType } from '@types';
 
 export enum NETWORK_STATES {
   Up = 'UP',

@@ -1,5 +1,6 @@
 import { TFunction } from 'react-i18next';
-import { NodeNetworkConfigurationInterface } from 'nmstate-ts';
+
+import { NodeNetworkConfigurationInterface } from '@types';
 
 import { INTERFACE_TYPE_OPTIONS } from './components/constants';
 

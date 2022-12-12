@@ -1,0 +1,22 @@
+diff --git a/src/nmstate-types/models/V1alpha1NodeNetworkConfigurationEnactmentStatus.ts b/src/nmstate-types/models/V1alpha1NodeNetworkConfigurationEnactmentStatus.ts
+index 8f06617..1bd0b52 100644
+--- a/src/nmstate-types/models/V1alpha1NodeNetworkConfigurationEnactmentStatus.ts
++++ b/src/nmstate-types/models/V1alpha1NodeNetworkConfigurationEnactmentStatus.ts
+@@ -83,7 +83,7 @@ export function V1alpha1NodeNetworkConfigurationEnactmentStatusFromJSONTyped(jso
+     }
+     return {
+         
+-        'capturedStates': !exists(json, 'capturedStates') ? undefined : { [key: string]: V1alpha1NodeNetworkConfigurationEnactmentStatusCapturedStatesValue; }FromJSON(json['capturedStates']),
++        'capturedStates': !exists(json, 'capturedStates') ? undefined : json['capturedStates'],
+         'conditions': !exists(json, 'conditions') ? undefined : json['conditions'],
+         'desiredState': !exists(json, 'desiredState') ? undefined : json['desiredState'],
+         'desiredStateMetaInfo': !exists(json, 'desiredStateMetaInfo') ? undefined : V1alpha1NodeNetworkConfigurationEnactmentStatusCapturedStatesValueMetaInfoFromJSON(json['desiredStateMetaInfo']),
+@@ -100,7 +100,7 @@ export function V1alpha1NodeNetworkConfigurationEnactmentStatusToJSON(value?: V1
+     }
+     return {
+         
+-        'capturedStates': { [key: string]: V1alpha1NodeNetworkConfigurationEnactmentStatusCapturedStatesValue; }ToJSON(value.capturedStates),
++        'capturedStates': value.capturedStates,
+         'conditions': value.conditions,
+         'desiredState': value.desiredState,
+         'desiredStateMetaInfo': V1alpha1NodeNetworkConfigurationEnactmentStatusCapturedStatesValueMetaInfoToJSON(value.desiredStateMetaInfo),

@@ -1,1 +1,19 @@
-{}
+{
+  "Add another interface to the policy": "Add another interface to the policy",
+  "Apply this node network configuration policy only to specific subsets of nodes using the node selector": "Apply this node network configuration policy only to specific subsets of nodes using the node selector",
+  "Checking this option will create a new PVC of the bootsource for the new template": "Checking this option will create a new PVC of the bootsource for the new template",
+  "Create": "Create",
+  "Create node network configuration policy": "Create node network configuration policy",
+  "Description": "Description",
+  "Details": "Details",
+  "From Form": "From Form",
+  "Interface name": "Interface name",
+  "Leaving this option unchecked will apply the policy over all matching nodes on the cluster": "Leaving this option unchecked will apply the policy over all matching nodes on the cluster",
+  "Name": "Name",
+  "Node network configuration policy": "Node network configuration policy",
+  "Node network configuration policy interface": "Node network configuration policy interface",
+  "Node network is configured and managed by NM state. Create a node netowrk configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.": "Node network is configured and managed by NM state. Create a node netowrk configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.",
+  "Policy name": "Policy name",
+  "Remove": "Remove",
+  "With YAML": "With YAML"
+}

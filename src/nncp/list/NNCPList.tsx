@@ -3,8 +3,7 @@ import { useHistory } from 'react-router-dom';
 import {
   NodeNetworkConfigurationPolicyModelGroupVersionKind,
   NodeNetworkConfigurationPolicyModelRef,
-} from 'nmstate-ts';
-import { V1NodeNetworkConfigurationPolicy } from 'nmstate-ts';
+} from 'src/console-models';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import {
@@ -14,6 +13,7 @@ import {
   useK8sWatchResource,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { V1NodeNetworkConfigurationPolicy } from '@types';
 
 import NNCPRow from './components/NNCPRow';
 import useNNCPColumns from './hooks/useNNCPColumns';
@@ -39,7 +39,7 @@ const NNCPList: React.FC = () => {
       : history.push(`/k8s/cluster/${NodeNetworkConfigurationPolicyModelRef}/~new/yaml`);
   };
 
-  const [_, activeColumns] = useNNCPColumns();
+  const [, activeColumns] = useNNCPColumns();
 
   return (
     <>

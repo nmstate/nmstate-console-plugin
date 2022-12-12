@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { NodeNetworkConfigurationPolicyModelRef } from 'nmstate-ts';
+import { NodeNetworkConfigurationPolicyModelRef } from 'src/console-models';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import {
