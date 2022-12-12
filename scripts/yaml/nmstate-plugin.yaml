@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nmstate-console-plugin
+  namespace: konveyor-nmstate
+  labels:
+    app: nmstate-console-plugin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nmstate-console-plugin
+  template:
+    metadata:
+      labels:
+        app: nmstate-console-plugin
+    spec:
+      containers:
+        - name: nmstate-console-plugin
+          image: localhost:5001/nmstate-console-plugin
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nmstate-console-plugin
+  namespace: konveyor-nmstate
+  labels:
+    app: nmstate-console-plugin
+spec:
+  ports:
+    - name: 9001-tcp
+      protocol: TCP
+      port: 9001
+      targetPort: 8080
+  selector:
+    app: nmstate-console-plugin
+  type: ClusterIP
+  sessionAffinity: None

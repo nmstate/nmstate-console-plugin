@@ -7,13 +7,11 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "noUnusedLocals": false,
-
     "target": "es2020",
     "module": "es2020",
     "moduleResolution": "node",
     "sourceMap": true,
     "jsx": "react",
-
     "baseUrl": "./",
     "paths": {
       "@types": ["src/nmstate-types/index.ts"]
