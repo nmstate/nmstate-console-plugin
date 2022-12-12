@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
-import { InterfaceType, NodeNetworkConfigurationInterface } from 'nmstate-ts';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { FormGroup, Select, SelectOption, SelectVariant, TextInput } from '@patternfly/react-core';
+import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 
@@ -45,8 +45,8 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
       <FormGroup label={t('Interface name')} isRequired fieldId={`nncp-interface-name-${id}`}>
         <TextInput
           isRequired
-          id={`nncp-interface-name-input-${id}`}
-          name={`nncp-interface-name-input-${id}`}
+          id={`nncp-interface-name-${id}`}
+          name={`nncp-interface-name-${id}`}
           value={nncpInterface?.name}
           onChange={handleNameChange}
         />
@@ -54,6 +54,7 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
       <FormGroup label="Network state" isRequired fieldId={`nncp-interface-network-state-${id}`}>
         <Select
           menuAppendTo="parent"
+          id={`nncp-interface-network-state-${id}`}
           isOpen={isStateOpen}
           onToggle={setStateOpen}
           onSelect={handleStateChange}
@@ -70,6 +71,7 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
 
       <FormGroup label="Type" isRequired fieldId={`nncp-interface-type-${id}`}>
         <Select
+          id={`nncp-interface-type-${id}`}
           menuAppendTo="parent"
           isOpen={isTypeOpen}
           onToggle={setTypeOpen}

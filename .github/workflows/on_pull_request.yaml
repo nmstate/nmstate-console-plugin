@@ -1,0 +1,39 @@
+name: Test
+on:
+  pull_request:
+
+jobs:
+  tests:
+    name: Run linter and tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Check i18n
+        shell: bash
+        run: |
+          yarn i18n
+          GIT_STATUS="$(git status --short --untracked-files locales)"
+          if [ -n "$GIT_STATUS" ]; then
+            echo "i18n files are not up to date. Commit them to fix."
+            git diff
+            exit 1
+          fi
+
+      - name: Test
+        run: yarn test:coverage
+
+      - name: Build
+        run: yarn build

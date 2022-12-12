@@ -1,10 +1,8 @@
 import * as React from 'react';
-import {
-  NodeNetworkConfigurationPolicyModelGroupVersionKind,
-  V1NodeNetworkConfigurationPolicy,
-} from 'nmstate-ts';
+import { NodeNetworkConfigurationPolicyModelGroupVersionKind } from 'src/console-models';
 
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
+import { V1NodeNetworkConfigurationPolicy } from '@types';
 
 const NNCPRow: React.FC<RowProps<V1NodeNetworkConfigurationPolicy>> = ({
   obj,

@@ -15,7 +15,9 @@
     "jsx": "react",
 
     "baseUrl": "./",
-    "outDir": "dist"
+    "paths": {
+      "@types": ["src/nmstate-types/index.ts"]
+    }
   },
   "include": ["src", "pkg"],
   "exclude": ["node_modules", "dist"],

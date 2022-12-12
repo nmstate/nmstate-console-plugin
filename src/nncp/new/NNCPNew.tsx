@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
-import {
-  InterfaceType,
-  NodeNetworkConfigurationInterface,
-  V1NodeNetworkConfigurationPolicy,
-} from 'nmstate-ts';
-import NodeNetworkConfigurationPolicyModel from 'nmstate-ts/console-models/NodeNetworkConfigurationPolicyModel';
+import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { useImmer } from 'use-immer';
 
@@ -24,6 +19,11 @@ import {
 } from '@patternfly/react-core';
 import { HelpIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { MinusCircleIcon } from '@patternfly/react-icons';
+import {
+  InterfaceType,
+  NodeNetworkConfigurationInterface,
+  V1NodeNetworkConfigurationPolicy,
+} from '@types';
 
 import ApplySelectorCheckbox from './components/ApplySelectorCheckbox';
 import { NETWORK_STATES } from './components/constants';

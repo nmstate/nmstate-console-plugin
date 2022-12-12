@@ -4,6 +4,7 @@
   "private": true,
   "repository": "git@github.com:kubev2v/forklift-console-plugin.git",
   "license": "Apache-2.0",
+  "types": "./src/types/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn clean && NODE_ENV=production yarn webpack",
@@ -14,7 +15,8 @@
     "lint:fix": "eslint . --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:updateSnapshot": "jest --updateSnapshot"
+    "test:updateSnapshot": "jest --updateSnapshot",
+    "generate-types": "cd ./src/nmstate-types && ./download-nmstate-crds.sh && cd ../.."
   },
   "devDependencies": {
     "@openshift-console/dynamic-plugin-sdk": "0.0.18",
@@ -61,7 +63,7 @@
     "ts-loader": "^9.3.1",
     "ts-node": "^10.8.1",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
-    "typescript": "^4.7.4",
+    "typescript": "^4.9.4",
     "use-immer": "^0.8.1",
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2",
