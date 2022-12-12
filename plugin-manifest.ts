@@ -1,11 +1,34 @@
 import type { EncodedExtension } from '@openshift/dynamic-plugin-sdk';
 import type {
+  ExtensionK8sModel,
   ResourceClusterNavItem,
   ResourceListPage,
   RoutePage,
 } from '@openshift-console/dynamic-plugin-sdk';
+import type { ConsolePluginMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/schema/plugin-package';
 
-const extensions: EncodedExtension[] = [
+export const pluginMetadata = {
+  name: 'nmstate-console-plugin',
+  version: '0.0.1',
+  displayName: 'OpenShift Console Plugin For NMState',
+  description:
+    'NMState  is a library that manages host netowrking settings in a declarative manner.',
+  exposedModules: {
+    NNCPList: './nncp/list/NNCPList',
+    NNCPNew: './nncp/new/NNCPNew',
+  },
+  dependencies: {
+    '@console/pluginAPI': '*',
+  },
+} as ConsolePluginMetadata;
+
+const NodeNetworkConfigurationPolicyModel: ExtensionK8sModel = {
+  group: 'nmstate.io',
+  kind: 'NodeNetworkConfigurationPolicy',
+  version: 'v1',
+};
+
+export const extensions: EncodedExtension[] = [
   {
     type: 'console.navigation/resource-cluster',
     properties: {
@@ -13,11 +36,7 @@ const extensions: EncodedExtension[] = [
       perspective: 'admin',
       name: '%plugin__nmstate-plugin~NodeNetworkConfigurationPolicy%',
       section: 'networking',
-      model: {
-        group: 'nmstate.io',
-        kind: 'NodeNetworkConfigurationPolicy',
-        version: 'v1',
-      },
+      model: NodeNetworkConfigurationPolicyModel,
       dataAttributes: {
         'data-quickstart-id': 'qs-nav-nncp-list',
         'data-test-id': 'nncp-nav-list',
@@ -28,11 +47,7 @@ const extensions: EncodedExtension[] = [
     type: 'console.page/resource/list',
     properties: {
       perspective: 'admin',
-      model: {
-        group: 'nmstate.io',
-        kind: 'NodeNetworkConfigurationPolicy',
-        version: 'v1',
-      },
+      model: NodeNetworkConfigurationPolicyModel,
       component: { $codeRef: 'NNCPList' },
     },
   } as EncodedExtension<ResourceListPage>,
@@ -57,5 +72,3 @@ const extensions: EncodedExtension[] = [
     },
   } as EncodedExtension<RoutePage>,
 ];
-
-export default extensions;

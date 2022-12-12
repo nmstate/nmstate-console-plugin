@@ -41,6 +41,9 @@ spec:
       containers:
         - name: console
           image: quay.io/openshift/origin-console:latest
+          env:
+            - name: BRIDGE_PLUGINS
+              value: nmstate-console-plugin=http://nmstate-console-plugin.nmstate-ui.svc.cluster.local:9001
 ---
 apiVersion: v1
 kind: Service

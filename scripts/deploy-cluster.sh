@@ -160,9 +160,8 @@ echo "  web console: http://localhost:30080/"
 
 echo ""
 echo "Local registry usage example:"
-echo "  podman build -t localhost:5001/forklift-console-plugin -f Containerfile"
-echo "  podman push localhost:5001/forklift-console-plugin --tls-verify=false"
-echo "  kubectl apply -f scripts/yaml/forklift-plugin.yaml"
+echo "  podman build -t localhost:5001/nmstate-console-plugin -f Containerfile"
+echo "  podman push localhost:5001/nmstate-console-plugin --tls-verify=false"
 
 echo ""
 echo "==========================================="

@@ -8,8 +8,7 @@ import { type Configuration as WebpackConfiguration, EnvironmentPlugin } from 'w
 import { type Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 
 import { DynamicConsoleRemotePlugin } from './src/webpack';
-import extensions from './console-extensions';
-import pluginMetadata from './plugin';
+import { extensions, pluginMetadata } from './plugin-manifest';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -85,9 +84,6 @@ const config: WebpackConfiguration & {
       patterns: [{ from: '../locales', to: '../dist/locales' }],
     }),
     new EnvironmentPlugin({
-      DATA_SOURCE: 'remote',
-      BRAND_TYPE: 'Konveyor',
-      NAMESPACE: 'konveyor-forklift',
       NODE_ENV: isProd ? 'production' : 'development',
     }),
   ],
