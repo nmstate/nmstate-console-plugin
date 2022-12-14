@@ -639,6 +639,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@kubevirt-ui/kubevirt-api@^0.0.47":
+  version "0.0.47"
+  resolved "https://registry.yarnpkg.com/@kubevirt-ui/kubevirt-api/-/kubevirt-api-0.0.47.tgz#763a5c1da69a64772545465c83e1bb9e386d1523"
+  integrity sha512-W+gZymVdT8Jb6alP8PRYlp7JMaki4gK8run45gw+2QOp7VNXDwT21CpZU/eANupftuhIH102hLITAjlvtIS/qA==
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"

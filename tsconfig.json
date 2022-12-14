@@ -14,7 +14,8 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
-      "@types": ["src/nmstate-types/index.ts"]
+      "@types": ["src/nmstate-types/index.ts"],
+      "@utils": ["src/utils"]
     }
   },
   "include": ["src", "pkg"],

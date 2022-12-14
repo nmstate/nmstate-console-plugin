@@ -6,11 +6,14 @@ import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import {
   Checkbox,
   FormGroup,
+  Popover,
   Select,
   SelectOption,
   SelectVariant,
+  Text,
   TextInput,
 } from '@patternfly/react-core';
+import { HelpIcon } from '@patternfly/react-icons';
 import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
@@ -168,7 +171,9 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
       <FormGroup
         label={t('Port')}
         fieldId={`nncp-interface-port-${id}`}
-        helperText={t('Use commas to separate between ports')}
+        helperText={
+          nncpInterface.type === InterfaceType.BOND && t('Use commas to separate between ports')
+        }
       >
         <TextInput
           value={
@@ -181,14 +186,26 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
         />
       </FormGroup>
 
-      <FormGroup fieldId={`nncp-interface-stp-${id}`}>
-        <Checkbox
-          label={t('Enable STP')}
-          id={`nncp-interface-stp-${id}`}
-          isChecked={nncpInterface?.bridge?.options?.stp?.enabled}
-          onChange={onSTPChange}
-        />
-      </FormGroup>
+      {nncpInterface.type === InterfaceType.LINUX_BRIDGE && (
+        <FormGroup fieldId={`nncp-interface-stp-${id}`}>
+          <Checkbox
+            label={
+              <Text>
+                {t('Enable STP')}{' '}
+                <Popover
+                  aria-label={'Help'}
+                  bodyContent={() => <div>{t('STP can be edited in the YAML file')}</div>}
+                >
+                  <HelpIcon />
+                </Popover>
+              </Text>
+            }
+            id={`nncp-interface-stp-${id}`}
+            isChecked={nncpInterface?.bridge?.options?.stp?.enabled}
+            onChange={onSTPChange}
+          />
+        </FormGroup>
+      )}
     </>
   );
 };

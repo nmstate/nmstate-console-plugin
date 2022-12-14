@@ -35,6 +35,7 @@ import {
 import ApplySelectorCheckbox from './components/ApplySelectorCheckbox';
 import { NETWORK_STATES } from './components/constants';
 import NNCPInterface from './components/NNCPInterface';
+import NodeSelectorModal from './components/NodeSelectorModal/NodeSelectorModal';
 import { getExpandableTitle } from './utils';
 
 import './nncp-new.scss';
@@ -64,6 +65,7 @@ const NNCPNew: FC = () => {
   const [nncp, setNNCP] = useImmer(InitialNNCP);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>(undefined);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const onDescriptionChange = (newDescription: string) => {
     setNNCP(({ metadata }) => {
@@ -81,14 +83,9 @@ const NNCPNew: FC = () => {
         };
       }
 
-      const nBridges = nncp.spec.desiredState.interfaces.filter(
-        (nncpInterface: NodeNetworkConfigurationInterface) =>
-          nncpInterface.type === InterfaceType.LINUX_BRIDGE,
-      ).length;
-
-      nncp.spec.desiredState.interfaces.push({
+      nncp.spec.desiredState.interfaces.unshift({
         type: InterfaceType.LINUX_BRIDGE,
-        name: `br${nBridges}`,
+        name: `interface-${nncp.spec.desiredState.interfaces.length}`,
       });
     });
   };
@@ -128,6 +125,15 @@ const NNCPNew: FC = () => {
 
   return (
     <PageSection>
+      <NodeSelectorModal
+        isOpen={modalOpen}
+        nncp={nncp}
+        onClose={() => setModalOpen(false)}
+        onSubmit={(newNNCP) => {
+          setNNCP(newNNCP);
+          setModalOpen(false);
+        }}
+      />
       <div className="nncp-new-content">
         <Title className="nncp-new-content__h1" headingLevel="h1">
           {t('Create node network configuration policy')}
@@ -147,9 +153,13 @@ const NNCPNew: FC = () => {
           </FormGroup>
           <FormGroup fieldId="apply-selector">
             <ApplySelectorCheckbox
-              isChecked={true}
-              onChange={() => {
-                console.log('apply');
+              isChecked={!!nncp.spec.nodeSelector}
+              onChange={(checked) => {
+                if (checked) setModalOpen(true);
+                else
+                  setNNCP((draftNNCP) => {
+                    delete draftNNCP.spec.nodeSelector;
+                  });
               }}
             />
           </FormGroup>
