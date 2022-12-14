@@ -1,11 +1,18 @@
-import * as React from 'react';
+import React, { FC, useState } from 'react';
 import { Trans } from 'react-i18next';
+import { useHistory } from 'react-router';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
+import { getResourceUrl } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { useImmer } from 'use-immer';
 
+import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
 import {
+  ActionGroup,
+  Alert,
+  AlertVariant,
   Button,
+  ButtonType,
   ButtonVariant,
   Form,
   FormFieldGroupExpandable,
@@ -51,9 +58,12 @@ const InitialNNCP: V1NodeNetworkConfigurationPolicy = {
   },
 };
 
-const NNCPNew: React.FC = () => {
+const NNCPNew: FC = () => {
+  const history = useHistory();
   const { t } = useNMStateTranslation();
   const [nncp, setNNCP] = useImmer(InitialNNCP);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error>(undefined);
 
   const onDescriptionChange = (newDescription: string) => {
     setNNCP(({ metadata }) => {
@@ -101,6 +111,21 @@ const NNCPNew: React.FC = () => {
     });
   };
 
+  const onSubmit = () => {
+    setLoading(true);
+    return k8sCreate({
+      model: NodeNetworkConfigurationPolicyModel,
+      data: nncp,
+    })
+      .then(() =>
+        history.push(
+          getResourceUrl({ model: NodeNetworkConfigurationPolicyModel, resource: nncp }),
+        ),
+      )
+      .catch(setError)
+      .finally(() => setLoading(false));
+  };
+
   return (
     <PageSection>
       <div className="nncp-new-content">
@@ -135,7 +160,11 @@ const NNCPNew: React.FC = () => {
               id="policy-name"
               name="policy-name"
               value={nncp.metadata.name}
-              onChange={(newName) => setNNCP(({ metadata }) => (metadata.name = newName))}
+              onChange={(newName) =>
+                setNNCP((draftNNCP) => {
+                  draftNNCP.metadata.name = newName;
+                })
+              }
             />
           </FormGroup>
           <FormGroup label={t('Description')} isRequired fieldId="policy-description-group">
@@ -207,6 +236,31 @@ const NNCPNew: React.FC = () => {
               </FormFieldGroupExpandable>
             ))}
           </div>
+
+          {error && (
+            <Alert
+              variant={AlertVariant.danger}
+              title={t('Create NodeNetworkConfigurationPolicy error')}
+              isInline
+            >
+              {error.message}
+            </Alert>
+          )}
+
+          <ActionGroup className="pf-c-form">
+            <Button
+              isDisabled={loading}
+              type={ButtonType.submit}
+              variant={ButtonVariant.primary}
+              onClick={onSubmit}
+              isLoading={loading}
+            >
+              {t('Create')}
+            </Button>
+            {/* <Button type="button" variant="secondary" onClick={onReload}>
+            {t('Reload')}
+          </Button> */}
+          </ActionGroup>
         </Form>
       </div>
     </PageSection>

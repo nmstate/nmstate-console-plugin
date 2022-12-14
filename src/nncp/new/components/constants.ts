@@ -1,8 +1,8 @@
 import { InterfaceType } from '@types';
 
 export enum NETWORK_STATES {
-  Up = 'UP',
-  Down = 'DOWN',
+  Up = 'up',
+  Down = 'down',
 }
 
 export const INTERFACE_TYPE_OPTIONS = {

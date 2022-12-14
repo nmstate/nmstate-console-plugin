@@ -1,7 +1,16 @@
 import React, { FC, useState } from 'react';
+import { NodeNetworkConfigurationInterfaceBondMode } from 'src/nmstate-types/custom-models/NodeNetworkConfigurationInterfaceBondMode';
+import { ensurePath } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
-import { FormGroup, Select, SelectOption, SelectVariant, TextInput } from '@patternfly/react-core';
+import {
+  Checkbox,
+  FormGroup,
+  Select,
+  SelectOption,
+  SelectVariant,
+  TextInput,
+} from '@patternfly/react-core';
 import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
@@ -27,6 +36,7 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
     newState: NETWORK_STATES,
   ) => {
     onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.state = newState));
+    setStateOpen(false);
   };
 
   const handleNameChange = (newName: string) => {
@@ -34,10 +44,59 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
   };
 
   const handleTypechange = (event: React.MouseEvent<Element, MouseEvent>, newType: string) => {
-    onInterfaceChange(
-      id,
-      (draftNNCPInterface) => (draftNNCPInterface.type = newType as InterfaceType),
-    );
+    onInterfaceChange(id, (draftNNCPInterface) => {
+      draftNNCPInterface.type = newType as InterfaceType;
+
+      if (newType === InterfaceType.LINUX_BRIDGE)
+        draftNNCPInterface.bridge = { port: [], options: {} };
+
+      if (newType === InterfaceType.BOND)
+        draftNNCPInterface['link-aggregation'] = {
+          mode: NodeNetworkConfigurationInterfaceBondMode.BALANCE_RR,
+          port: [],
+        };
+    });
+    setTypeOpen(false);
+  };
+
+  const onIP4Change = (checked: boolean) => {
+    if (checked)
+      onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.ipv4 = { enabled: true }));
+    else {
+      onInterfaceChange(id, (draftNNCPInterface) => {
+        delete draftNNCPInterface.ipv4;
+      });
+    }
+  };
+
+  const onDHCPChange = (checked: boolean) => {
+    onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.ipv4.dhcp = checked));
+  };
+
+  const onSTPChange = (checked: boolean) => {
+    onInterfaceChange(id, (draftNNCPInterface) => {
+      ensurePath(draftNNCPInterface, 'bridge.options');
+
+      draftNNCPInterface.bridge = {
+        options: {
+          stp: { enabled: checked },
+        },
+      };
+    });
+  };
+
+  const onPortChange = (value: string) => {
+    onInterfaceChange(id, (draftNNCPInterface) => {
+      if (draftNNCPInterface.type === InterfaceType.BOND) {
+        ensurePath(draftNNCPInterface, 'link-aggregation.port');
+        draftNNCPInterface['link-aggregation'].port = value.split(',');
+      }
+
+      if (draftNNCPInterface.type === InterfaceType.LINUX_BRIDGE) {
+        ensurePath(draftNNCPInterface, 'bridge.port');
+        draftNNCPInterface.bridge.port = [{ name: value }];
+      }
+    });
   };
 
   return (
@@ -51,7 +110,11 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
           onChange={handleNameChange}
         />
       </FormGroup>
-      <FormGroup label="Network state" isRequired fieldId={`nncp-interface-network-state-${id}`}>
+      <FormGroup
+        label={t('Network state')}
+        isRequired
+        fieldId={`nncp-interface-network-state-${id}`}
+      >
         <Select
           menuAppendTo="parent"
           id={`nncp-interface-network-state-${id}`}
@@ -69,7 +132,7 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
         </Select>
       </FormGroup>
 
-      <FormGroup label="Type" isRequired fieldId={`nncp-interface-type-${id}`}>
+      <FormGroup label={t('Type')} isRequired fieldId={`nncp-interface-type-${id}`}>
         <Select
           id={`nncp-interface-type-${id}`}
           menuAppendTo="parent"
@@ -85,6 +148,46 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
             </SelectOption>
           ))}
         </Select>
+      </FormGroup>
+      <FormGroup label={t('IP configuration')} fieldId={`nncp-interface-ip-${id}`}>
+        <Checkbox
+          label={t('IPV4')}
+          id={`nncp-interface-ip-${id}`}
+          isChecked={!!nncpInterface.ipv4}
+          onChange={onIP4Change}
+        />
+        {!!nncpInterface.ipv4 && (
+          <Checkbox
+            label={t('DHCP')}
+            id={`nncp-interface-dhcp-${id}`}
+            isChecked={nncpInterface.ipv4.dhcp}
+            onChange={onDHCPChange}
+          />
+        )}
+      </FormGroup>
+      <FormGroup
+        label={t('Port')}
+        fieldId={`nncp-interface-port-${id}`}
+        helperText={t('Use commas to separate between ports')}
+      >
+        <TextInput
+          value={
+            nncpInterface?.bridge?.port?.[0]?.name ||
+            nncpInterface?.['link-aggregation']?.port.join(',')
+          }
+          type="text"
+          id={`nncp-interface-port-${id}`}
+          onChange={onPortChange}
+        />
+      </FormGroup>
+
+      <FormGroup fieldId={`nncp-interface-stp-${id}`}>
+        <Checkbox
+          label={t('Enable STP')}
+          id={`nncp-interface-stp-${id}`}
+          isChecked={nncpInterface?.bridge?.options?.stp?.enabled}
+          onChange={onSTPChange}
+        />
       </FormGroup>
     </>
   );
