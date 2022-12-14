@@ -1,28 +1,43 @@
 import { NodeNetworkConfigurationInterfaceIPV4Address } from './NodeNetworkConfigurationInterfaceIPV4Address';
 
 export interface NodeNetworkConfigurationInterfaceIPV4 {
+  /**
+   * The enabled property is the boolean switch to enable and disable the whole IP stack.
+   * For IPv6 with enabled: false, the link local address will also be removed from this interface.
+   * If explicitly set to enabled: false, all other IP parameters will be ignored and will not fail the verification
+   */
   enabled: boolean;
+  /** The dhcp property is the boolean switch for DHCP on specified interface. */
   dhcp?: boolean;
 
   /**
-   * This property only shows when dhcp is true when querying.
-   * This property is ignored when dhcp is false when applying.
+   * The auto-routes property is the boolean switch for whether apply routes entries(including default gateway) retried from dynamic configuration method.
+   * Set to true by default unless current state set to false explicitly.
    */
-  auto_routes?: boolean;
+  'auto-routes'?: boolean;
 
   /**
-   * This property only shows when dhcp is true when querying.
-   * This property is ignored when dhcp is false when applying.
+   * The auto-routes property is the boolean switch for whether apply default gateway retried from dynamic configuration method.
+   * Set to true by default unless current state set to false explicitly.
    */
-  auto_gateway?: boolean;
+  'auto-gateway'?: boolean;
 
   /**
-   * This property only shows when dhcp is true when querying.
-   * This property is ignored when dhcp is false when applying.
+   * The auto-dns property is the boolean switch for whether apply DNS configurations retried from dynamic configuration method.
+   * Set to true by default unless current state set to false explicitly.
    */
-  auto_dns?: boolean;
+  'auto-dns'?: boolean;
+  /**
+   * The auto-route-table-id property is the integer for route table ID of the routes retried from dynamic configuration method.
+   * If not mentioned in desire state or set to 0, nmstate will use the main table ID 254.
+   */
+  'auto-route-table-id'?: number;
 
-  auto_route_table_id?: number;
+  /**
+   * The auto-route-metric property is the integer for route metric of the routes retried from dynamic configuration method.
+   * If not mentioned in desire state or set to -1, nmstate will let network backend to determine the metric.
+   */
+  'auto-route-metric'?: number;
 
   /** when dhcp is true, this property is ignored */
   address?: NodeNetworkConfigurationInterfaceIPV4Address[];

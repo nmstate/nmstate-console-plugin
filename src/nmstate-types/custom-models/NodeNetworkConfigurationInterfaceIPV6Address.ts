@@ -1,4 +1,5 @@
 export interface NodeNetworkConfigurationInterfaceIPV6Address {
-  address_ip: string;
-  address_prefix_length: number;
+  ip: string;
+  'prefix-length'?: number;
+  'mptcp-flags'?: string[];
 }
