@@ -1,10 +1,10 @@
-import React, { FC, useState } from 'react';
-import { modelToGroupVersionKind } from 'src/console-models/modelUtils';
+import React, { FC } from 'react';
+import NodeModel, { NodeModelGroupVersionKind } from 'src/console-models/NodeModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { useImmer } from 'use-immer';
 
 import { IoK8sApiCoreV1Node } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import { K8sModel, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
   Button,
@@ -29,25 +29,10 @@ type NodeSelectorModalProps = {
     newNNCP: V1NodeNetworkConfigurationPolicy,
   ) => Promise<V1NodeNetworkConfigurationPolicy | void> | void;
 };
-
-export const NodeModel: K8sModel = {
-  apiVersion: 'v1',
-  label: 'Node',
-  // t('public~Node')
-  labelKey: 'public~Node',
-  plural: 'nodes',
-  abbr: 'N',
-  kind: 'Node',
-  id: 'node',
-  labelPlural: 'Nodes',
-  // t('public~Nodes')
-  labelPluralKey: 'public~Nodes',
-};
-
 const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ nncp, isOpen, onClose, onSubmit }) => {
   const { t } = useNMStateTranslation();
   const [nodes, nodesLoaded] = useK8sWatchResource<IoK8sApiCoreV1Node[]>({
-    groupVersionKind: modelToGroupVersionKind(NodeModel),
+    groupVersionKind: NodeModelGroupVersionKind,
     isList: true,
   });
   const [selectorLabels, setSelectorLabels] = useImmer(

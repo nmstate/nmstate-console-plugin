@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { modelToGroupVersionKind } from 'src/console-models/modelUtils';
+import { NodeModelGroupVersionKind } from 'src/console-models/NodeModel';
 import Loading from 'src/utils/components/Loading/Loading';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { IoK8sApiCoreV1Node } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import { GreenCheckCircleIcon, ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
+import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Alert,
   AlertVariant,
@@ -14,8 +14,6 @@ import {
   pluralize,
   Popover,
 } from '@patternfly/react-core';
-
-import { NodeModel } from '../NodeSelectorModal';
 
 type NodeCheckerAlertProps = {
   qualifiedNodes: IoK8sApiCoreV1Node[];
@@ -70,7 +68,7 @@ const NodeCheckerAlert: React.FC<NodeCheckerAlertProps> = ({ qualifiedNodes, nod
                 <Flex key={node.metadata.uid}>
                   <FlexItem spacer={{ default: 'spacerXs' }}>
                     <ResourceLink
-                      groupVersionKind={modelToGroupVersionKind(NodeModel)}
+                      groupVersionKind={NodeModelGroupVersionKind}
                       name={node.metadata.name}
                     />
                   </FlexItem>

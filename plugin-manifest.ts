@@ -14,8 +14,8 @@ export const pluginMetadata = {
   description:
     'NMState  is a library that manages host netowrking settings in a declarative manner.',
   exposedModules: {
-    NNCPList: './nncp/list/NNCPList',
-    NNCPNew: './nncp/new/NNCPNew',
+    PoliciesList: './policies/list/PoliciesList',
+    NewPolicy: './policies/new/NewPolicy',
   },
   dependencies: {
     '@console/pluginAPI': '*',
@@ -32,7 +32,7 @@ export const extensions: EncodedExtension[] = [
   {
     type: 'console.navigation/resource-cluster',
     properties: {
-      id: 'nncp',
+      id: 'policy',
       perspective: 'admin',
       name: '%plugin__nmstate-plugin~NodeNetworkConfigurationPolicy%',
       section: 'networking',
@@ -48,7 +48,7 @@ export const extensions: EncodedExtension[] = [
     properties: {
       perspective: 'admin',
       model: NodeNetworkConfigurationPolicyModel,
-      component: { $codeRef: 'NNCPList' },
+      component: { $codeRef: 'PoliciesList' },
     },
   } as EncodedExtension<ResourceListPage>,
 
@@ -67,7 +67,7 @@ export const extensions: EncodedExtension[] = [
         'data-test-id': 'nncp-nav-item',
       },
       component: {
-        $codeRef: 'NNCPNew',
+        $codeRef: 'NewPolicy',
       },
     },
   } as EncodedExtension<RoutePage>,

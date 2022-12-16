@@ -18,9 +18,7 @@ import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 
-import './nncp-interface.scss';
-
-type NNCPInterfaceProps = {
+type PolicyInterfaceProps = {
   id: number;
   nncpInterface?: NodeNetworkConfigurationInterface;
   onInterfaceChange?: (
@@ -29,7 +27,7 @@ type NNCPInterfaceProps = {
   ) => void;
 };
 
-const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceChange }) => {
+const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterfaceChange }) => {
   const { t } = useNMStateTranslation();
   const [isStateOpen, setStateOpen] = useState(false);
   const [isTypeOpen, setTypeOpen] = useState(false);
@@ -104,11 +102,11 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
 
   return (
     <>
-      <FormGroup label={t('Interface name')} isRequired fieldId={`nncp-interface-name-${id}`}>
+      <FormGroup label={t('Interface name')} isRequired fieldId={`policy-interface-name-${id}`}>
         <TextInput
           isRequired
-          id={`nncp-interface-name-${id}`}
-          name={`nncp-interface-name-${id}`}
+          id={`policy-interface-name-${id}`}
+          name={`policy-interface-name-${id}`}
           value={nncpInterface?.name}
           onChange={handleNameChange}
         />
@@ -116,11 +114,11 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
       <FormGroup
         label={t('Network state')}
         isRequired
-        fieldId={`nncp-interface-network-state-${id}`}
+        fieldId={`policy-interface-network-state-${id}`}
       >
         <Select
           menuAppendTo="parent"
-          id={`nncp-interface-network-state-${id}`}
+          id={`policy-interface-network-state-${id}`}
           isOpen={isStateOpen}
           onToggle={setStateOpen}
           onSelect={handleStateChange}
@@ -135,9 +133,9 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
         </Select>
       </FormGroup>
 
-      <FormGroup label={t('Type')} isRequired fieldId={`nncp-interface-type-${id}`}>
+      <FormGroup label={t('Type')} isRequired fieldId={`policy-interface-type-${id}`}>
         <Select
-          id={`nncp-interface-type-${id}`}
+          id={`policy-interface-type-${id}`}
           menuAppendTo="parent"
           isOpen={isTypeOpen}
           onToggle={setTypeOpen}
@@ -152,17 +150,17 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
           ))}
         </Select>
       </FormGroup>
-      <FormGroup label={t('IP configuration')} fieldId={`nncp-interface-ip-${id}`}>
+      <FormGroup label={t('IP configuration')} fieldId={`policy-interface-ip-${id}`}>
         <Checkbox
           label={t('IPV4')}
-          id={`nncp-interface-ip-${id}`}
+          id={`policy-interface-ip-${id}`}
           isChecked={!!nncpInterface.ipv4}
           onChange={onIP4Change}
         />
         {!!nncpInterface.ipv4 && (
           <Checkbox
             label={t('DHCP')}
-            id={`nncp-interface-dhcp-${id}`}
+            id={`policy-interface-dhcp-${id}`}
             isChecked={nncpInterface.ipv4.dhcp}
             onChange={onDHCPChange}
           />
@@ -170,7 +168,7 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
       </FormGroup>
       <FormGroup
         label={t('Port')}
-        fieldId={`nncp-interface-port-${id}`}
+        fieldId={`policy-interface-port-${id}`}
         helperText={
           nncpInterface.type === InterfaceType.BOND && t('Use commas to separate between ports')
         }
@@ -181,13 +179,13 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
             nncpInterface?.['link-aggregation']?.port.join(',')
           }
           type="text"
-          id={`nncp-interface-port-${id}`}
+          id={`policy-interface-port-${id}`}
           onChange={onPortChange}
         />
       </FormGroup>
 
       {nncpInterface.type === InterfaceType.LINUX_BRIDGE && (
-        <FormGroup fieldId={`nncp-interface-stp-${id}`}>
+        <FormGroup fieldId={`policy-interface-stp-${id}`}>
           <Checkbox
             label={
               <Text>
@@ -200,7 +198,7 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
                 </Popover>
               </Text>
             }
-            id={`nncp-interface-stp-${id}`}
+            id={`policy-interface-stp-${id}`}
             isChecked={nncpInterface?.bridge?.options?.stp?.enabled}
             onChange={onSTPChange}
           />
@@ -210,4 +208,4 @@ const NNCPInterface: FC<NNCPInterfaceProps> = ({ id, nncpInterface, onInterfaceC
   );
 };
 
-export default NNCPInterface;
+export default PolicyInterface;

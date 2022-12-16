@@ -9,7 +9,10 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 
-const useNNCPColumns = (): [TableColumn<K8sResourceCommon>[], TableColumn<K8sResourceCommon>[]] => {
+const usePolicyColumns = (): [
+  TableColumn<K8sResourceCommon>[],
+  TableColumn<K8sResourceCommon>[],
+] => {
   const { t } = useNMStateTranslation();
 
   const columns: TableColumn<K8sResourceCommon>[] = useMemo(
@@ -19,7 +22,17 @@ const useNNCPColumns = (): [TableColumn<K8sResourceCommon>[], TableColumn<K8sRes
         id: 'name',
         transforms: [sortable],
         sort: 'metadata.name',
-        props: { className: 'pf-m-width-15' },
+        props: { className: 'pf-m-width-30' },
+      },
+      {
+        title: t('Matched nodes'),
+        id: 'nodes',
+        props: { className: 'pf-m-width-30' },
+      },
+      {
+        title: t('Node network state'),
+        id: 'status',
+        props: { className: 'pf-m-width-30' },
       },
       {
         title: '',
@@ -39,4 +52,4 @@ const useNNCPColumns = (): [TableColumn<K8sResourceCommon>[], TableColumn<K8sRes
   return [columns, activeColumns];
 };
 
-export default useNNCPColumns;
+export default usePolicyColumns;

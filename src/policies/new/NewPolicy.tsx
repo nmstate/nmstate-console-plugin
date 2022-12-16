@@ -34,13 +34,13 @@ import {
 
 import ApplySelectorCheckbox from './components/ApplySelectorCheckbox';
 import { NETWORK_STATES } from './components/constants';
-import NNCPInterface from './components/NNCPInterface';
 import NodeSelectorModal from './components/NodeSelectorModal/NodeSelectorModal';
+import PolicyInterface from './components/PolicyInterface';
 import { getExpandableTitle } from './utils';
 
-import './nncp-new.scss';
+import './new-policy.scss';
 
-const InitialNNCP: V1NodeNetworkConfigurationPolicy = {
+const initialPolicy: V1NodeNetworkConfigurationPolicy = {
   apiVersion: `${NodeNetworkConfigurationPolicyModel.apiGroup}/${NodeNetworkConfigurationPolicyModel.apiVersion}`,
   kind: NodeNetworkConfigurationPolicyModel.kind,
   metadata: {
@@ -59,10 +59,10 @@ const InitialNNCP: V1NodeNetworkConfigurationPolicy = {
   },
 };
 
-const NNCPNew: FC = () => {
+const NewPolicy: FC = () => {
   const history = useHistory();
   const { t } = useNMStateTranslation();
-  const [nncp, setNNCP] = useImmer(InitialNNCP);
+  const [nncp, setNNCP] = useImmer(initialPolicy);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>(undefined);
   const [modalOpen, setModalOpen] = useState(false);
@@ -134,8 +134,8 @@ const NNCPNew: FC = () => {
           setModalOpen(false);
         }}
       />
-      <div className="nncp-new-content">
-        <Title className="nncp-new-content__h1" headingLevel="h1">
+      <div className="new-policy-content">
+        <Title className="new-policy-content__h1" headingLevel="h1">
           {t('Create node network configuration policy')}
 
           <Button variant={ButtonVariant.link}>Edit YAML</Button>
@@ -203,7 +203,7 @@ const NNCPNew: FC = () => {
               </Popover>
             </Text>
 
-            <Text className="nncp-new-content__add-new-interface">
+            <Text className="new-policy-content__add-new-interface">
               <Button
                 className="pf-m-link--align-left"
                 onClick={addNewInterface}
@@ -217,7 +217,7 @@ const NNCPNew: FC = () => {
             {nncp.spec?.desiredState?.interfaces.map((nncpInterface, index) => (
               <FormFieldGroupExpandable
                 key={`${nncpInterface.type}-${index}`}
-                className="nncp-interface__expandable"
+                className="policy-interface__expandable"
                 toggleAriaLabel={t('Details')}
                 isExpanded={true}
                 header={
@@ -238,7 +238,7 @@ const NNCPNew: FC = () => {
                   />
                 }
               >
-                <NNCPInterface
+                <PolicyInterface
                   id={index}
                   nncpInterface={nncpInterface}
                   onInterfaceChange={onInterfaceChange}
@@ -277,4 +277,4 @@ const NNCPNew: FC = () => {
   );
 };
 
-export default NNCPNew;
+export default NewPolicy;

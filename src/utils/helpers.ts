@@ -1,3 +1,4 @@
+import { IoK8sApiCoreV1Node } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { K8sModel, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 
 import { ALL_NAMESPACES_SESSION_KEY } from './constants';
