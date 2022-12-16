@@ -6,8 +6,6 @@ import {
   ExpandableSection,
   Modal,
   Tab,
-  TabContent,
-  TabContentBody,
   Tabs,
   TabTitleIcon,
   TabTitleText,
