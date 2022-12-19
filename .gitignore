@@ -99,3 +99,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+
+## Cypress gitignore
+
+cypress/videos
+cypress/screenshots

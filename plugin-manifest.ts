@@ -7,6 +7,8 @@ import type {
 } from '@openshift-console/dynamic-plugin-sdk';
 import type { ConsolePluginMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/schema/plugin-package';
 
+import NodeNetworkConfigurationPolicyModel from './src/console-models/NodeNetworkConfigurationPolicyModel';
+
 export const pluginMetadata = {
   name: 'nmstate-console-plugin',
   version: '0.0.1',
@@ -22,10 +24,10 @@ export const pluginMetadata = {
   },
 } as ConsolePluginMetadata;
 
-const NodeNetworkConfigurationPolicyModel: ExtensionK8sModel = {
-  group: 'nmstate.io',
-  kind: 'NodeNetworkConfigurationPolicy',
-  version: 'v1',
+const PolicyExtensionModel: ExtensionK8sModel = {
+  group: NodeNetworkConfigurationPolicyModel.apiGroup as string,
+  kind: NodeNetworkConfigurationPolicyModel.kind,
+  version: NodeNetworkConfigurationPolicyModel.apiVersion,
 };
 
 export const extensions: EncodedExtension[] = [
@@ -36,10 +38,10 @@ export const extensions: EncodedExtension[] = [
       perspective: 'admin',
       name: '%plugin__nmstate-plugin~NodeNetworkConfigurationPolicy%',
       section: 'networking',
-      model: NodeNetworkConfigurationPolicyModel,
+      model: PolicyExtensionModel,
       dataAttributes: {
-        'data-quickstart-id': 'qs-nav-nncp-list',
-        'data-test-id': 'nncp-nav-list',
+        'data-quickstart-id': 'qs-nav-policy-list',
+        'data-test-id': 'policy-nav-list',
       },
     },
   } as EncodedExtension<ResourceClusterNavItem>,
@@ -47,7 +49,7 @@ export const extensions: EncodedExtension[] = [
     type: 'console.page/resource/list',
     properties: {
       perspective: 'admin',
-      model: NodeNetworkConfigurationPolicyModel,
+      model: PolicyExtensionModel,
       component: { $codeRef: 'PoliciesList' },
     },
   } as EncodedExtension<ResourceListPage>,
@@ -63,8 +65,8 @@ export const extensions: EncodedExtension[] = [
       id: 'networking',
       name: '%plugin__nmstate-console-plugin~NodeNetworkConfigurationPolicy%',
       dataAttributes: {
-        'data-quickstart-id': 'qs-nav-sec-nncp',
-        'data-test-id': 'nncp-nav-item',
+        'data-quickstart-id': 'qs-nav-sec-policy',
+        'data-test-id': 'policy-nav-item',
       },
       component: {
         $codeRef: 'NewPolicy',

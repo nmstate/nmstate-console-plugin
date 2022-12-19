@@ -39,4 +39,44 @@ jobs:
         run: yarn test:coverage
 
       - name: Build
-        run: yarn Build
+        run: yarn build
+  e2e-tests:
+    name: Run e2e tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install kinD
+        run: |
+          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64
+          chmod +x ./kind
+          sudo mv ./kind /usr/local/bin/kind
+
+      - name: Install k8s and oc
+        run: |
+          curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
+          tar -xvf oc.tar.gz
+
+          sudo install oc /usr/local/bin/oc
+          sudo install kubectl /usr/local/bin/kubectl
+      - name: Install podman
+        run: |
+          sudo apt-get -y install podman
+
+      - name: Create Cluster
+        run: |
+          yarn create-cluster
+          yarn login-cluster
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          start: yarn dev, yarn start-console
+          wait-on: "http://localhost:9001"
+          browser: chrome
+          headed: false
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: cypress/videos
