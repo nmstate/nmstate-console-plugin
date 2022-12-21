@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { RedExclamationCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
@@ -31,7 +31,6 @@ const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
   enactments,
 }) => {
   const { t } = useNMStateTranslation();
-  const [selectedTab, setSelectedTab] = useState<string | number>(0);
 
   const {
     availableEnactments,
@@ -59,6 +58,12 @@ const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
     ],
     [enactments],
   );
+
+  const [selectedTab, setSelectedTab] = useState<string | number>(0);
+
+  useEffect(() => {
+    setSelectedTab(tabsData.findIndex((tab) => tab.enactments.length !== 0));
+  }, [selectedPolicy]);
 
   return (
     <Modal

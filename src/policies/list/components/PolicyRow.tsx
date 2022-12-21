@@ -41,7 +41,7 @@ const PolicyRow: FC<
         </Button>
       </TableData>
       <TableData id="status" activeColumnIDs={activeColumnIDs} className="pf-m-width-30">
-        <EnactmentStateColumn enactments={enactments} />
+        <EnactmentStateColumn enactments={policyEnactments} />
       </TableData>
       <TableData
         id=""
