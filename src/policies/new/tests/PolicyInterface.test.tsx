@@ -8,7 +8,7 @@ import PolicyInterface from '../components/PolicyInterface';
 
 afterEach(cleanup);
 
-const nncpInterface: NodeNetworkConfigurationInterface = {
+const policyInterface: NodeNetworkConfigurationInterface = {
   name: 'br0',
   type: InterfaceType.LINUX_BRIDGE,
   state: NETWORK_STATES.Up,
@@ -18,10 +18,14 @@ const onInterfaceChange = jest.fn();
 
 test('NNCPInterface', async () => {
   const { getByLabelText } = render(
-    <PolicyInterface id={1} nncpInterface={nncpInterface} onInterfaceChange={onInterfaceChange} />,
+    <PolicyInterface
+      id={1}
+      policyInterface={policyInterface}
+      onInterfaceChange={onInterfaceChange}
+    />,
   );
 
   expect((getByLabelText('Interface name', { exact: false }) as HTMLInputElement).value).toBe(
-    nncpInterface.name,
+    policyInterface.name,
   );
 });

@@ -16,43 +16,44 @@ import {
 import { HelpIcon } from '@patternfly/react-icons';
 import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 
+import BondOptions from './BondOptions';
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 
 type PolicyInterfaceProps = {
   id: number;
-  nncpInterface?: NodeNetworkConfigurationInterface;
+  policyInterface?: NodeNetworkConfigurationInterface;
   onInterfaceChange?: (
     interfaceId: number,
-    updateInterface: (nncpInterface: NodeNetworkConfigurationInterface) => void,
+    updateInterface: (policyInterface: NodeNetworkConfigurationInterface) => void,
   ) => void;
 };
 
-const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterfaceChange }) => {
+const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInterfaceChange }) => {
   const { t } = useNMStateTranslation();
   const [isStateOpen, setStateOpen] = useState(false);
   const [isTypeOpen, setTypeOpen] = useState(false);
+  const [isAggregationOpen, setAggregationOpen] = useState(false);
 
   const handleStateChange = (
     event: React.MouseEvent<Element, MouseEvent>,
     newState: NETWORK_STATES,
   ) => {
-    onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.state = newState));
+    onInterfaceChange(id, (draftInterface) => (draftInterface.state = newState));
     setStateOpen(false);
   };
 
   const handleNameChange = (newName: string) => {
-    onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.name = newName));
+    onInterfaceChange(id, (draftInterface) => (draftInterface.name = newName));
   };
 
   const handleTypechange = (event: React.MouseEvent<Element, MouseEvent>, newType: string) => {
-    onInterfaceChange(id, (draftNNCPInterface) => {
-      draftNNCPInterface.type = newType as InterfaceType;
+    onInterfaceChange(id, (draftInterface) => {
+      draftInterface.type = newType as InterfaceType;
 
-      if (newType === InterfaceType.LINUX_BRIDGE)
-        draftNNCPInterface.bridge = { port: [], options: {} };
+      if (newType === InterfaceType.LINUX_BRIDGE) draftInterface.bridge = { port: [], options: {} };
 
       if (newType === InterfaceType.BOND)
-        draftNNCPInterface['link-aggregation'] = {
+        draftInterface['link-aggregation'] = {
           mode: NodeNetworkConfigurationInterfaceBondMode.BALANCE_RR,
           port: [],
         };
@@ -62,23 +63,23 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
 
   const onIP4Change = (checked: boolean) => {
     if (checked)
-      onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.ipv4 = { enabled: true }));
+      onInterfaceChange(id, (draftInterface) => (draftInterface.ipv4 = { enabled: true }));
     else {
-      onInterfaceChange(id, (draftNNCPInterface) => {
-        delete draftNNCPInterface.ipv4;
+      onInterfaceChange(id, (draftInterface) => {
+        delete draftInterface.ipv4;
       });
     }
   };
 
   const onDHCPChange = (checked: boolean) => {
-    onInterfaceChange(id, (draftNNCPInterface) => (draftNNCPInterface.ipv4.dhcp = checked));
+    onInterfaceChange(id, (draftInterface) => (draftInterface.ipv4.dhcp = checked));
   };
 
   const onSTPChange = (checked: boolean) => {
-    onInterfaceChange(id, (draftNNCPInterface) => {
-      ensurePath(draftNNCPInterface, 'bridge.options');
+    onInterfaceChange(id, (draftInterface) => {
+      ensurePath(draftInterface, 'bridge.options');
 
-      draftNNCPInterface.bridge = {
+      draftInterface.bridge = {
         options: {
           stp: { enabled: checked },
         },
@@ -86,16 +87,27 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
     });
   };
 
+  const handleAggregationChange = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    aggregationMode: string,
+  ) => {
+    onInterfaceChange(id, (draftInterface) => {
+      ensurePath(draftInterface, 'link-aggregation');
+      draftInterface['link-aggregation'].mode =
+        aggregationMode as NodeNetworkConfigurationInterfaceBondMode;
+    });
+  };
+
   const onPortChange = (value: string) => {
-    onInterfaceChange(id, (draftNNCPInterface) => {
-      if (draftNNCPInterface.type === InterfaceType.BOND) {
-        ensurePath(draftNNCPInterface, 'link-aggregation.port');
-        draftNNCPInterface['link-aggregation'].port = value.split(',');
+    onInterfaceChange(id, (draftInterface) => {
+      if (draftInterface.type === InterfaceType.BOND) {
+        ensurePath(draftInterface, 'link-aggregation.port');
+        draftInterface['link-aggregation'].port = value.split(',');
       }
 
-      if (draftNNCPInterface.type === InterfaceType.LINUX_BRIDGE) {
-        ensurePath(draftNNCPInterface, 'bridge.port');
-        draftNNCPInterface.bridge.port = [{ name: value }];
+      if (draftInterface.type === InterfaceType.LINUX_BRIDGE) {
+        ensurePath(draftInterface, 'bridge.port');
+        draftInterface.bridge.port = [{ name: value }];
       }
     });
   };
@@ -107,7 +119,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
           isRequired
           id={`policy-interface-name-${id}`}
           name={`policy-interface-name-${id}`}
-          value={nncpInterface?.name}
+          value={policyInterface?.name}
           onChange={handleNameChange}
         />
       </FormGroup>
@@ -123,7 +135,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
           onToggle={setStateOpen}
           onSelect={handleStateChange}
           variant={SelectVariant.single}
-          selections={nncpInterface?.state}
+          selections={policyInterface?.state}
         >
           {Object.entries(NETWORK_STATES).map(([key, value]) => (
             <SelectOption key={key} value={value}>
@@ -141,7 +153,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
           onToggle={setTypeOpen}
           onSelect={handleTypechange}
           variant={SelectVariant.single}
-          selections={nncpInterface?.type}
+          selections={policyInterface?.type}
         >
           {Object.entries(INTERFACE_TYPE_OPTIONS).map(([key, value]) => (
             <SelectOption key={key} value={key}>
@@ -154,14 +166,14 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
         <Checkbox
           label={t('IPV4')}
           id={`policy-interface-ip-${id}`}
-          isChecked={!!nncpInterface.ipv4}
+          isChecked={!!policyInterface.ipv4}
           onChange={onIP4Change}
         />
-        {!!nncpInterface.ipv4 && (
+        {!!policyInterface.ipv4 && (
           <Checkbox
             label={t('DHCP')}
             id={`policy-interface-dhcp-${id}`}
-            isChecked={nncpInterface.ipv4.dhcp}
+            isChecked={policyInterface.ipv4.dhcp}
             onChange={onDHCPChange}
           />
         )}
@@ -170,13 +182,13 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
         label={t('Port')}
         fieldId={`policy-interface-port-${id}`}
         helperText={
-          nncpInterface.type === InterfaceType.BOND && t('Use commas to separate between ports')
+          policyInterface.type === InterfaceType.BOND && t('Use commas to separate between ports')
         }
       >
         <TextInput
           value={
-            nncpInterface?.bridge?.port?.[0]?.name ||
-            nncpInterface?.['link-aggregation']?.port.join(',')
+            policyInterface?.bridge?.port?.[0]?.name ||
+            policyInterface?.['link-aggregation']?.port.join(',')
           }
           type="text"
           id={`policy-interface-port-${id}`}
@@ -184,7 +196,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
         />
       </FormGroup>
 
-      {nncpInterface.type === InterfaceType.LINUX_BRIDGE && (
+      {policyInterface.type === InterfaceType.LINUX_BRIDGE && (
         <FormGroup fieldId={`policy-interface-stp-${id}`}>
           <Checkbox
             label={
@@ -199,10 +211,41 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, nncpInterface, onInterf
               </Text>
             }
             id={`policy-interface-stp-${id}`}
-            isChecked={nncpInterface?.bridge?.options?.stp?.enabled}
+            isChecked={policyInterface?.bridge?.options?.stp?.enabled}
             onChange={onSTPChange}
           />
         </FormGroup>
+      )}
+
+      {policyInterface.type === InterfaceType.BOND && (
+        <>
+          <FormGroup
+            label={t('Aggregation mode')}
+            isRequired
+            fieldId={`policy-interface-aggregation-${id}`}
+          >
+            <Select
+              id={`policy-interface-aggregation-${id}`}
+              menuAppendTo="parent"
+              isOpen={isAggregationOpen}
+              onToggle={setAggregationOpen}
+              onSelect={handleAggregationChange}
+              variant={SelectVariant.single}
+              selections={policyInterface?.['link-aggregation']?.mode}
+            >
+              {Object.entries(NodeNetworkConfigurationInterfaceBondMode).map(([key, value]) => (
+                <SelectOption key={key} value={key}>
+                  {value}
+                </SelectOption>
+              ))}
+            </Select>
+          </FormGroup>
+          <BondOptions
+            onInterfaceChange={onInterfaceChange}
+            policyInterface={policyInterface}
+            id={id}
+          />
+        </>
       )}
     </>
   );

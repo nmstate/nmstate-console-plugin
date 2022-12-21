@@ -62,13 +62,13 @@ const initialPolicy: V1NodeNetworkConfigurationPolicy = {
 const NewPolicy: FC = () => {
   const history = useHistory();
   const { t } = useNMStateTranslation();
-  const [nncp, setNNCP] = useImmer(initialPolicy);
+  const [policy, setPolicy] = useImmer(initialPolicy);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>(undefined);
   const [modalOpen, setModalOpen] = useState(false);
 
   const onDescriptionChange = (newDescription: string) => {
-    setNNCP(({ metadata }) => {
+    setPolicy(({ metadata }) => {
       if (!metadata.annotations) metadata.annotations = {};
 
       metadata.annotations.description = newDescription;
@@ -76,23 +76,23 @@ const NewPolicy: FC = () => {
   };
 
   const addNewInterface = () => {
-    setNNCP((nncp) => {
-      if (!nncp.spec?.desiredState?.interfaces) {
-        nncp.spec.desiredState = {
+    setPolicy((draftPolicy) => {
+      if (!draftPolicy.spec?.desiredState?.interfaces) {
+        draftPolicy.spec.desiredState = {
           interfaces: [] as NodeNetworkConfigurationInterface[],
         };
       }
 
-      nncp.spec.desiredState.interfaces.unshift({
+      draftPolicy.spec.desiredState.interfaces.unshift({
         type: InterfaceType.LINUX_BRIDGE,
-        name: `interface-${nncp.spec.desiredState.interfaces.length}`,
+        name: `interface-${draftPolicy.spec.desiredState.interfaces.length}`,
       });
     });
   };
 
   const removeInterface = (interfaceIndex: number) => {
-    setNNCP((nncp) => {
-      (nncp.spec.desiredState.interfaces as NodeNetworkConfigurationInterface[]).splice(
+    setPolicy((draftPolicy) => {
+      (draftPolicy.spec.desiredState.interfaces as NodeNetworkConfigurationInterface[]).splice(
         interfaceIndex,
         1,
       );
@@ -103,8 +103,8 @@ const NewPolicy: FC = () => {
     interfaceIndex: number,
     updateInterface: (draftInterface: NodeNetworkConfigurationInterface) => void,
   ) => {
-    setNNCP((draftNNCP) => {
-      updateInterface(draftNNCP.spec.desiredState.interfaces[interfaceIndex]);
+    setPolicy((draftPolicy) => {
+      updateInterface(draftPolicy.spec.desiredState.interfaces[interfaceIndex]);
     });
   };
 
@@ -112,11 +112,11 @@ const NewPolicy: FC = () => {
     setLoading(true);
     return k8sCreate({
       model: NodeNetworkConfigurationPolicyModel,
-      data: nncp,
+      data: policy,
     })
       .then(() =>
         history.push(
-          getResourceUrl({ model: NodeNetworkConfigurationPolicyModel, resource: nncp }),
+          getResourceUrl({ model: NodeNetworkConfigurationPolicyModel, resource: policy }),
         ),
       )
       .catch(setError)
@@ -127,10 +127,10 @@ const NewPolicy: FC = () => {
     <PageSection>
       <NodeSelectorModal
         isOpen={modalOpen}
-        nncp={nncp}
+        nncp={policy}
         onClose={() => setModalOpen(false)}
-        onSubmit={(newNNCP) => {
-          setNNCP(newNNCP);
+        onSubmit={(newPolicy) => {
+          setPolicy(newPolicy);
           setModalOpen(false);
         }}
       />
@@ -143,7 +143,7 @@ const NewPolicy: FC = () => {
         <Form>
           <FormGroup fieldId="text">
             <Text>
-              <Trans>
+              <Trans t={t} ns="plugin__nmstate-console-plugin">
                 Node network is configured and managed by NM state. Create a node netowrk
                 configuration policy to describe the requested network configuration on your nodes
                 in the cluster. The node network configuration enactment reports the netwrok
@@ -153,12 +153,12 @@ const NewPolicy: FC = () => {
           </FormGroup>
           <FormGroup fieldId="apply-selector">
             <ApplySelectorCheckbox
-              isChecked={!!nncp.spec.nodeSelector}
+              isChecked={!!policy.spec.nodeSelector}
               onChange={(checked) => {
                 if (checked) setModalOpen(true);
                 else
-                  setNNCP((draftNNCP) => {
-                    delete draftNNCP.spec.nodeSelector;
+                  setPolicy((draftPolicy) => {
+                    delete draftPolicy.spec.nodeSelector;
                   });
               }}
             />
@@ -169,10 +169,10 @@ const NewPolicy: FC = () => {
               type="text"
               id="policy-name"
               name="policy-name"
-              value={nncp.metadata.name}
+              value={policy.metadata.name}
               onChange={(newName) =>
-                setNNCP((draftNNCP) => {
-                  draftNNCP.metadata.name = newName;
+                setPolicy((draftPolicy) => {
+                  draftPolicy.metadata.name = newName;
                 })
               }
             />
@@ -182,7 +182,7 @@ const NewPolicy: FC = () => {
               type="text"
               id="policy-description"
               name="policy-description"
-              value={nncp?.metadata?.annotations?.description}
+              value={policy?.metadata?.annotations?.description}
               onChange={onDescriptionChange}
             />
           </FormGroup>
@@ -214,16 +214,16 @@ const NewPolicy: FC = () => {
               </Button>
             </Text>
 
-            {nncp.spec?.desiredState?.interfaces.map((nncpInterface, index) => (
+            {policy.spec?.desiredState?.interfaces.map((policyInterface, index) => (
               <FormFieldGroupExpandable
-                key={`${nncpInterface.type}-${index}`}
+                key={`${policyInterface.type}-${index}`}
                 className="policy-interface__expandable"
                 toggleAriaLabel={t('Details')}
                 isExpanded={true}
                 header={
                   <FormFieldGroupHeader
                     titleText={{
-                      text: getExpandableTitle(nncpInterface, t),
+                      text: getExpandableTitle(policyInterface, t),
                       id: `nncp-interface-${index}`,
                     }}
                     actions={
@@ -240,7 +240,7 @@ const NewPolicy: FC = () => {
               >
                 <PolicyInterface
                   id={index}
-                  nncpInterface={nncpInterface}
+                  policyInterface={policyInterface}
                   onInterfaceChange={onInterfaceChange}
                 />
               </FormFieldGroupExpandable>
