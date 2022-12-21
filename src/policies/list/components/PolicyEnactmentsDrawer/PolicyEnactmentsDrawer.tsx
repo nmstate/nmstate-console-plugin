@@ -33,11 +33,11 @@ const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
   const { t } = useNMStateTranslation();
 
   const {
-    availableEnactments,
-    pendingEnactments,
-    progressingEnactments,
-    failingEnactments,
-    abortedEnactments,
+    available: availableEnactments,
+    pending: pendingEnactments,
+    progressing: progressingEnactments,
+    failing: failingEnactments,
+    aborted: abortedEnactments,
   } = categorizeEnactments(enactments);
 
   const tabsData = useMemo(

@@ -6,32 +6,23 @@ export const findConditionType = (conditions: any, conditionType: string) =>
       condition?.type === conditionType && condition?.status === 'True',
   );
 
+export const getEnactmentStatus = (enactment: V1beta1NodeNetworkConfigurationEnactment): string =>
+  enactment?.status?.conditions?.find((condition) => condition.status === 'True').type;
+
 export const categorizeEnactments = (enactments: V1beta1NodeNetworkConfigurationEnactment[]) => {
   return (enactments || []).reduce(
     (acc, enactment) => {
-      if (findConditionType(enactment?.status?.conditions, 'Available'))
-        acc.availableEnactments.push(enactment);
+      const status = getEnactmentStatus(enactment);
 
-      if (findConditionType(enactment?.status?.conditions, 'Pending'))
-        acc.pendingEnactments.push(enactment);
-
-      if (findConditionType(enactment?.status?.conditions, 'Failing'))
-        acc.failingEnactments.push(enactment);
-
-      if (findConditionType(enactment?.status?.conditions, 'Progressing'))
-        acc.progressingEnactments.push(enactment);
-
-      if (findConditionType(enactment?.status?.conditions, 'Aborted'))
-        acc.abortedEnactments.push(enactment);
-
+      if (acc[status?.toLowerCase()]) acc[status?.toLowerCase()].push(enactment);
       return acc;
     },
     {
-      availableEnactments: [],
-      pendingEnactments: [],
-      failingEnactments: [],
-      progressingEnactments: [],
-      abortedEnactments: [],
+      available: [],
+      pending: [],
+      failing: [],
+      progressing: [],
+      aborted: [],
     } as { [key in string]: V1beta1NodeNetworkConfigurationEnactment[] },
   );
 };

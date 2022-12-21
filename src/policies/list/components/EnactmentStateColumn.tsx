@@ -17,33 +17,27 @@ type NNCPStateColumnProps = {
 const NNCPStateColumn: React.FC<NNCPStateColumnProps> = ({ enactments }) => {
   const { t } = useNMStateTranslation();
 
-  const {
-    availableEnactments,
-    pendingEnactments,
-    failingEnactments,
-    progressingEnactments,
-    abortedEnactments,
-  } = categorizeEnactments(enactments);
+  const { available, pending, failing, progressing, aborted } = categorizeEnactments(enactments);
   return (
     <Stack hasGutter>
-      {failingEnactments.length > 0 && (
+      {failing.length > 0 && (
         <StackItem>
-          <RedExclamationCircleIcon /> {failingEnactments.length} {t('Failing')}
+          <RedExclamationCircleIcon /> {failing.length} {t('Failing')}
         </StackItem>
       )}
-      {abortedEnactments.length > 0 && (
+      {aborted.length > 0 && (
         <StackItem>
-          <CloseIcon color={dangerColor.value} /> {abortedEnactments.length} {t('Aborted')}
+          <CloseIcon color={dangerColor.value} /> {aborted.length} {t('Aborted')}
         </StackItem>
       )}
       <StackItem>
-        <CheckIcon color={successColor.value} /> {availableEnactments.length} {t('Available')}
+        <CheckIcon color={successColor.value} /> {available.length} {t('Available')}
       </StackItem>
       <StackItem>
-        <InProgressIcon /> {progressingEnactments.length} {t('Progressing')}
+        <InProgressIcon /> {progressing.length} {t('Progressing')}
       </StackItem>
       <StackItem>
-        <HourglassHalfIcon /> {pendingEnactments.length} {t('Pending')}
+        <HourglassHalfIcon /> {pending.length} {t('Pending')}
       </StackItem>
     </Stack>
   );

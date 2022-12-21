@@ -11,8 +11,10 @@ import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import {
   ListPageBody,
   ListPageCreateDropdown,
+  ListPageFilter,
   ListPageHeader,
   useK8sWatchResource,
+  useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';
@@ -20,6 +22,7 @@ import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPol
 import PolicyEnactmentsDrawer from './components/PolicyEnactmentsDrawer/PolicyEnactmentsDrawer';
 import PolicyRow from './components/PolicyRow';
 import usePolicyColumns from './hooks/usePolicyColumns';
+import usePolicyFilters from './hooks/usePolicyFilters';
 
 const PoliciesList: React.FC = () => {
   const { t } = useNMStateTranslation();
@@ -53,6 +56,8 @@ const PoliciesList: React.FC = () => {
   };
 
   const [, activeColumns] = usePolicyColumns();
+  const filters = usePolicyFilters(enactments);
+  const [data, filteredData, onFilterChange] = useListPageFilter(policies, filters);
 
   const selectedPolicyEnactments = selectedPolicy
     ? enactments.filter(
@@ -75,9 +80,16 @@ const PoliciesList: React.FC = () => {
         </ListPageCreateDropdown>
       </ListPageHeader>
       <ListPageBody>
+        <ListPageFilter
+          data={data}
+          loaded={policiesLoaded}
+          rowFilters={filters}
+          onFilterChange={onFilterChange}
+        />
+
         <VirtualizedTable<V1NodeNetworkConfigurationPolicy>
-          data={policies}
-          unfilteredData={policies}
+          data={filteredData}
+          unfilteredData={data}
           loaded={policiesLoaded && enactmentsLoaded}
           columns={activeColumns}
           loadError={policiesLoadError && enactmentsError}
