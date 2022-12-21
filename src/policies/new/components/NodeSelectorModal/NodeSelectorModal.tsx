@@ -81,7 +81,6 @@ const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ nncp, isOpen, onClose, 
       variant={ModalVariant.small}
       className="ocs-modal"
       title={t('Node Selector')}
-      titleIconVariant="default"
     >
       <Form>
         <LabelsList model={nodes?.length !== 0 && NodeModel} onLabelAdd={onSelectorLabelAdd}>
