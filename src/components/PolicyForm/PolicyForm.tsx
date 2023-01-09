@@ -159,12 +159,13 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
 
         <Text className="policy-form-content__add-new-interface pf-u-mt-md">
           <Button
-            className="pf-m-link--align-left"
+            className="pf-m-link--align-left pf-u-ml-md"
             onClick={addNewInterface}
             type="button"
             variant="link"
           >
-            <PlusCircleIcon /> {t('Add another interface to the policy')}
+            <PlusCircleIcon />{' '}
+            <span className="pf-u-ml-sm">{t('Add another interface to the policy')}</span>
           </Button>
         </Text>
 
