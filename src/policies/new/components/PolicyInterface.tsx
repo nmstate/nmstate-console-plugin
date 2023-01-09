@@ -18,6 +18,7 @@ import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 
 import BondOptions from './BondOptions';
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
+import CopyMAC from './CopyMAC';
 
 export type onInterfaceChangeType = (policyInterface: NodeNetworkConfigurationInterface) => void;
 
@@ -217,6 +218,11 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
 
       {policyInterface.type === InterfaceType.BOND && (
         <>
+          <CopyMAC
+            id={id}
+            onInterfaceChange={onInterfaceChange}
+            policyInterface={policyInterface}
+          />
           <FormGroup
             label={t('Aggregation mode')}
             isRequired
