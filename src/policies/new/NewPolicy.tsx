@@ -68,12 +68,19 @@ const NewPolicy: FC = () => {
       .finally(() => setLoading(false));
   };
 
+  const goToYAMLEditor = () => {
+    const baseUrl = getResourceUrl({ model: NodeNetworkConfigurationPolicyModel });
+    history.push(`${baseUrl}~new`);
+  };
+
   return (
     <PageSection className="new-policy-content">
       <Title className="new-policy-content__h1" headingLevel="h1">
         {t('Create node network configuration policy')}
 
-        <Button variant={ButtonVariant.link}>Edit YAML</Button>
+        <Button variant={ButtonVariant.link} onClick={goToYAMLEditor}>
+          Edit YAML
+        </Button>
       </Title>
 
       <PolicyForm
@@ -83,30 +90,28 @@ const NewPolicy: FC = () => {
         formId="create-policy-form"
       />
 
-      <>
-        {error && (
-          <Alert
-            variant={AlertVariant.danger}
-            title={t('Create NodeNetworkConfigurationPolicy error')}
-            isInline
-          >
-            {error.message}
-          </Alert>
-        )}
+      {error && (
+        <Alert
+          variant={AlertVariant.danger}
+          title={t('Create NodeNetworkConfigurationPolicy error')}
+          isInline
+        >
+          {error.message}
+        </Alert>
+      )}
 
-        <ActionGroup className="pf-c-form" form="">
-          <Button
-            isDisabled={loading}
-            type={ButtonType.submit}
-            variant={ButtonVariant.primary}
-            onClick={onFormSubmit}
-            isLoading={loading}
-            form="create-policy-form"
-          >
-            {t('Create')}
-          </Button>
-        </ActionGroup>
-      </>
+      <ActionGroup className="pf-c-form" form="">
+        <Button
+          isDisabled={loading}
+          type={ButtonType.submit}
+          variant={ButtonVariant.primary}
+          onClick={onFormSubmit}
+          isLoading={loading}
+          form="create-policy-form"
+        >
+          {t('Create')}
+        </Button>
+      </ActionGroup>
     </PageSection>
   );
 };

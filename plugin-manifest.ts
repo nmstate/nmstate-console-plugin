@@ -4,6 +4,7 @@ import type {
   ResourceClusterNavItem,
   ResourceListPage,
   RoutePage,
+  YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import type { ConsolePluginMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/schema/plugin-package';
 
@@ -18,6 +19,7 @@ export const pluginMetadata = {
   exposedModules: {
     PoliciesList: './policies/list/PoliciesList',
     NewPolicy: './policies/new/NewPolicy',
+    policyTemplate: 'src/policy-template.ts',
   },
   dependencies: {
     '@console/pluginAPI': '*',
@@ -73,4 +75,17 @@ export const extensions: EncodedExtension[] = [
       },
     },
   } as EncodedExtension<RoutePage>,
+  {
+    type: 'console.yaml-template',
+    properties: {
+      name: 'default',
+      model: PolicyExtensionModel,
+      template: {
+        $codeRef: 'policyTemplate.defaultPolicyTemplate',
+      },
+    },
+    flags: {
+      required: ['KUBEVIRT'],
+    },
+  } as EncodedExtension<YAMLTemplate>,
 ];

@@ -52,7 +52,7 @@ const PoliciesList: React.FC = () => {
   const onCreate = (type: string) => {
     return type === 'catalog'
       ? history.push(`/k8s/cluster/${NodeNetworkConfigurationPolicyModelRef}/~new/form`)
-      : history.push(`/k8s/cluster/${NodeNetworkConfigurationPolicyModelRef}/~new/yaml`);
+      : history.push(`/k8s/cluster/${NodeNetworkConfigurationPolicyModelRef}/~new`);
   };
 
   const [columns, activeColumns] = usePolicyColumns();
