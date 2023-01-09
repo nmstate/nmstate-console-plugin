@@ -2,7 +2,7 @@ import { TFunction } from 'react-i18next';
 
 import { NodeNetworkConfigurationInterface } from '@types';
 
-import { INTERFACE_TYPE_OPTIONS } from './components/constants';
+import { INTERFACE_TYPE_OPTIONS } from './constants';
 
 export const getExpandableTitle = (
   nncpInterface: NodeNetworkConfigurationInterface,

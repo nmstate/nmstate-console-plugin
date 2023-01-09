@@ -39,3 +39,6 @@ export const getResourceUrl = (urlProps: ResourceUrlProps): string => {
 
   return `/k8s/${namespaced ? namespaceUrl : 'cluster'}/${ref}/${name}`;
 };
+
+export const getContentScrollableElement = (): HTMLElement =>
+  document.getElementById('content-scrollable');

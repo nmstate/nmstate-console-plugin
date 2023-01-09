@@ -1,18 +1,13 @@
 .new-policy-content {
   max-width: 700px;
 
-  &__h1 {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--pf-global--spacer--md);
-  }
-
   &__add-new-interface {
     margin-left: var(--pf-global--spacer--sm);
   }
 
-  .policy-interface__expandable {
-    margin-top: var(--pf-global--spacer--md);
-    --pf-c-form__field-group--field-group--MarginTop: 0;
+  &__h1 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--pf-global--spacer--md);
   }
 }

@@ -1,12 +1,20 @@
 import React, { FC } from 'react';
 import { NodeNetworkConfigurationPolicyModelGroupVersionKind } from 'src/console-models';
 import { ENACTMENT_LABEL_POLICY } from 'src/utils/constants';
+import { getContentScrollableElement } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
-import { Button } from '@patternfly/react-core';
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownPosition,
+  KebabToggle,
+} from '@patternfly/react-core';
 import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';
 
+import EditModal from './EditModal';
 import EnactmentStateColumn from './EnactmentStateColumn';
 
 const PolicyRow: FC<
@@ -19,10 +27,17 @@ const PolicyRow: FC<
   >
 > = ({ obj, activeColumnIDs, rowData: { selectPolicy, enactments } }) => {
   const { t } = useNMStateTranslation();
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
 
   const policyEnactments = enactments?.filter(
     (enactment) => enactment?.metadata?.labels?.[ENACTMENT_LABEL_POLICY] === obj?.metadata?.name,
   );
+
+  const onEditModalToggle = () => {
+    setIsEditModalOpen(true);
+  };
+
   return (
     <>
       <TableData id="name" activeColumnIDs={activeColumnIDs} className="pf-m-width-30">
@@ -44,10 +59,29 @@ const PolicyRow: FC<
         <EnactmentStateColumn enactments={policyEnactments} />
       </TableData>
       <TableData
-        id=""
+        id="actions"
         activeColumnIDs={activeColumnIDs}
         className="dropdown-kebab-pf pf-c-table__action"
-      ></TableData>
+      >
+        <Dropdown
+          menuAppendTo={getContentScrollableElement}
+          onSelect={() => setIsDropdownOpen(false)}
+          toggle={<KebabToggle onToggle={setIsDropdownOpen} id="toggle-id-edit" />}
+          isOpen={isDropdownOpen}
+          isPlain
+          dropdownItems={[
+            <DropdownItem onClick={onEditModalToggle} key="edit">
+              {t('Edit')}
+            </DropdownItem>,
+          ]}
+          position={DropdownPosition.right}
+        />
+        <EditModal
+          isOpen={isEditModalOpen}
+          closeModal={() => setIsEditModalOpen(false)}
+          policy={obj}
+        />
+      </TableData>
     </>
   );
 };

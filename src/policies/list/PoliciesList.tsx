@@ -55,7 +55,7 @@ const PoliciesList: React.FC = () => {
       : history.push(`/k8s/cluster/${NodeNetworkConfigurationPolicyModelRef}/~new/yaml`);
   };
 
-  const [, activeColumns] = usePolicyColumns();
+  const [columns, activeColumns] = usePolicyColumns();
   const filters = usePolicyFilters(enactments);
   const [data, filteredData, onFilterChange] = useListPageFilter(policies, filters);
 
@@ -85,6 +85,16 @@ const PoliciesList: React.FC = () => {
           loaded={policiesLoaded}
           rowFilters={filters}
           onFilterChange={onFilterChange}
+          columnLayout={{
+            columns: columns?.map(({ id, title, additional }) => ({
+              id,
+              title,
+              additional,
+            })),
+            id: NodeNetworkConfigurationPolicyModelRef,
+            selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
+            type: t('NodeNetworkConfigurationPolicy'),
+          }}
         />
 
         <VirtualizedTable<V1NodeNetworkConfigurationPolicy>
