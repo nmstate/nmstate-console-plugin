@@ -56,7 +56,6 @@ const BondOptions: React.FC<BondOptionsProps> = ({ id, onInterfaceChange, policy
     });
   };
 
-  console.log(Object.entries(options));
   return (
     <>
       {Object.entries(options).map(([key, value], index) => (

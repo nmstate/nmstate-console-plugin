@@ -64,6 +64,8 @@
     "react-query": "^3.39.2",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
+    "sass": "^1.57.1",
+    "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
     "ts-jest": "^28.0.7",
     "ts-loader": "^9.3.1",

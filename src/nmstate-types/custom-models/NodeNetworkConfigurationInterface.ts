@@ -21,7 +21,6 @@ export interface NodeNetworkConfigurationInterface {
   /**
    * Only valid for InterfaceType.BOND, InterfaceType.LINUX_BRIDGE and InterfaceType.OVS_INTERFACE. The Interface.COPY_MAC_FROM could hold the name of port which you want this controller interface to use the same MAC with.
    * The MAC address is read from permanent hardware MAC address and fallback to current MAC address.
-   * For example, below yaml state will create/change linux bridge br0 to use the MAC address of eth2.
    */
   'copy-mac-from'?: string;
   /** The Interface.IPV4 property holds the IPv4 stack information in a dictionary. */
