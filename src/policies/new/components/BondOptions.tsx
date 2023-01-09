@@ -12,7 +12,6 @@ type BondOptionsProps = {
   id: number;
   policyInterface?: NodeNetworkConfigurationInterface;
   onInterfaceChange?: (
-    interfaceId: number,
     updateInterface: (policyInterface: NodeNetworkConfigurationInterface) => void,
   ) => void;
 };
@@ -26,7 +25,7 @@ const BondOptions: React.FC<BondOptionsProps> = ({ id, onInterfaceChange, policy
   );
 
   const onKeyChange = (oldKey, newKey) => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'link-aggregation.options');
       draftInterface['link-aggregation'].options[newKey] =
         draftInterface['link-aggregation'].options[oldKey];
@@ -35,21 +34,21 @@ const BondOptions: React.FC<BondOptionsProps> = ({ id, onInterfaceChange, policy
   };
 
   const onOptionValue = (key, value) => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'link-aggregation.options');
       draftInterface['link-aggregation'].options[key] = value;
     });
   };
 
   const onDelete = (key) => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'link-aggregation.options');
       delete draftInterface['link-aggregation'].options[key];
     });
   };
 
   const onOptionAdd = () => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'link-aggregation.options');
       console.log(selectableOptions[0]);
       draftInterface['link-aggregation'].options[selectableOptions[0]] = '';

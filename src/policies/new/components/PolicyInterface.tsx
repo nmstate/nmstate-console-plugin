@@ -19,13 +19,12 @@ import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 import BondOptions from './BondOptions';
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 
+export type onInterfaceChangeType = (policyInterface: NodeNetworkConfigurationInterface) => void;
+
 type PolicyInterfaceProps = {
   id: number;
   policyInterface?: NodeNetworkConfigurationInterface;
-  onInterfaceChange?: (
-    interfaceId: number,
-    updateInterface: (policyInterface: NodeNetworkConfigurationInterface) => void,
-  ) => void;
+  onInterfaceChange?: (updateInterface: onInterfaceChangeType) => void;
 };
 
 const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInterfaceChange }) => {
@@ -38,16 +37,16 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
     event: React.MouseEvent<Element, MouseEvent>,
     newState: NETWORK_STATES,
   ) => {
-    onInterfaceChange(id, (draftInterface) => (draftInterface.state = newState));
+    onInterfaceChange((draftInterface) => (draftInterface.state = newState));
     setStateOpen(false);
   };
 
   const handleNameChange = (newName: string) => {
-    onInterfaceChange(id, (draftInterface) => (draftInterface.name = newName));
+    onInterfaceChange((draftInterface) => (draftInterface.name = newName));
   };
 
   const handleTypechange = (event: React.MouseEvent<Element, MouseEvent>, newType: string) => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       draftInterface.type = newType as InterfaceType;
 
       if (newType === InterfaceType.LINUX_BRIDGE) draftInterface.bridge = { port: [], options: {} };
@@ -62,21 +61,20 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
   };
 
   const onIP4Change = (checked: boolean) => {
-    if (checked)
-      onInterfaceChange(id, (draftInterface) => (draftInterface.ipv4 = { enabled: true }));
+    if (checked) onInterfaceChange((draftInterface) => (draftInterface.ipv4 = { enabled: true }));
     else {
-      onInterfaceChange(id, (draftInterface) => {
+      onInterfaceChange((draftInterface) => {
         delete draftInterface.ipv4;
       });
     }
   };
 
   const onDHCPChange = (checked: boolean) => {
-    onInterfaceChange(id, (draftInterface) => (draftInterface.ipv4.dhcp = checked));
+    onInterfaceChange((draftInterface) => (draftInterface.ipv4.dhcp = checked));
   };
 
   const onSTPChange = (checked: boolean) => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'bridge.options');
 
       draftInterface.bridge = {
@@ -91,7 +89,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
     event: React.MouseEvent<Element, MouseEvent>,
     aggregationMode: string,
   ) => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'link-aggregation');
       draftInterface['link-aggregation'].mode =
         aggregationMode as NodeNetworkConfigurationInterfaceBondMode;
@@ -99,7 +97,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
   };
 
   const onPortChange = (value: string) => {
-    onInterfaceChange(id, (draftInterface) => {
+    onInterfaceChange((draftInterface) => {
       if (draftInterface.type === InterfaceType.BOND) {
         ensurePath(draftInterface, 'link-aggregation.port');
         draftInterface['link-aggregation'].port = value.split(',');

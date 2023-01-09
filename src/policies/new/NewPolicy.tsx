@@ -35,7 +35,7 @@ import {
 import ApplySelectorCheckbox from './components/ApplySelectorCheckbox';
 import { NETWORK_STATES } from './components/constants';
 import NodeSelectorModal from './components/NodeSelectorModal/NodeSelectorModal';
-import PolicyInterface from './components/PolicyInterface';
+import PolicyInterface, { onInterfaceChangeType } from './components/PolicyInterface';
 import { getExpandableTitle } from './utils';
 
 import './new-policy.scss';
@@ -96,15 +96,6 @@ const NewPolicy: FC = () => {
         interfaceIndex,
         1,
       );
-    });
-  };
-
-  const onInterfaceChange = (
-    interfaceIndex: number,
-    updateInterface: (draftInterface: NodeNetworkConfigurationInterface) => void,
-  ) => {
-    setPolicy((draftPolicy) => {
-      updateInterface(draftPolicy.spec.desiredState.interfaces[interfaceIndex]);
     });
   };
 
@@ -241,7 +232,11 @@ const NewPolicy: FC = () => {
                 <PolicyInterface
                   id={index}
                   policyInterface={policyInterface}
-                  onInterfaceChange={onInterfaceChange}
+                  onInterfaceChange={(updateInterface: onInterfaceChangeType) =>
+                    setPolicy((draftPolicy) => {
+                      updateInterface(draftPolicy.spec.desiredState.interfaces[index]);
+                    })
+                  }
                 />
               </FormFieldGroupExpandable>
             ))}
