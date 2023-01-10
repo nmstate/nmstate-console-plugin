@@ -129,7 +129,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
       >
         <Select
           menuAppendTo="parent"
-          id={`policy-interface-network-state-${id}`}
+          toggleId={`policy-interface-network-state-${id}`}
           isOpen={isStateOpen}
           onToggle={setStateOpen}
           onSelect={handleStateChange}
@@ -146,7 +146,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
 
       <FormGroup label={t('Type')} isRequired fieldId={`policy-interface-type-${id}`}>
         <Select
-          id={`policy-interface-type-${id}`}
+          toggleId={`policy-interface-type-${id}`}
           menuAppendTo="parent"
           isOpen={isTypeOpen}
           onToggle={setTypeOpen}

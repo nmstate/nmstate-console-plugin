@@ -79,7 +79,7 @@ const NewPolicy: FC = () => {
         {t('Create node network configuration policy')}
 
         <Button variant={ButtonVariant.link} onClick={goToYAMLEditor}>
-          Edit YAML
+          {t('Edit YAML')}
         </Button>
       </Title>
 

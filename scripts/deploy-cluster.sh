@@ -115,7 +115,7 @@ echo "deploy Openshift console"
 kubectl apply -f ${script_dir}/yaml/openshift-console.yaml
 
 echo ""
-echo "deploy deploy console CRDs"
+echo "deploy console CRDs"
 kubectl apply -f ${script_dir}/yaml/crds
 
 echo ""

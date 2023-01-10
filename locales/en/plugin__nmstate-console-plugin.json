@@ -21,6 +21,7 @@
   "Display all {{status}} enactments": "Display all {{status}} enactments",
   "Edit": "Edit",
   "Edit Node network configuration policy": "Edit Node network configuration policy",
+  "Edit YAML": "Edit YAML",
   "Enable STP": "Enable STP",
   "Enactment state": "Enactment state",
   "Enactments categorized by status": "Enactments categorized by status",
