@@ -34,7 +34,7 @@ const CopyMAC: React.FC<CopyMACProps> = ({ id, policyInterface, onInterfaceChang
           <TextInput
             value={policyInterface?.['copy-mac-from']}
             type="text"
-            id={`policy-interface-port-${id}`}
+            id={`policy-interface-copy-mac-from-${id}`}
             onChange={onPortChange}
           />
         </FormGroup>
