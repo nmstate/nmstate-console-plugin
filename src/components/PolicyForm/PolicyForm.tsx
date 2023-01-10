@@ -1,18 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Trans } from 'react-i18next';
-import { useHistory } from 'react-router';
-import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
-import { getResourceUrl } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { Updater } from 'use-immer';
 
 import {
-  ActionGroup,
-  Alert,
-  AlertVariant,
   Button,
-  ButtonType,
-  ButtonVariant,
   Form,
   FormFieldGroupExpandable,
   FormFieldGroupHeader,
@@ -195,6 +187,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           >
             <PolicyInterface
               id={index}
+              editForm={!createForm}
               policyInterface={policyInterface}
               onInterfaceChange={(updateInterface: onInterfaceChangeType) =>
                 setPolicy((draftPolicy) => {

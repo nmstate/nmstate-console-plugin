@@ -24,11 +24,17 @@ export type onInterfaceChangeType = (policyInterface: NodeNetworkConfigurationIn
 
 type PolicyInterfaceProps = {
   id: number;
+  editForm?: boolean;
   policyInterface?: NodeNetworkConfigurationInterface;
   onInterfaceChange?: (updateInterface: onInterfaceChangeType) => void;
 };
 
-const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInterfaceChange }) => {
+const PolicyInterface: FC<PolicyInterfaceProps> = ({
+  id,
+  policyInterface,
+  onInterfaceChange,
+  editForm = true,
+}) => {
   const { t } = useNMStateTranslation();
   const [isStateOpen, setStateOpen] = useState(false);
   const [isTypeOpen, setTypeOpen] = useState(false);
@@ -120,6 +126,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
           name={`policy-interface-name-${id}`}
           value={policyInterface?.name}
           onChange={handleNameChange}
+          isDisabled={editForm}
         />
       </FormGroup>
       <FormGroup
@@ -153,6 +160,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
           onSelect={handleTypechange}
           variant={SelectVariant.single}
           selections={policyInterface?.type}
+          isDisabled={editForm}
         >
           {Object.entries(INTERFACE_TYPE_OPTIONS).map(([key, value]) => (
             <SelectOption key={key} value={key}>
@@ -201,17 +209,20 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({ id, policyInterface, onInte
             label={
               <Text>
                 {t('Enable STP')}{' '}
-                <Popover
-                  aria-label={'Help'}
-                  bodyContent={() => <div>{t('STP can be edited in the YAML file')}</div>}
-                >
-                  <HelpIcon />
-                </Popover>
+                {editForm && (
+                  <Popover
+                    aria-label={'Help'}
+                    bodyContent={() => <div>{t('STP can be edited in the YAML file')}</div>}
+                  >
+                    <HelpIcon />
+                  </Popover>
+                )}
               </Text>
             }
             id={`policy-interface-stp-${id}`}
             isChecked={policyInterface?.bridge?.options?.stp?.enabled}
             onChange={onSTPChange}
+            isDisabled={editForm}
           />
         </FormGroup>
       )}
