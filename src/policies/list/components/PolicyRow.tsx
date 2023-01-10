@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
+import { useHistory } from 'react-router';
 import { NodeNetworkConfigurationPolicyModelGroupVersionKind } from 'src/console-models';
+import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
+import { isPolicySupported } from 'src/policies/utils';
 import { ENACTMENT_LABEL_POLICY } from 'src/utils/constants';
-import { getContentScrollableElement } from 'src/utils/helpers';
+import { getContentScrollableElement, getResourceUrl } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
@@ -26,6 +29,8 @@ const PolicyRow: FC<
     }
   >
 > = ({ obj, activeColumnIDs, rowData: { selectPolicy, enactments } }) => {
+  const history = useHistory();
+  const formSupported = isPolicySupported(obj);
   const { t } = useNMStateTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
@@ -35,7 +40,14 @@ const PolicyRow: FC<
   );
 
   const onEditModalToggle = () => {
-    setIsEditModalOpen(true);
+    if (formSupported) return setIsEditModalOpen(true);
+
+    const policyDetailPage = getResourceUrl({
+      model: NodeNetworkConfigurationPolicyModel,
+      resource: obj,
+    });
+
+    history.push(`${policyDetailPage}/yaml`);
   };
 
   return (
@@ -70,7 +82,11 @@ const PolicyRow: FC<
           isOpen={isDropdownOpen}
           isPlain
           dropdownItems={[
-            <DropdownItem onClick={onEditModalToggle} key="edit">
+            <DropdownItem
+              onClick={onEditModalToggle}
+              key="edit"
+              description={!formSupported && t('Edit using YAML')}
+            >
               {t('Edit')}
             </DropdownItem>,
           ]}
