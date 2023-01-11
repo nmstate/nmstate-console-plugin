@@ -2,6 +2,7 @@ import type { EncodedExtension } from '@openshift/dynamic-plugin-sdk';
 import type {
   ExtensionK8sModel,
   ResourceClusterNavItem,
+  ResourceDetailsPage,
   ResourceListPage,
   RoutePage,
   YAMLTemplate,
@@ -19,7 +20,8 @@ export const pluginMetadata = {
   exposedModules: {
     PoliciesList: './policies/list/PoliciesList',
     NewPolicy: './policies/new/NewPolicy',
-    policyTemplate: 'src/policy-template.ts',
+    PolicyTemplate: 'src/policy-template.ts',
+    PolicyPage: './policies/details/PolicyPage',
   },
   dependencies: {
     '@console/pluginAPI': '*',
@@ -38,7 +40,7 @@ export const extensions: EncodedExtension[] = [
     properties: {
       id: 'policy',
       perspective: 'admin',
-      name: '%plugin__nmstate-plugin~NodeNetworkConfigurationPolicy%',
+      name: '%plugin__nmstate-console-plugin~NodeNetworkConfigurationPolicy%',
       section: 'networking',
       model: PolicyExtensionModel,
       dataAttributes: {
@@ -81,11 +83,16 @@ export const extensions: EncodedExtension[] = [
       name: 'default',
       model: PolicyExtensionModel,
       template: {
-        $codeRef: 'policyTemplate.defaultPolicyTemplate',
+        $codeRef: 'PolicyTemplate.defaultPolicyTemplate',
       },
     },
-    flags: {
-      required: ['KUBEVIRT'],
-    },
   } as EncodedExtension<YAMLTemplate>,
+
+  {
+    type: 'console.page/resource/details',
+    properties: {
+      model: PolicyExtensionModel,
+      component: { $codeRef: 'PolicyPage' },
+    },
+  } as EncodedExtension<ResourceDetailsPage>,
 ];
