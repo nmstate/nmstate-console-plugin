@@ -20,6 +20,7 @@ import {
 import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';
 
 import PolicyEnactmentsDrawer from './components/PolicyEnactmentsDrawer/PolicyEnactmentsDrawer';
+import PolicyListEmptyState from './components/PolicyListEmptyState/PolicyListEmptyState';
 import PolicyRow from './components/PolicyRow';
 import usePolicyColumns from './hooks/usePolicyColumns';
 import usePolicyFilters from './hooks/usePolicyFilters';
@@ -105,6 +106,7 @@ const PoliciesList: React.FC = () => {
           loadError={policiesLoadError && enactmentsError}
           Row={PolicyRow}
           rowData={{ selectPolicy: setSelectedPolicy, enactments }}
+          NoDataEmptyMsg={() => <PolicyListEmptyState />}
         />
 
         <PolicyEnactmentsDrawer
