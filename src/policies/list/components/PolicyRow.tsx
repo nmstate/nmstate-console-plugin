@@ -59,13 +59,13 @@ const PolicyRow: FC<
         />
       </TableData>
       <TableData id="nodes" activeColumnIDs={activeColumnIDs} className="pf-m-width-30">
-        <Button
-          variant="link"
-          isInline
-          onClick={() => policyEnactments.length !== 0 && selectPolicy(obj)}
-        >
-          {policyEnactments.length} {t('nodes')}
-        </Button>
+        {policyEnactments.length === 0 && <>0 {t('nodes')}</>}
+
+        {policyEnactments.length !== 0 && (
+          <Button variant="link" isInline onClick={() => selectPolicy(obj)}>
+            {policyEnactments.length} {t('nodes')}
+          </Button>
+        )}
       </TableData>
       <TableData id="status" activeColumnIDs={activeColumnIDs} className="pf-m-width-30">
         <EnactmentStateColumn enactments={policyEnactments} />

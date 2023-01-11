@@ -78,7 +78,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
         <>
           <NodeSelectorModal
             isOpen={modalOpen}
-            nncp={policy}
+            policy={policy}
             onClose={() => setModalOpen(false)}
             onSubmit={(newPolicy) => {
               setPolicy(newPolicy);
