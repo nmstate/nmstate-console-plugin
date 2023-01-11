@@ -3,6 +3,7 @@
 import * as path from 'path';
 
 import CopyPlugin from 'copy-webpack-plugin';
+import svgToMiniDataURI from 'mini-svg-data-uri';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import { type Configuration as WebpackConfiguration, EnvironmentPlugin } from 'webpack';
 import { type Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
@@ -58,6 +59,27 @@ const config: WebpackConfiguration & {
         resolve: {
           fullySpecified: false,
         },
+      },
+      {
+        oneOf: [
+          {
+            test: /\.svg$/,
+            type: 'asset/inline',
+            generator: {
+              dataUrl: (content) => {
+                content = content.toString();
+                return svgToMiniDataURI(content);
+              },
+            },
+          },
+          {
+            test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
+            type: 'asset/resource',
+            generator: {
+              filename: 'assets/[name].[ext]',
+            },
+          },
+        ],
       },
     ],
   },

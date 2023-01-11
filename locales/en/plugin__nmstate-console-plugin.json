@@ -11,6 +11,7 @@
   "Available": "Available",
   "Cancel": "Cancel",
   "Checking this option will create a new PVC of the bootsource for the new template": "Checking this option will create a new PVC of the bootsource for the new template",
+  "Click <1>Create node network configuration policy</1> to create your first policy": "Click <1>Create node network configuration policy</1> to create your first policy",
   "Copy MAC address": "Copy MAC address",
   "Create": "Create",
   "Create node network configuration policy": "Create node network configuration policy",
@@ -21,6 +22,7 @@
   "Display all {{status}} enactments": "Display all {{status}} enactments",
   "Edit": "Edit",
   "Edit Node network configuration policy": "Edit Node network configuration policy",
+  "Edit using YAML": "Edit using YAML",
   "Edit YAML": "Edit YAML",
   "Enable STP": "Enable STP",
   "Enactment state": "Enactment state",
@@ -38,6 +40,7 @@
   "Name": "Name",
   "Network state": "Network state",
   "No matching Nodes found for the labels": "No matching Nodes found for the labels",
+  "No node network configuration policies defined yet": "No node network configuration policies defined yet",
   "Node Network Configuration Policy": "Node Network Configuration Policy",
   "Node network configuration policy interface": "Node network configuration policy interface",
   "Node network is configured and managed by NM state. Create a node netowrk configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.": "Node network is configured and managed by NM state. Create a node netowrk configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.",
@@ -62,6 +65,7 @@
   "Type": "Type",
   "Use commas to separate between ports": "Use commas to separate between ports",
   "Value": "Value",
+  "View documentation": "View documentation",
   "View matching {{matchingNodeText}}": "View matching {{matchingNodeText}}",
   "With YAML": "With YAML"
 }

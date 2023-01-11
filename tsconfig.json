@@ -14,11 +14,12 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
+      "@images/*": ["images/*"],
       "@types": ["src/nmstate-types/index.ts"],
       "@utils": ["src/utils"]
     }
   },
-  "include": ["src", "pkg"],
+  "include": ["src", "pkg", "src/custom.d.ts"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "files": true,
