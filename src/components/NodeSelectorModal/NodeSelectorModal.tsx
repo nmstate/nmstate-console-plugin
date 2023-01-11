@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+import { NodeNetworkConfigurationEnactmentModelGroupVersionKind } from 'src/console-models';
 import NodeModel, { NodeModelGroupVersionKind } from 'src/console-models/NodeModel';
+import { ENACTMENT_LABEL_NODE } from 'src/utils/constants';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { useImmer } from 'use-immer';
 
@@ -7,6 +9,8 @@ import { IoK8sApiCoreV1Node } from '@kubevirt-ui/kubevirt-api/kubernetes/models'
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
+  Alert,
+  AlertVariant,
   Button,
   ButtonType,
   ButtonVariant,
@@ -14,7 +18,7 @@ import {
   Modal,
   ModalVariant,
 } from '@patternfly/react-core';
-import { V1NodeNetworkConfigurationPolicy } from '@types';
+import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';
 
 import LabelsList from './components/LabelList';
 import LabelRow from './components/LabelRow';
@@ -22,21 +26,29 @@ import NodeCheckerAlert from './components/NodeCheckerAlert';
 import { IDLabel } from './utils/types';
 
 type NodeSelectorModalProps = {
-  nncp: V1NodeNetworkConfigurationPolicy;
+  policy: V1NodeNetworkConfigurationPolicy;
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (
     newNNCP: V1NodeNetworkConfigurationPolicy,
   ) => Promise<V1NodeNetworkConfigurationPolicy | void> | void;
 };
-const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ nncp, isOpen, onClose, onSubmit }) => {
+const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ policy, isOpen, onClose, onSubmit }) => {
   const { t } = useNMStateTranslation();
   const [nodes, nodesLoaded] = useK8sWatchResource<IoK8sApiCoreV1Node[]>({
     groupVersionKind: NodeModelGroupVersionKind,
     isList: true,
   });
+
+  const [enactments, enactmentsLoaded] = useK8sWatchResource<
+    V1beta1NodeNetworkConfigurationEnactment[]
+  >({
+    groupVersionKind: NodeNetworkConfigurationEnactmentModelGroupVersionKind,
+    isList: true,
+  });
+
   const [selectorLabels, setSelectorLabels] = useImmer(
-    Object.entries(nncp.spec?.nodeSelector || {}).map(([key, value], index) => ({
+    Object.entries(policy.spec?.nodeSelector || {}).map(([key, value], index) => ({
       key,
       value,
       id: index,
@@ -71,8 +83,14 @@ const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ nncp, isOpen, onClose, 
       acc[selector.key] = selector.value;
       return acc;
     }, {});
-    return onSubmit({ ...nncp, spec: { ...nncp.spec, nodeSelector } });
+    return onSubmit({ ...policy, spec: { ...policy.spec, nodeSelector } });
   };
+
+  const nodeAlreadyCovered = qualifiedNodes.find((node) =>
+    enactments.find(
+      (enactment) => enactment?.metadata?.labels?.[ENACTMENT_LABEL_NODE] === node.metadata.name,
+    ),
+  );
 
   return (
     <Modal
@@ -100,8 +118,20 @@ const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ nncp, isOpen, onClose, 
         {nodes.length !== 0 && (
           <NodeCheckerAlert
             qualifiedNodes={selectorLabels?.length === 0 ? nodes : qualifiedNodes}
-            nodesLoaded={nodesLoaded}
+            nodesLoaded={nodesLoaded && enactmentsLoaded}
           />
+        )}
+
+        {nodeAlreadyCovered && (
+          <Alert
+            variant={AlertVariant.warning}
+            isInline
+            title={t('This node already has a policy matching it')}
+          >
+            {t(
+              'Make sure there are no dependencies between the existing policy and the one you are about to define',
+            )}
+          </Alert>
         )}
 
         <ActionGroup className="pf-c-form">
