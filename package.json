@@ -20,7 +20,9 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:updateSnapshot": "jest --updateSnapshot",
-    "generate-types": "cd ./src/nmstate-types && ./download-nmstate-crds.sh && cd ../.."
+    "generate-types": "cd ./src/nmstate-types && ./download-nmstate-crds.sh && cd ../..",
+    "helm:lint": "helm lint deployment/nmstate-console-plugin/",
+    "helm:build": "mkdir -p tmp && helm package -d tmp deployment/nmstate-console-plugin/"
   },
   "devDependencies": {
     "@kubevirt-ui/kubevirt-api": "^0.0.47",

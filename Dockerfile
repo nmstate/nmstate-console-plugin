@@ -1,13 +1,31 @@
-FROM registry.access.redhat.com/ubi8/nodejs-16 AS builder
-USER root
-RUN command -v yarn || npm i -g yarn
+# Builder container
+FROM registry.access.redhat.com/ubi9/nodejs-16 AS build
 
-COPY . /opt/app-root/src
-WORKDIR /opt/app-root/src
-RUN yarn install --frozen-lockfile --ignore-engines && yarn build
+# Install yarn
+RUN npm install -g yarn -s &>/dev/null
 
-FROM registry.access.redhat.com/ubi8/nginx-120
+# Copy app source
+COPY . /opt/app-root/src/app
+WORKDIR /opt/app-root/src/app
 
-COPY --from=builder /opt/app-root/src/dist /usr/share/nginx/html
+# Run install as supper tux
+USER 0
+RUN yarn install --frozen-lockfile && yarn build
+
+# Web server container
+FROM registry.access.redhat.com/ubi9/nginx-120
+
+# Use none-root user
 USER 1001
-CMD /usr/libexec/s2i/run
+
+# Set nginx configuration
+# COPY nginx.conf /etc/nginx/nginx.conf
+
+# When using ubi9/nginx-120 defaults:
+#  listen       8080 default_server;
+#  root         /opt/app-root/src;
+
+COPY --from=build /opt/app-root/src/app/dist /opt/app-root/src
+
+# Run the server
+CMD nginx -g "daemon off;"

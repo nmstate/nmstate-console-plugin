@@ -104,6 +104,28 @@ export INVENTORY_SERVER_HOST=https://$(oc get routes -o custom-columns=HOST:.spe
 yarn dev
 ```
 
+### Deployment on cluster
+
+After pushing an image with your changes to an image registry, you can deploy
+the plugin to a cluster by instantiating the template:
+
+```sh
+oc process -f oc-manifest.yaml \
+  -p PLUGIN_NAME=nmstate-console-plugin \
+  -p NAMESPACE=openshift-nmstate \
+  -p IMAGE=quay.io/nmstate/nmstate-console-plugin:latest \
+  | oc create -f -
+```
+
+Once deployed, patch the
+[Console operator](https://github.com/openshift/console-operator)
+config to enable the plugin.
+
+```sh
+oc patch consoles.operator.openshift.io cluster \
+  --patch '{ "spec": { "plugins": ["nmstate-console-plugin"] } }' --type=merge
+```
+
 ## Learn more
 
 | Reference                                                                       |                                                                           |
