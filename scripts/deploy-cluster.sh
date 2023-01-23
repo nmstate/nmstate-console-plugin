@@ -162,7 +162,7 @@ echo "  web console: http://localhost:30080/"
 
 echo ""
 echo "Local registry usage example:"
-echo "  podman build -t localhost:5001/nmstate-console-plugin -f Containerfile"
+echo "  podman build -t localhost:5001/nmstate-console-plugin -f Dockerfile"
 echo "  podman push localhost:5001/nmstate-console-plugin --tls-verify=false"
 
 echo ""

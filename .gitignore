@@ -105,3 +105,7 @@ dist
 
 cypress/videos
 cypress/screenshots
+
+## Helm gitignore
+
+tmp/
