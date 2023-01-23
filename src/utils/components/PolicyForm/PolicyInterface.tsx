@@ -19,6 +19,7 @@ import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 import BondOptions from './BondOptions';
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 import CopyMAC from './CopyMAC';
+import { validateInterfaceName } from './utils';
 
 export type onInterfaceChangeType = (policyInterface: NodeNetworkConfigurationInterface) => void;
 
@@ -117,9 +118,17 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
     });
   };
 
+  const nameError = validateInterfaceName(policyInterface?.name);
+
   return (
     <>
-      <FormGroup label={t('Interface name')} isRequired fieldId={`policy-interface-name-${id}`}>
+      <FormGroup
+        label={t('Interface name')}
+        isRequired
+        fieldId={`policy-interface-name-${id}`}
+        helperTextInvalid={t(nameError)}
+        validated={nameError ? 'error' : 'default'}
+      >
         <TextInput
           isRequired
           id={`policy-interface-name-${id}`}
