@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { NodeModelGroupVersionKind } from 'src/console-models/NodeModel';
-import Loading from 'src/utils/components/Loading/Loading';
-import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { IoK8sApiCoreV1Node } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
@@ -14,6 +12,8 @@ import {
   pluralize,
   Popover,
 } from '@patternfly/react-core';
+import Loading from '@utils/components/Loading/Loading';
+import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 type NodeCheckerAlertProps = {
   qualifiedNodes: IoK8sApiCoreV1Node[];

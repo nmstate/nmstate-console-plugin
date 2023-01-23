@@ -21,9 +21,8 @@ import {
   NodeNetworkConfigurationInterface,
   V1NodeNetworkConfigurationPolicy,
 } from '@types';
-
-import { NETWORK_STATES } from '../../components/PolicyForm/constants';
-import PolicyForm from '../../components/PolicyForm/PolicyForm';
+import { NETWORK_STATES } from '@utils/components/PolicyForm/constants';
+import PolicyForm from '@utils/components/PolicyForm/PolicyForm';
 
 import './new-policy.scss';
 

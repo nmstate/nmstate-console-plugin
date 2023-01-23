@@ -3,6 +3,7 @@ import { InterfaceType } from '@types';
 export enum NETWORK_STATES {
   Up = 'up',
   Down = 'down',
+  Absent = 'absent',
 }
 
 export const INTERFACE_TYPE_OPTIONS = {
