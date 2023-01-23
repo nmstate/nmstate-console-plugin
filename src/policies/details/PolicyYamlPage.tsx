@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { RouteComponentProps } from 'react-router';
-import Loading from 'src/components/Loading/Loading';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye } from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
+import Loading from '@utils/components/Loading/Loading';
 
 type PolicyYAMLPageProps = RouteComponentProps<{
   ns: string;

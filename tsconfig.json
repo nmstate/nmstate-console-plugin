@@ -16,7 +16,7 @@
     "paths": {
       "@images/*": ["images/*"],
       "@types": ["src/nmstate-types/index.ts"],
-      "@utils": ["src/utils"]
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["src", "pkg", "src/custom.d.ts"],

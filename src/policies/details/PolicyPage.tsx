@@ -1,10 +1,10 @@
 import * as React from 'react';
-import Loading from 'src/components/Loading/Loading';
-import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye } from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
+import Loading from '@utils/components/Loading/Loading';
+import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 import PolicyDetailsPage from './PolicyDetailsPage';
 import PolicyPageTitle from './PolicyPageTitle';

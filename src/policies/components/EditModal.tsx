@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PolicyForm from 'src/components/PolicyForm/PolicyForm';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { useImmer } from 'use-immer';
@@ -16,6 +15,7 @@ import {
   StackItem,
 } from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
+import PolicyForm from '@utils/components/PolicyForm/PolicyForm';
 
 type EditModalProps = {
   closeModal?: () => void;
