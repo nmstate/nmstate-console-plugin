@@ -63,7 +63,11 @@ const PolicyRow: FC<
         activeColumnIDs={activeColumnIDs}
         className="dropdown-kebab-pf pf-c-table__action"
       >
-        <PolicyActions policy={obj} isKebabToggle={true} />
+        <PolicyActions
+          policy={obj}
+          isKebabToggle={true}
+          isPolicyArchived={policyAbsent && allEnactmentsAvailable}
+        />
       </TableData>
     </>
   );

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import produce from 'immer';
+import { Trans } from 'react-i18next';
+import { useHistory } from 'react-router';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
-import { k8sUpdate } from '@openshift-console/dynamic-plugin-sdk';
+import { k8sDelete } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionList,
   ActionListItem,
@@ -15,37 +16,31 @@ import {
   Stack,
   StackItem,
 } from '@patternfly/react-core';
-import { NodeNetworkConfigurationInterface, V1NodeNetworkConfigurationPolicy } from '@types';
+import { V1NodeNetworkConfigurationPolicy } from '@types';
+import { getResourceUrl } from '@utils/helpers';
 
-type ArchiveModalProps = {
+type DeleteModalProps = {
   closeModal?: () => void;
   isOpen?: boolean;
   policy: V1NodeNetworkConfigurationPolicy;
 };
 
-const ArchiveModal: React.FC<ArchiveModalProps> = ({ closeModal, isOpen, policy }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({ closeModal, isOpen, policy }) => {
   const { t } = useNMStateTranslation();
+  const history = useHistory();
   const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = () => {
     setLoading(true);
 
-    const newPolicy = produce(policy, (draftPolicy) => {
-      draftPolicy?.spec?.desiredState?.interfaces?.forEach(
-        (iface: NodeNetworkConfigurationInterface) => {
-          iface.state = 'absent';
-        },
-      );
-    });
-
-    return k8sUpdate({
+    return k8sDelete({
       model: NodeNetworkConfigurationPolicyModel,
-      data: newPolicy,
-      ns: newPolicy?.metadata?.namespace,
-      name: newPolicy?.metadata?.name,
+      resource: policy,
+      ns: policy?.metadata?.namespace,
+      name: policy?.metadata?.name,
     })
-      .then(() => closeModal())
+      .then(() => history.push(getResourceUrl({ model: NodeNetworkConfigurationPolicyModel })))
       .catch(setError)
       .finally(() => {
         setError(undefined);
@@ -57,11 +52,12 @@ const ArchiveModal: React.FC<ArchiveModalProps> = ({ closeModal, isOpen, policy 
     <Modal
       className="ocs-modal"
       onClose={closeModal}
-      variant="small"
+      variant="medium"
       position="top"
-      title={t('Archive Node network configuration policy')}
+      title={t('Delete Node network configuration policy')}
+      titleIconVariant="warning"
       footer={
-        <Stack className="archive-modal-footer pf-u-flex-fill" hasGutter>
+        <Stack className="pf-u-flex-fill" hasGutter>
           {error && (
             <StackItem>
               <Alert isInline variant={AlertVariant.danger} title={t('An error occurred')}>
@@ -85,10 +81,10 @@ const ArchiveModal: React.FC<ArchiveModalProps> = ({ closeModal, isOpen, policy 
                   onClick={handleSubmit}
                   isDisabled={loading}
                   isLoading={loading}
-                  variant={'primary'}
-                  form="archive-policy-form"
+                  variant={ButtonVariant.danger}
+                  form="delete-policy-form"
                 >
-                  {t('Archive')}
+                  {t('Delete')}
                 </Button>
               </ActionListItem>
               <ActionListItem>
@@ -101,17 +97,15 @@ const ArchiveModal: React.FC<ArchiveModalProps> = ({ closeModal, isOpen, policy 
         </Stack>
       }
       isOpen={isOpen}
-      id="archive-modal"
+      id="delete-modal"
     >
-      <form id="archive-policy-form" onSubmit={handleSubmit}>
-        <p>
-          {t(
-            'Archiving will remove the policy from all nodes, are you sure you want to archive this policy?',
-          )}
-        </p>
+      <form id="delete-policy-form">
+        <Trans t={t} ns="plugin__nmstate-console-plugin">
+          Are you sure you want to delete <strong>{policy?.metadata?.name}</strong>?
+        </Trans>
       </form>
     </Modal>
   );
 };
 
-export default ArchiveModal;
+export default DeleteModal;

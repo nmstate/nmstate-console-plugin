@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { NodeNetworkConfigurationPolicyModelRef } from 'src/console-models';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -54,7 +53,10 @@ const PolicyPageTitle: React.FC<PolicyPageTitleProps> = ({ policy, name }) => {
             </span>
           </h1>
           <div className="co-actions">
-            <PolicyActions policy={policy} />
+            <PolicyActions
+              policy={policy}
+              isPolicyArchived={policyAbsent && allEnactmentsAvailable}
+            />
           </div>
         </span>
         {policy && !formSupported && (

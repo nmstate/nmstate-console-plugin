@@ -10,6 +10,7 @@ import {
   Alert,
   AlertVariant,
   Button,
+  ButtonVariant,
   Modal,
   Stack,
   StackItem,
@@ -51,6 +52,7 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
       className="ocs-modal"
       onClose={closeModal}
       variant={'small'}
+      position="top"
       title={t('Edit Node network configuration policy')}
       footer={
         <Stack className="edit-modal-footer pf-u-flex-fill" hasGutter>
@@ -77,14 +79,14 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
                   onClick={handleSubmit}
                   isDisabled={loading}
                   isLoading={loading}
-                  variant={'primary'}
+                  variant={ButtonVariant.primary}
                   form="edit-policy-form"
                 >
                   {t('Save')}
                 </Button>
               </ActionListItem>
               <ActionListItem>
-                <Button onClick={closeModal} variant="link">
+                <Button onClick={closeModal} variant={ButtonVariant.secondary}>
                   {t('Cancel')}
                 </Button>
               </ActionListItem>

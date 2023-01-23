@@ -14,21 +14,28 @@ import {
 import { V1NodeNetworkConfigurationPolicy } from '@types';
 
 import ArchiveModal from '../components/ArchiveModal';
+import DeleteModal from '../components/DeleteModal';
 import EditModal from '../components/EditModal';
 import { isPolicySupported } from '../utils';
 
 type PolicyActionsProps = {
   policy: V1NodeNetworkConfigurationPolicy;
   isKebabToggle?: boolean;
+  isPolicyArchived?: boolean | undefined;
 };
 
-const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) => {
+const PolicyActions: React.FC<PolicyActionsProps> = ({
+  policy,
+  isPolicyArchived,
+  isKebabToggle,
+}) => {
   const history = useHistory();
   const formSupported = isPolicySupported(policy);
   const { t } = useNMStateTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
   const [isArchiveModalOpen, setIsArchiveModalOpen] = React.useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
   const onEditModalToggle = () => {
     if (formSupported) return setIsEditModalOpen(true);
@@ -39,6 +46,10 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
     });
 
     history.push(`${policyDetailPage}/yaml`);
+  };
+
+  const onDeleteModalToggle = () => {
+    setIsDeleteModalOpen(true);
   };
 
   return (
@@ -66,9 +77,18 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
           <DropdownItem
             onClick={() => setIsArchiveModalOpen(true)}
             key="archive"
-            description={t('Set as absent')}
+            isDisabled={isPolicyArchived}
+            description={isPolicyArchived ? t('Already archived') : t('Set as absent')}
           >
             {t('Archive')}
+          </DropdownItem>,
+          <DropdownItem
+            onClick={onDeleteModalToggle}
+            key="delete"
+            isDisabled={isPolicyArchived === false}
+            description={isPolicyArchived === false && t('Policy should be in an archived state')}
+          >
+            {t('Delete')}
           </DropdownItem>,
         ]}
         position={DropdownPosition.right}
@@ -84,6 +104,13 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
         <ArchiveModal
           isOpen={isArchiveModalOpen}
           closeModal={() => setIsArchiveModalOpen(false)}
+          policy={policy}
+        />
+      )}
+      {policy && isDeleteModalOpen && (
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          closeModal={() => setIsDeleteModalOpen(false)}
           policy={policy}
         />
       )}
