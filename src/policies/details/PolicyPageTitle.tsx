@@ -27,10 +27,12 @@ const PolicyPageTitle: React.FC<PolicyPageTitleProps> = ({ policy, name }) => {
         <Breadcrumb className="pf-c-breadcrumb co-breadcrumb">
           <BreadcrumbItem>
             <Link to={getResourceUrl({ model: NodeNetworkConfigurationPolicyModel })}>
-              {t('Node Network Configuration Policy')}
+              {t(NodeNetworkConfigurationPolicyModel.label)}
             </Link>
           </BreadcrumbItem>
-          <BreadcrumbItem>{t('Node Network Configuration Policy details')}</BreadcrumbItem>
+          <BreadcrumbItem>
+            {t('{{modelName}} details', { modelName: NodeNetworkConfigurationPolicyModel.label })}
+          </BreadcrumbItem>
         </Breadcrumb>
       </div>
       <div className="co-m-nav-title co-m-nav-title--detail co-m-nav-title--breadcrumbs">

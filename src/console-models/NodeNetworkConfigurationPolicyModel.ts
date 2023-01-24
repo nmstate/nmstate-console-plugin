@@ -3,6 +3,7 @@ import { K8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/api/common-t
 import { modelToGroupVersionKind, modelToRef } from './modelUtils';
 
 const NodeNetworkConfigurationPolicyModel: K8sModel = {
+  // t('NodeNetworkConfigurationPolicy')
   label: 'NodeNetworkConfigurationPolicy',
   labelPlural: 'NodeNetworkConfigurationPolicies',
   apiVersion: 'v1',
