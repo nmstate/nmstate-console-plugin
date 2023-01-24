@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import produce from 'immer';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
-import { useImmer } from 'use-immer';
 
 import { k8sUpdate } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -14,29 +14,35 @@ import {
   Stack,
   StackItem,
 } from '@patternfly/react-core';
-import { V1NodeNetworkConfigurationPolicy } from '@types';
-import PolicyForm from '@utils/components/PolicyForm/PolicyForm';
+import { NodeNetworkConfigurationInterface, V1NodeNetworkConfigurationPolicy } from '@types';
 
-type EditModalProps = {
+type ArchiveModalProps = {
   closeModal?: () => void;
   isOpen?: boolean;
   policy: V1NodeNetworkConfigurationPolicy;
 };
 
-const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => {
+const ArchiveModal: React.FC<ArchiveModalProps> = ({ closeModal, isOpen, policy }) => {
   const { t } = useNMStateTranslation();
   const [error, setError] = useState(undefined);
-  const [editablePolicy, setEditablePolicy] = useImmer(policy);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = () => {
     setLoading(true);
 
+    const newPolicy = produce(policy, (draftPolicy) => {
+      draftPolicy?.spec?.desiredState?.interfaces?.forEach(
+        (iface: NodeNetworkConfigurationInterface) => {
+          iface.state = 'absent';
+        },
+      );
+    });
+
     return k8sUpdate({
       model: NodeNetworkConfigurationPolicyModel,
-      data: editablePolicy,
-      ns: editablePolicy?.metadata?.namespace,
-      name: editablePolicy?.metadata?.name,
+      data: newPolicy,
+      ns: newPolicy?.metadata?.namespace,
+      name: newPolicy?.metadata?.name,
     })
       .then(() => closeModal())
       .catch(setError)
@@ -50,10 +56,11 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
     <Modal
       className="ocs-modal"
       onClose={closeModal}
-      variant={'small'}
-      title={t('Edit Node network configuration policy')}
+      variant="small"
+      position="top"
+      title={t('Archive Node network configuration policy')}
       footer={
-        <Stack className="edit-modal-footer pf-u-flex-fill" hasGutter>
+        <Stack className="archive-modal-footer pf-u-flex-fill" hasGutter>
           {error && (
             <StackItem>
               <Alert isInline variant={AlertVariant.danger} title={t('An error occurred')}>
@@ -78,9 +85,9 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
                   isDisabled={loading}
                   isLoading={loading}
                   variant={'primary'}
-                  form="edit-policy-form"
+                  form="archive-policy-form"
                 >
-                  {t('Save')}
+                  {t('Archive')}
                 </Button>
               </ActionListItem>
               <ActionListItem>
@@ -93,11 +100,17 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
         </Stack>
       }
       isOpen={isOpen}
-      id="edit-modal"
+      id="archive-modal"
     >
-      <PolicyForm policy={editablePolicy} setPolicy={setEditablePolicy} formId="edit-policy-form" />
+      <form id="archive-policy-form" onSubmit={handleSubmit}>
+        <p>
+          {t(
+            'Archiving will remove the policy from all nodes, are you sure you want to archive this policy?',
+          )}
+        </p>
+      </form>
     </Modal>
   );
 };
 
-export default EditModal;
+export default ArchiveModal;
