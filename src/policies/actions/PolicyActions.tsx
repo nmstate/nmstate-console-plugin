@@ -13,6 +13,7 @@ import {
 } from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
 
+import ArchiveModal from '../components/ArchiveModal';
 import EditModal from '../components/EditModal';
 import { isPolicySupported } from '../utils';
 
@@ -27,6 +28,7 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
   const { t } = useNMStateTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = React.useState(false);
 
   const onEditModalToggle = () => {
     if (formSupported) return setIsEditModalOpen(true);
@@ -61,6 +63,13 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
           >
             {t('Edit')}
           </DropdownItem>,
+          <DropdownItem
+            onClick={() => setIsArchiveModalOpen(true)}
+            key="archive"
+            description={t('Set as absent')}
+          >
+            {t('Archive')}
+          </DropdownItem>,
         ]}
         position={DropdownPosition.right}
       />
@@ -68,6 +77,13 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
         <EditModal
           isOpen={isEditModalOpen}
           closeModal={() => setIsEditModalOpen(false)}
+          policy={policy}
+        />
+      )}
+      {policy && isArchiveModalOpen && (
+        <ArchiveModal
+          isOpen={isArchiveModalOpen}
+          closeModal={() => setIsArchiveModalOpen(false)}
           policy={policy}
         />
       )}
