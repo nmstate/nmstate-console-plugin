@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { NodeNetworkConfigurationPolicyModelRef } from 'src/console-models';
+import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { Alert, Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
+import { getResourceUrl } from '@utils/helpers';
 
 import PolicyActions from '../actions/PolicyActions';
 import { isPolicySupported } from '../utils';
@@ -23,7 +25,7 @@ const PolicyPageTitle: React.FC<PolicyPageTitleProps> = ({ policy, name }) => {
       <div className="pf-c-page__main-breadcrumb">
         <Breadcrumb className="pf-c-breadcrumb co-breadcrumb">
           <BreadcrumbItem>
-            <Link to={`/k8s/ns/cluster/${NodeNetworkConfigurationPolicyModelRef}`}>
+            <Link to={getResourceUrl({ model: NodeNetworkConfigurationPolicyModel })}>
               {t('Node Network Configuration Policy')}
             </Link>
           </BreadcrumbItem>
