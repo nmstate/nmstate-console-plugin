@@ -15,3 +15,18 @@ export const getExpandableTitle = (
 
   return t('Node network configuration policy interface');
 };
+
+export const validateInterfaceName = (name: string): string => {
+  if (!name) return '';
+
+  if (name.length > 15) {
+    // t('Interface name should follow the linux kernel naming convention. The name should be smaller than 16 characters.')
+    return 'Interface name should follow the linux kernel naming convention. The name should be smaller than 16 characters.';
+  }
+
+  if (/[/ ]/.test(name)) {
+    // t('Interface name should follow the linux kernel naming convention. Whitespaces and slashes are not allowed.')
+    return 'Interface name should follow the linux kernel naming convention. Whitespaces and slashes are not allowed.';
+  }
+  return '';
+};

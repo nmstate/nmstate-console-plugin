@@ -42,6 +42,8 @@
   "Failing": "Failing",
   "From Form": "From Form",
   "Interface name": "Interface name",
+  "Interface name should follow the linux kernel naming convention. The name should be smaller than 16 characters.": "Interface name should follow the linux kernel naming convention. The name should be smaller than 16 characters.",
+  "Interface name should follow the linux kernel naming convention. Whitespaces and slashes are not allowed.": "Interface name should follow the linux kernel naming convention. Whitespaces and slashes are not allowed.",
   "IP configuration": "IP configuration",
   "IPv4": "IPv4",
   "IPV4": "IPV4",
