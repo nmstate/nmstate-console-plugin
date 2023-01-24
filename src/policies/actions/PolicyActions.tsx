@@ -4,6 +4,7 @@ import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkC
 import { getContentScrollableElement, getResourceUrl } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
+import { useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Dropdown,
   DropdownItem,
@@ -16,6 +17,8 @@ import { V1NodeNetworkConfigurationPolicy } from '@types';
 import DeleteModal from '../components/DeleteModal';
 import EditModal from '../components/EditModal';
 import { isPolicySupported } from '../utils';
+
+import { getEditDescrition } from './utils';
 
 type PolicyActionsProps = {
   policy: V1NodeNetworkConfigurationPolicy;
@@ -30,6 +33,16 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+
+  const [canUpdatePolicy] = useAccessReview({
+    verb: 'update',
+    resource: NodeNetworkConfigurationPolicyModel.plural,
+  });
+
+  const [canDeletePolicy] = useAccessReview({
+    verb: 'delete',
+    resource: NodeNetworkConfigurationPolicyModel.plural,
+  });
 
   const onEditModalToggle = () => {
     if (formSupported) return setIsEditModalOpen(true);
@@ -64,11 +77,17 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) 
           <DropdownItem
             onClick={onEditModalToggle}
             key="edit"
-            description={!formSupported && t('Edit using YAML')}
+            isDisabled={canUpdatePolicy === false}
+            description={getEditDescrition(formSupported, canUpdatePolicy)}
           >
             {t('Edit')}
           </DropdownItem>,
-          <DropdownItem onClick={onDeleteModalToggle} key="delete">
+          <DropdownItem
+            onClick={onDeleteModalToggle}
+            key="delete"
+            isDisabled={canDeletePolicy === false}
+            description={canDeletePolicy === false && t('Cannot delete in view-only mode')}
+          >
             {t('Delete')}
           </DropdownItem>,
         ]}
