@@ -1,5 +1,14 @@
 import { TIMEOUT_VISIT_PAGE } from '../support/utilts';
 
+const deletePolicyFromDetailsPage = () => {
+  cy.contains('button', 'Actions', { matchCase: false }).click();
+  cy.contains('a', 'Delete').click();
+
+  cy.contains('button', 'Delete').click();
+
+  cy.contains('h1', 'Node Network Configuration Policy', { timeout: TIMEOUT_VISIT_PAGE });
+};
+
 describe('Create new policy with form', () => {
   it('with bridge interface', () => {
     const testPolicyName = 'test-bridge-policy-name';
@@ -21,6 +30,8 @@ describe('Create new policy with form', () => {
     cy.contains('button', 'Create').click();
 
     cy.contains('h1', testPolicyName, { timeout: TIMEOUT_VISIT_PAGE });
+
+    deletePolicyFromDetailsPage();
   });
 
   it('with bridge and bond interface', () => {
@@ -50,5 +61,7 @@ describe('Create new policy with form', () => {
     cy.contains('button', 'Create').click();
 
     cy.contains('h1', testPolicyName, { timeout: TIMEOUT_VISIT_PAGE });
+
+    deletePolicyFromDetailsPage();
   });
 });
