@@ -5,6 +5,7 @@ import {
   NodeNetworkConfigurationPolicyModelGroupVersionKind,
   NodeNetworkConfigurationPolicyModelRef,
 } from 'src/console-models';
+import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { ENACTMENT_LABEL_POLICY } from 'src/utils/constants';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -18,6 +19,7 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';
+import { getResourceUrl } from '@utils/helpers';
 
 import PolicyEnactmentsDrawer from './components/PolicyEnactmentsDrawer/PolicyEnactmentsDrawer';
 import PolicyListEmptyState from './components/PolicyListEmptyState/PolicyListEmptyState';
@@ -46,14 +48,16 @@ const PoliciesList: React.FC = () => {
   });
 
   const createItems = {
-    catalog: t('From Form'),
+    form: t('From Form'),
     yaml: t('With YAML'),
   };
 
   const onCreate = (type: string) => {
-    return type === 'catalog'
-      ? history.push(`/k8s/cluster/${NodeNetworkConfigurationPolicyModelRef}/~new/form`)
-      : history.push(`/k8s/cluster/${NodeNetworkConfigurationPolicyModelRef}/~new`);
+    const baseURL = getResourceUrl({
+      model: NodeNetworkConfigurationPolicyModel,
+    });
+
+    return type === 'form' ? history.push(`${baseURL}~new/form`) : history.push(`${baseURL}~new`);
   };
 
   const [columns, activeColumns] = usePolicyColumns();
