@@ -13,7 +13,6 @@ import {
 } from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
 
-import ArchiveModal from '../components/ArchiveModal';
 import DeleteModal from '../components/DeleteModal';
 import EditModal from '../components/EditModal';
 import { isPolicySupported } from '../utils';
@@ -24,17 +23,12 @@ type PolicyActionsProps = {
   isPolicyArchived?: boolean | undefined;
 };
 
-const PolicyActions: React.FC<PolicyActionsProps> = ({
-  policy,
-  isPolicyArchived,
-  isKebabToggle,
-}) => {
+const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) => {
   const history = useHistory();
   const formSupported = isPolicySupported(policy);
   const { t } = useNMStateTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
-  const [isArchiveModalOpen, setIsArchiveModalOpen] = React.useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
   const onEditModalToggle = () => {
@@ -74,20 +68,7 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({
           >
             {t('Edit')}
           </DropdownItem>,
-          <DropdownItem
-            onClick={() => setIsArchiveModalOpen(true)}
-            key="archive"
-            isDisabled={isPolicyArchived}
-            description={isPolicyArchived ? t('Already archived') : t('Set as absent')}
-          >
-            {t('Archive')}
-          </DropdownItem>,
-          <DropdownItem
-            onClick={onDeleteModalToggle}
-            key="delete"
-            isDisabled={isPolicyArchived === false}
-            description={isPolicyArchived === false && t('Policy should be in an archived state')}
-          >
+          <DropdownItem onClick={onDeleteModalToggle} key="delete">
             {t('Delete')}
           </DropdownItem>,
         ]}
@@ -97,13 +78,6 @@ const PolicyActions: React.FC<PolicyActionsProps> = ({
         <EditModal
           isOpen={isEditModalOpen}
           closeModal={() => setIsEditModalOpen(false)}
-          policy={policy}
-        />
-      )}
-      {policy && isArchiveModalOpen && (
-        <ArchiveModal
-          isOpen={isArchiveModalOpen}
-          closeModal={() => setIsArchiveModalOpen(false)}
           policy={policy}
         />
       )}
