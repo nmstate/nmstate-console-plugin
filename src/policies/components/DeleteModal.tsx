@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useHistory } from 'react-router';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
@@ -11,6 +11,7 @@ import {
   Alert,
   AlertVariant,
   Button,
+  ButtonType,
   ButtonVariant,
   FormGroup,
   Modal,
@@ -35,7 +36,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ closeModal, isOpen, policy })
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
     setLoading(true);
 
     return k8sDelete({
@@ -87,6 +89,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ closeModal, isOpen, policy })
                   isDisabled={loading || inputValue !== policy?.metadata?.name}
                   isLoading={loading}
                   variant={ButtonVariant.danger}
+                  type={ButtonType.submit}
                   form="delete-policy-form"
                 >
                   {t('Delete')}
