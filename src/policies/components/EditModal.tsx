@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { useImmer } from 'use-immer';
@@ -10,6 +10,7 @@ import {
   Alert,
   AlertVariant,
   Button,
+  ButtonType,
   ButtonVariant,
   Modal,
   Stack,
@@ -30,7 +31,8 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
   const [editablePolicy, setEditablePolicy] = useImmer(policy);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
     setLoading(true);
 
     return k8sUpdate({
@@ -80,6 +82,7 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
                   isDisabled={loading}
                   isLoading={loading}
                   variant={ButtonVariant.primary}
+                  type={ButtonType.submit}
                   form="edit-policy-form"
                 >
                   {t('Save')}

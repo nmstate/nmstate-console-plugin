@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEventHandler } from 'react';
 import { NodeNetworkConfigurationEnactmentModelGroupVersionKind } from 'src/console-models';
 import NodeModel, { NodeModelGroupVersionKind } from 'src/console-models/NodeModel';
 import { ENACTMENT_LABEL_NODE } from 'src/utils/constants';
@@ -77,7 +77,7 @@ const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ policy, isOpen, onClose
     setSelectorLabels((selectors) => selectors.filter((s) => s.id !== id));
   };
 
-  const onSave = (event) => {
+  const onSave: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
     const nodeSelector = selectorLabels.reduce((acc, selector) => {
       acc[selector.key] = selector.value;

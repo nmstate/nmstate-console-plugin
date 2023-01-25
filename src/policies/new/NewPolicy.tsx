@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, MouseEventHandler, useState } from 'react';
 import { useHistory } from 'react-router';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { getResourceUrl } from 'src/utils/helpers';
@@ -52,7 +52,8 @@ const NewPolicy: FC = () => {
   const [error, setError] = useState<Error>(undefined);
   const history = useHistory();
 
-  const onFormSubmit = () => {
+  const onFormSubmit: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
     setLoading(true);
     return k8sCreate({
       model: NodeNetworkConfigurationPolicyModel,
