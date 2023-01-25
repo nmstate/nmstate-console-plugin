@@ -30,3 +30,7 @@ export const validateInterfaceName = (name: string): string => {
   }
   return '';
 };
+
+export function capitalizeFirstLetter(string: string) {
+  return string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
+}

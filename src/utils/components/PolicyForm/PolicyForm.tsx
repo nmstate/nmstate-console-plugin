@@ -3,18 +3,8 @@ import { Trans } from 'react-i18next';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { Updater } from 'use-immer';
 
-import {
-  Button,
-  Form,
-  FormFieldGroupExpandable,
-  FormFieldGroupHeader,
-  FormGroup,
-  Popover,
-  Text,
-  TextInput,
-} from '@patternfly/react-core';
+import { Button, Form, FormGroup, Popover, Text, TextInput } from '@patternfly/react-core';
 import { HelpIcon, PlusCircleIcon } from '@patternfly/react-icons';
-import { MinusCircleIcon } from '@patternfly/react-icons';
 import {
   InterfaceType,
   NodeNetworkConfigurationInterface,
@@ -24,8 +14,7 @@ import {
 import NodeSelectorModal from '../NodeSelectorModal/NodeSelectorModal';
 
 import ApplySelectorCheckbox from './ApplySelectorCheckbox';
-import PolicyInterface, { onInterfaceChangeType } from './PolicyInterface';
-import { getExpandableTitle } from './utils';
+import PolicyInterfacesExpandable from './PolicyInterfaceExpandable';
 
 import './policy-form.scss';
 
@@ -60,15 +49,6 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
         type: InterfaceType.LINUX_BRIDGE,
         name: `interface-${draftPolicy.spec.desiredState.interfaces.length}`,
       });
-    });
-  };
-
-  const removeInterface = (interfaceIndex: number) => {
-    setPolicy((draftPolicy) => {
-      (draftPolicy.spec.desiredState.interfaces as NodeNetworkConfigurationInterface[]).splice(
-        interfaceIndex,
-        1,
-      );
     });
   };
 
@@ -161,42 +141,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           </Button>
         </Text>
 
-        {policy?.spec?.desiredState?.interfaces.map((policyInterface, index) => (
-          <FormFieldGroupExpandable
-            key={`${policyInterface.type}-${index}`}
-            className="policy-interface__expandable"
-            toggleAriaLabel={t('Details')}
-            isExpanded={true}
-            header={
-              <FormFieldGroupHeader
-                titleText={{
-                  text: getExpandableTitle(policyInterface, t),
-                  id: `nncp-interface-${index}`,
-                }}
-                actions={
-                  <Button
-                    variant="plain"
-                    aria-label={t('Remove')}
-                    onClick={() => removeInterface(index)}
-                  >
-                    <MinusCircleIcon />
-                  </Button>
-                }
-              />
-            }
-          >
-            <PolicyInterface
-              id={index}
-              editForm={!createForm}
-              policyInterface={policyInterface}
-              onInterfaceChange={(updateInterface: onInterfaceChangeType) =>
-                setPolicy((draftPolicy) => {
-                  updateInterface(draftPolicy.spec.desiredState.interfaces[index]);
-                })
-              }
-            />
-          </FormFieldGroupExpandable>
-        ))}
+        <PolicyInterfacesExpandable policy={policy} setPolicy={setPolicy} createForm={createForm} />
       </div>
     </Form>
   );
