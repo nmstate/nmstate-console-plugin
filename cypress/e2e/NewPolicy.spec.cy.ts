@@ -1,8 +1,12 @@
 import { TIMEOUT_VISIT_PAGE } from '../support/utilts';
 
-const deletePolicyFromDetailsPage = () => {
+const deletePolicyFromDetailsPage = (policyName: string) => {
   cy.contains('button', 'Actions', { matchCase: false }).click();
   cy.contains('a', 'Delete').click();
+
+  cy.contains('button[disabled]', 'Delete');
+
+  cy.get('input#text-confirmation').clear().type(policyName);
 
   cy.contains('button', 'Delete').click();
 
@@ -31,7 +35,7 @@ describe('Create new policy with form', () => {
 
     cy.contains('h1', testPolicyName, { timeout: TIMEOUT_VISIT_PAGE });
 
-    deletePolicyFromDetailsPage();
+    deletePolicyFromDetailsPage(testPolicyName);
   });
 
   it('with bridge and bond interface', () => {
@@ -62,6 +66,6 @@ describe('Create new policy with form', () => {
 
     cy.contains('h1', testPolicyName, { timeout: TIMEOUT_VISIT_PAGE });
 
-    deletePolicyFromDetailsPage();
+    deletePolicyFromDetailsPage(testPolicyName);
   });
 });
