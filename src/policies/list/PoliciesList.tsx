@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   NodeNetworkConfigurationEnactmentModelGroupVersionKind,
@@ -21,6 +21,8 @@ import {
 import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';
 import { getResourceUrl } from '@utils/helpers';
 
+import { EnactmentStatuses } from '../constants';
+
 import PolicyEnactmentsDrawer from './components/PolicyEnactmentsDrawer/PolicyEnactmentsDrawer';
 import PolicyListEmptyState from './components/PolicyListEmptyState/PolicyListEmptyState';
 import PolicyRow from './components/PolicyRow';
@@ -31,6 +33,7 @@ const PoliciesList: React.FC = () => {
   const { t } = useNMStateTranslation();
   const history = useHistory();
   const [selectedPolicy, setSelectedPolicy] = useState<V1NodeNetworkConfigurationPolicy>();
+  const [selectedState, setSelectedState] = useState<EnactmentStatuses>();
 
   const [policies, policiesLoaded, policiesLoadError] = useK8sWatchResource<
     V1NodeNetworkConfigurationPolicy[]
@@ -71,9 +74,17 @@ const PoliciesList: React.FC = () => {
       )
     : [];
 
+  const onSelectPolicy = useCallback(
+    (policy: V1NodeNetworkConfigurationPolicy, state: EnactmentStatuses) => {
+      setSelectedPolicy(policy);
+      setSelectedState(state);
+    },
+    [],
+  );
+
   return (
     <>
-      <ListPageHeader title={t('Node Network Configuration Policy')}>
+      <ListPageHeader title={t(NodeNetworkConfigurationPolicyModel.label)}>
         <ListPageCreateDropdown
           items={createItems}
           onClick={onCreate}
@@ -109,13 +120,17 @@ const PoliciesList: React.FC = () => {
           columns={activeColumns}
           loadError={policiesLoadError && enactmentsError}
           Row={PolicyRow}
-          rowData={{ selectPolicy: setSelectedPolicy, enactments }}
+          rowData={{ selectPolicy: onSelectPolicy, enactments }}
           NoDataEmptyMsg={() => <PolicyListEmptyState />}
         />
 
         <PolicyEnactmentsDrawer
           selectedPolicy={selectedPolicy}
-          onClose={() => setSelectedPolicy(undefined)}
+          selectedState={selectedState}
+          onClose={() => {
+            setSelectedPolicy(undefined);
+            setSelectedState(undefined);
+          }}
           enactments={selectedPolicyEnactments}
         />
       </ListPageBody>

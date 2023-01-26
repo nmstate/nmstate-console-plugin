@@ -1,8 +1,9 @@
 import React from 'react';
+import { EnactmentStatuses } from 'src/policies/constants';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { RedExclamationCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
-import { Stack, StackItem } from '@patternfly/react-core';
+import { Button, ButtonVariant, Stack, StackItem } from '@patternfly/react-core';
 import { CheckIcon, CloseIcon, HourglassHalfIcon, InProgressIcon } from '@patternfly/react-icons';
 import { global_danger_color_200 as dangerColor } from '@patternfly/react-tokens/dist/js/global_danger_color_200';
 import { global_success_color_200 as successColor } from '@patternfly/react-tokens/dist/js/global_success_color_200';
@@ -12,9 +13,10 @@ import { categorizeEnactments } from './utils';
 
 type NNCPStateColumnProps = {
   enactments: V1beta1NodeNetworkConfigurationEnactment[];
+  onStateClick: (state: EnactmentStatuses) => void;
 };
 
-const NNCPStateColumn: React.FC<NNCPStateColumnProps> = ({ enactments }) => {
+const NNCPStateColumn: React.FC<NNCPStateColumnProps> = ({ enactments, onStateClick }) => {
   const { t } = useNMStateTranslation();
 
   const { available, pending, failing, progressing, aborted } = categorizeEnactments(enactments);
@@ -23,27 +25,27 @@ const NNCPStateColumn: React.FC<NNCPStateColumnProps> = ({ enactments }) => {
     {
       icon: <RedExclamationCircleIcon />,
       number: failing.length,
-      label: 'Failing',
+      label: EnactmentStatuses.Failing,
     },
     {
       icon: <CloseIcon color={dangerColor.value} />,
       number: aborted.length,
-      label: 'Aborted',
+      label: EnactmentStatuses.Aborted,
     },
     {
       icon: <CheckIcon color={successColor.value} />,
       number: available.length,
-      label: 'Available',
+      label: EnactmentStatuses.Available,
     },
     {
       icon: <InProgressIcon />,
       number: progressing.length,
-      label: 'Progressing',
+      label: EnactmentStatuses.Progressing,
     },
     {
       icon: <HourglassHalfIcon />,
       number: pending.length,
-      label: 'Pending',
+      label: EnactmentStatuses.Pending,
     },
   ];
 
@@ -53,7 +55,13 @@ const NNCPStateColumn: React.FC<NNCPStateColumnProps> = ({ enactments }) => {
         if (state.number > 0) {
           return (
             <StackItem key={state.label}>
-              {state.icon} {state.number} {t(state.label)}
+              <Button
+                variant={ButtonVariant.link}
+                isInline
+                onClick={() => onStateClick(state.label)}
+              >
+                {state.icon} {state.number} {t(state.label)}
+              </Button>
             </StackItem>
           );
         }

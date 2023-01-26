@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { NodeNetworkConfigurationPolicyModelGroupVersionKind } from 'src/console-models';
 import PolicyActions from 'src/policies/actions/PolicyActions';
+import { EnactmentStatuses } from 'src/policies/constants';
 import { ENACTMENT_LABEL_POLICY } from 'src/utils/constants';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
-import { Button } from '@patternfly/react-core';
 import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';
 
 import EnactmentStateColumn from './EnactmentStateColumn';
@@ -14,7 +14,7 @@ const PolicyRow: FC<
   RowProps<
     V1NodeNetworkConfigurationPolicy,
     {
-      selectPolicy: (policy: V1NodeNetworkConfigurationPolicy) => void;
+      selectPolicy: (policy: V1NodeNetworkConfigurationPolicy, state: EnactmentStatuses) => void;
       enactments: V1beta1NodeNetworkConfigurationEnactment[];
     }
   >
@@ -34,16 +34,15 @@ const PolicyRow: FC<
         />
       </TableData>
       <TableData id="nodes" activeColumnIDs={activeColumnIDs} className="pf-m-width-30">
-        {policyEnactments.length === 0 && <>0 {t('nodes')}</>}
-
-        {policyEnactments.length !== 0 && (
-          <Button variant="link" isInline onClick={() => selectPolicy(obj)}>
-            {policyEnactments.length} {t('nodes')}
-          </Button>
-        )}
+        <span>
+          {policyEnactments.length} {t('nodes')}
+        </span>
       </TableData>
       <TableData id="status" activeColumnIDs={activeColumnIDs} className="pf-m-width-30">
-        <EnactmentStateColumn enactments={policyEnactments} />
+        <EnactmentStateColumn
+          enactments={policyEnactments}
+          onStateClick={(state) => selectPolicy(obj, state)}
+        />
       </TableData>
       <TableData
         id="actions"

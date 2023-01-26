@@ -10,7 +10,7 @@ const deletePolicyFromDetailsPage = (policyName: string) => {
 
   cy.contains('button', 'Delete').click();
 
-  cy.contains('h1', 'Node Network Configuration Policy', { timeout: TIMEOUT_VISIT_PAGE });
+  cy.contains('h1', 'NodeNetworkConfigurationPolicy', { timeout: TIMEOUT_VISIT_PAGE });
 };
 
 describe('Create new policy with form', () => {

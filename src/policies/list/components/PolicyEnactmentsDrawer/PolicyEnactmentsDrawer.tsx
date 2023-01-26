@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { EnactmentStatuses } from 'src/policies/constants';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { RedExclamationCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
@@ -21,12 +22,14 @@ import './policy-enactments-drawer.scss';
 
 type PolicyEnactmentsDrawerProps = {
   selectedPolicy?: V1NodeNetworkConfigurationPolicy;
+  selectedState?: EnactmentStatuses;
   onClose: () => void;
   enactments: V1beta1NodeNetworkConfigurationEnactment[];
 };
 
 const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
   selectedPolicy,
+  selectedState,
   onClose,
   enactments,
 }) => {
@@ -42,19 +45,31 @@ const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
 
   const tabsData = useMemo(
     () => [
-      { title: t('Failing'), icon: <RedExclamationCircleIcon />, enactments: failingEnactments },
       {
-        title: t('Aborted'),
+        title: EnactmentStatuses.Failing,
+        icon: <RedExclamationCircleIcon />,
+        enactments: failingEnactments,
+      },
+      {
+        title: EnactmentStatuses.Aborted,
         icon: <CloseIcon color={dangerColor.value} />,
         enactments: abortedEnactments,
       },
       {
-        title: t('Available'),
+        title: EnactmentStatuses.Available,
         icon: <CheckIcon color={successColor.value} />,
         enactments: availableEnactments,
       },
-      { title: t('Progressing'), icon: <InProgressIcon />, enactments: progressingEnactments },
-      { title: t('Pending'), icon: <HourglassHalfIcon />, enactments: pendingEnactments },
+      {
+        title: EnactmentStatuses.Progressing,
+        icon: <InProgressIcon />,
+        enactments: progressingEnactments,
+      },
+      {
+        title: EnactmentStatuses.Pending,
+        icon: <HourglassHalfIcon />,
+        enactments: pendingEnactments,
+      },
     ],
     [enactments],
   );
@@ -62,8 +77,8 @@ const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
   const [selectedTab, setSelectedTab] = useState<string | number>(0);
 
   useEffect(() => {
-    setSelectedTab(tabsData.findIndex((tab) => tab.enactments.length !== 0));
-  }, [selectedPolicy]);
+    setSelectedTab(tabsData.findIndex((tab) => tab.title === selectedState));
+  }, [selectedPolicy, selectedState]);
 
   return (
     <Modal
@@ -91,7 +106,7 @@ const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
               title={
                 <>
                   <TabTitleIcon>{tabData.icon}</TabTitleIcon>
-                  <TabTitleText> {tabData.title} </TabTitleText>
+                  <TabTitleText> {t(tabData.title)} </TabTitleText>
                 </>
               }
             >
