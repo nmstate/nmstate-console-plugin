@@ -13,7 +13,7 @@
   "Cancel": "Cancel",
   "Checking this option will create a new PVC of the bootsource for the new template": "Checking this option will create a new PVC of the bootsource for the new template",
   "Click <1>Create node network configuration policy</1> to create your first policy": "Click <1>Create node network configuration policy</1> to create your first policy",
-  "Confirm deletion by typing <1>{policy?.metadata?.name}</1> below:": "Confirm deletion by typing <1>{policy?.metadata?.name}</1> below:",
+  "Confirm deletion by typing <1>{{name}}</1> below:": "Confirm deletion by typing <1>{{name}}</1> below:",
   "Copy MAC address": "Copy MAC address",
   "Create": "Create",
   "Create node network configuration policy": "Create node network configuration policy",

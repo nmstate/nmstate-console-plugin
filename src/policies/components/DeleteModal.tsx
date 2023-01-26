@@ -119,7 +119,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ closeModal, isOpen, policy })
         </p>
         <p className="pf-u-mb-md pf-u-mt-sm">
           <Trans t={t} ns="plugin__nmstate-console-plugin">
-            Confirm deletion by typing <strong>{policy?.metadata?.name}</strong> below:
+            Confirm deletion by typing <strong>{{ name: policy?.metadata?.name }}</strong> below:
           </Trans>
         </p>
         <FormGroup fieldId="text-confirmation">
