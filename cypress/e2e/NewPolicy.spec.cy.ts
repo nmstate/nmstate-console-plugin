@@ -16,6 +16,7 @@ const deletePolicyFromDetailsPage = (policyName: string) => {
 describe('Create new policy with form', () => {
   it('with bridge interface', () => {
     const testPolicyName = 'test-bridge-policy-name';
+
     cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
 
     cy.contains('button[type="button"]', 'Create', { timeout: TIMEOUT_VISIT_PAGE }).click();

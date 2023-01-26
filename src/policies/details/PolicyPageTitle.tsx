@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
-import { Alert, Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
+import { useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
+import { Alert, AlertVariant, Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
 import { getResourceUrl } from '@utils/helpers';
 
@@ -20,6 +21,11 @@ type PolicyPageTitleProps = {
 const PolicyPageTitle: React.FC<PolicyPageTitleProps> = ({ policy, name }) => {
   const { t } = useNMStateTranslation();
   const formSupported = isPolicySupported(policy);
+
+  const [canUpdatePolicy] = useAccessReview({
+    verb: 'update',
+    resource: NodeNetworkConfigurationPolicyModel.plural,
+  });
 
   return (
     <>
@@ -45,9 +51,20 @@ const PolicyPageTitle: React.FC<PolicyPageTitleProps> = ({ policy, name }) => {
             <PolicyActions policy={policy} />
           </div>
         </span>
-        {policy && !formSupported && (
+
+        {policy && canUpdatePolicy === false && (
           <Alert
-            variant="info"
+            className="pf-u-mb-md"
+            isInline
+            variant={AlertVariant.info}
+            title={t("You're in view-only mode")}
+          >
+            {t('To edit this policy, contact your administrator.')}
+          </Alert>
+        )}
+        {policy && canUpdatePolicy && !formSupported && (
+          <Alert
+            variant={AlertVariant.info}
             isInline
             title={t('This policy must be edited via YAML')}
             className="pf-u-mb-md"
