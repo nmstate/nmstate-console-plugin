@@ -46,7 +46,17 @@ function generateLogsAndCopyArtifacts {
 }
 
 echo "Creating namespace nmstate"
-oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/namespace.yaml
+cat <<EOF | oc create -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nmstate
+  labels:
+    name: nmstate
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+EOF
 
 trap generateLogsAndCopyArtifacts EXIT
 trap generateLogsAndCopyArtifacts ERR
@@ -109,16 +119,11 @@ export CONSOLE_CONFIG_NAME="cluster"
 export NMSTATE_PLUGIN_NAME="nmstate-console-plugin"
 NMSTATE_PLUGIN_IMAGE="$1"
 
-
-
-
-
-
 echo "deploy nmstate CRDs"
-oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nmstates.yaml
-oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkconfigurationenactments.yaml
-oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkconfigurationpolicies.yaml
-oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkstates.yaml
+oc apply -f src/nmstate-types/crds/nmstate.io_nmstates.yaml
+oc apply -f src/nmstate-types/crds/nmstate.io_nodenetworkconfigurationenactments.yaml
+oc apply -f src/nmstate-types/crds/nmstate.io_nodenetworkconfigurationpolicies.yaml
+oc apply -f src/nmstate-types/crds/nmstate.io_nodenetworkstates.yaml
 
 cat <<EOF | oc create -f -
 apiVersion: nmstate.io/v1
