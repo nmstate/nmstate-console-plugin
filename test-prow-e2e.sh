@@ -46,7 +46,7 @@ function generateLogsAndCopyArtifacts {
 }
 
 echo "Creating namespace nmstate"
-kubectl apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/namespace.yaml
+oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/namespace.yaml
 
 trap generateLogsAndCopyArtifacts EXIT
 trap generateLogsAndCopyArtifacts ERR
@@ -115,10 +115,10 @@ NMSTATE_PLUGIN_IMAGE="$1"
 
 
 echo "deploy nmstate CRDs"
-kubectl apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nmstates.yaml
-kubectl apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkconfigurationenactments.yaml
-kubectl apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkconfigurationpolicies.yaml
-kubectl apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkstates.yaml
+oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nmstates.yaml
+oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkconfigurationenactments.yaml
+oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkconfigurationpolicies.yaml
+oc apply -f https://github.com/nmstate/kubernetes-nmstate/releases/download/v0.74.0/nmstate.io_nodenetworkstates.yaml
 
 cat <<EOF | oc create -f -
 apiVersion: nmstate.io/v1
