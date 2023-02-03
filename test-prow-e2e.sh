@@ -135,10 +135,13 @@ EOF
 echo "Deploy nmstate console plugin"
 oc process -f oc-manifest.yaml \
   -p PLUGIN_NAME=nmstate-console-plugin \
-  -p NAMESPACE=openshift-nmstate \
+  -p NAMESPACE=nmstate \
   -p IMAGE=$NMSTATE_PLUGIN_IMAGE \
   | oc create -f -
 
+oc patch consoles.operator.openshift.io cluster \
+  --patch '{ "spec": { "plugins": ["nmstate-console-plugin"] } }' --type=merge
+  
 until \
   oc wait pods -n ${NS} --for=jsonpath='{.spec.containers[0].image}'="$NMSTATE_PLUGIN_IMAGE" -l app=nmstate-console-plugin
   do
