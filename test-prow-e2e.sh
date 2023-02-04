@@ -134,8 +134,6 @@ EOF
 
 echo "Deploy nmstate console plugin"
 oc process -f oc-manifest.yaml \
-  -p PLUGIN_NAME=nmstate-console-plugin \
-  -p NAMESPACE=nmstate \
   -p IMAGE=${NMSTATE_PLUGIN_IMAGE} \
   | oc create -f -
 
