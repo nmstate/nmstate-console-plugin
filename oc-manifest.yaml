@@ -4,7 +4,7 @@ metadata:
   name: nmstate-console-plugin-template
   annotations:
     openshift.io/display-name: OpenShift Console NMState Plugin Template
-    openshift.io/documentation-url: "https://github.com/nmstate/nmstate-plugin"
+    openshift.io/documentation-url: "https://github.com/nmstate/nmstate-console-plugin"
     iconClass: icon-nginx
     tags: openshift,console,plugin,nginx,nmstate
 parameters:
@@ -53,10 +53,18 @@ objects:
                 - containerPort: 9443
                   protocol: TCP
               imagePullPolicy: Always
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 50Mi
               volumeMounts:
                 - name: plugin-serving-cert
                   readOnly: true
                   mountPath: /var/serving-cert
+                - name: nginx-conf
+                  readOnly: true
+                  mountPath: /etc/nginx/nginx.conf
+                  subPath: nginx.conf
           volumes:
             - name: plugin-serving-cert
               secret:
@@ -108,3 +116,27 @@ objects:
         namespace: "${NAMESPACE}"
         port: 9443
         basePath: "/"
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: nginx-conf
+      namespace: "${NAMESPACE}"
+      labels:
+        app: "${PLUGIN_NAME}"
+        app.kubernetes.io/part-of: "${PLUGIN_NAME}"
+    data:
+      nginx.conf: |
+        error_log /dev/stdout info;
+        events {}
+        http {
+          access_log         /dev/stdout;
+          include            /etc/nginx/mime.types;
+          default_type       application/octet-stream;
+          keepalive_timeout  65;
+          server {
+            listen              9443 ssl;
+            ssl_certificate     /var/serving-cert/tls.crt;
+            ssl_certificate_key /var/serving-cert/tls.key;
+            root                /opt/app-root/src;
+          }
+        }
