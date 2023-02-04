@@ -7,19 +7,6 @@ metadata:
     openshift.io/documentation-url: "https://github.com/nmstate/nmstate-console-plugin"
     iconClass: icon-nginx
     tags: openshift,console,plugin,nginx,nmstate
-parameters:
-  - description: Name of your plugin. This name must match the name in the consolePlugin declaration in package.json.
-    name: PLUGIN_NAME
-    value: nmstate-console-plugin
-    required: true
-  - description: Namespace for your plugin. The namespace will be created by the template.
-    name: NAMESPACE
-    value: nmstate
-    required: true
-  - description: Container image of the plugin.
-    name: IMAGE
-    value: quay.io/repository/nmstate/nmstate-console-plugin:latest
-    required: true
 message: >-
   To enable the plugin on the cluster, run the following command:
   oc patch consoles.operator.openshift.io cluster --patch '{ "spec": { "plugins": ["${PLUGIN_NAME}"] } }' --type=merge
@@ -140,3 +127,16 @@ objects:
             root                /opt/app-root/src;
           }
         }
+parameters:
+  - description: Name of your plugin. This name must match the name in the consolePlugin declaration in package.json.
+    name: PLUGIN_NAME
+    value: nmstate-console-plugin
+    required: true
+  - description: Namespace for your plugin. The namespace will be created by the template.
+    name: NAMESPACE
+    value: nmstate
+    required: true
+  - description: Container image of the plugin.
+    name: IMAGE
+    value: quay.io/repository/nmstate/nmstate-console-plugin:latest
+    required: true
