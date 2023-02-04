@@ -14,11 +14,11 @@ parameters:
     required: true
   - description: Namespace for your plugin. The namespace will be created by the template.
     name: NAMESPACE
-    value: openshift-nmstate
+    value: nmstate
     required: true
   - description: Container image of the plugin.
     name: IMAGE
-    value: quay.io/repository/nmstate/nmstate-plugin:latest
+    value: quay.io/repository/nmstate/nmstate-console-plugin:latest
     required: true
 message: >-
   To enable the plugin on the cluster, run the following command:
