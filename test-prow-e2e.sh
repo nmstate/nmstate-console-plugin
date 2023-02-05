@@ -133,6 +133,7 @@ metadata:
 EOF
 
 echo "Deploy nmstate console plugin"
+echo $(oc process -f oc-manifest.yaml -p IMAGE=${NMSTATE_PLUGIN_IMAGE})
 oc process -f oc-manifest.yaml -p IMAGE=${NMSTATE_PLUGIN_IMAGE} | oc create -f -
 
 oc patch consoles.operator.openshift.io cluster --patch '{ "spec": { "plugins": ["nmstate-console-plugin"] } }' --type=merge
