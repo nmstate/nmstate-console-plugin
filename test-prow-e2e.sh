@@ -9,6 +9,20 @@ if [ $# -eq 0 ]
     exit 1
 fi
 
+
+PULL_SECRET_PATH="/var/run/operator-secret/dockerconfig" 
+NAMESPACE="openshift-marketplace"
+SECRET_NAME="ocs-secret"
+NS="nmstate"
+ARTIFACT_DIR=${ARTIFACT_DIR:=/tmp/artifacts}
+SCREENSHOTS_DIR="cypress/screenshots"
+
+# Enable console plugin for nmstate
+export CONSOLE_CONFIG_NAME="cluster"
+export NMSTATE_PLUGIN_NAME="nmstate-console-plugin"
+NMSTATE_PLUGIN_IMAGE="$1"
+
+
 function generateLogsAndCopyArtifacts {
   oc cluster-info dump > ${ARTIFACT_DIR}/cluster_info.json
   oc get secrets -A -o wide > ${ARTIFACT_DIR}/secrets.yaml
@@ -50,7 +64,7 @@ cat <<EOF | oc create -f -
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: nmstate
+  name: ${NS}
   labels:
     name: nmstate
     pod-security.kubernetes.io/enforce: restricted
@@ -61,12 +75,6 @@ EOF
 trap generateLogsAndCopyArtifacts EXIT
 trap generateLogsAndCopyArtifacts ERR
 
-PULL_SECRET_PATH="/var/run/operator-secret/dockerconfig" 
-NAMESPACE="openshift-marketplace"
-SECRET_NAME="ocs-secret"
-NS="nmstate"
-ARTIFACT_DIR=${ARTIFACT_DIR:=/tmp/artifacts}
-SCREENSHOTS_DIR="cypress/screenshots"
 
 function createSecret {
     oc create secret generic ${SECRET_NAME} --from-file=.dockerconfigjson=${PULL_SECRET_PATH} --type=kubernetes.io/dockerconfigjson -n $1
@@ -114,10 +122,6 @@ deleteAllPods ${NS}
 
 sleep 120
 
-# Enable console plugin for nmstate
-export CONSOLE_CONFIG_NAME="cluster"
-export NMSTATE_PLUGIN_NAME="nmstate-console-plugin"
-NMSTATE_PLUGIN_IMAGE="$1"
 
 echo "deploy nmstate CRDs"
 oc apply -f src/nmstate-types/crds/nmstate.io_nmstates.yaml
@@ -133,8 +137,8 @@ metadata:
 EOF
 
 echo "Deploy nmstate console plugin"
-oc process -f oc-manifest.yaml -p IMAGE=${NMSTATE_PLUGIN_IMAGE} -o yaml
-oc process -f oc-manifest.yaml -p IMAGE=${NMSTATE_PLUGIN_IMAGE} | oc create -f -
+oc process -n ${NS} -f oc-manifest.yaml -p IMAGE=${NMSTATE_PLUGIN_IMAGE} -p NAMESPACE=${NS} -o yaml
+oc process -n ${NS} -f oc-manifest.yaml -p IMAGE=${NMSTATE_PLUGIN_IMAGE} -p NAMESPACE=${NS} | oc create -f -
 
 oc patch consoles.operator.openshift.io cluster --patch '{ "spec": { "plugins": ["nmstate-console-plugin"] } }' --type=merge
   
