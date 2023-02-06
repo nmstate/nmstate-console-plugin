@@ -1,4 +1,4 @@
-import { TIMEOUT_VISIT_PAGE } from '../support/utilts';
+import { TIMEOUT_VISIT_PAGE } from '../support/constants';
 
 const deletePolicyFromDetailsPage = (policyName: string) => {
   cy.contains('button', 'Actions', { matchCase: false }).click();
@@ -6,7 +6,7 @@ const deletePolicyFromDetailsPage = (policyName: string) => {
 
   cy.contains('button[disabled]', 'Delete');
 
-  cy.get('input#text-confirmation').clear().type(policyName);
+  cy.get('input#text-confirmation').type(`{selectAll}${policyName}`);
 
   cy.contains('button', 'Delete').click();
 
@@ -14,20 +14,20 @@ const deletePolicyFromDetailsPage = (policyName: string) => {
 };
 
 describe('Create new policy with form', () => {
-  before(() => {
+  beforeEach(() => {
     cy.login();
+  });
+
+  it('with bridge interface', () => {
+    const testPolicyName = 'test-bridge-policy-name';
     cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
     cy.contains('button[type="button"]', 'Create', { timeout: TIMEOUT_VISIT_PAGE }).click();
 
     cy.contains('button', 'From Form').click();
 
     cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
-  });
 
-  it('with bridge interface', () => {
-    const testPolicyName = 'test-bridge-policy-name';
-
-    cy.get('input[name="policy-name"]').clear().type(testPolicyName);
+    cy.get('input[name="policy-name"]').type(`{selectAll}${testPolicyName}`);
 
     cy.get('input[name="policy-description"]').clear().type('test-policy-description');
 
@@ -43,8 +43,14 @@ describe('Create new policy with form', () => {
 
   it('with bridge and bond interface', () => {
     const testPolicyName = 'test-bridge-bond-policy-name';
+    cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
+    cy.contains('button[type="button"]', 'Create', { timeout: TIMEOUT_VISIT_PAGE }).click();
 
-    cy.get('input[name="policy-name"]').clear().type(testPolicyName);
+    cy.contains('button', 'From Form').click();
+
+    cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
+
+    cy.get('input[name="policy-name"]').type(`{selectAll}${testPolicyName}`);
 
     cy.get('input[name="policy-description"]').clear().type('test-policy-description');
 

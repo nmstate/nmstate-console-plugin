@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
-import { KUBEADMIN_IDP, KUBEADMIN_USERNAME } from './constants';
-import { TIMEOUT_VISIT_PAGE } from './utilts';
+import { KUBEADMIN_IDP, KUBEADMIN_USERNAME, TIMEOUT_VISIT_PAGE } from './constants';
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -44,14 +43,16 @@ const submitButton = 'button[type=submit]';
 
 Cypress.Commands.add('login', (provider?: string, username?: string, password?: string) => {
   // Check if auth is disabled (for a local development environment).
+
   cy.visit('', { timeout: TIMEOUT_VISIT_PAGE }); // visits baseUrl which is set in plugins.js
   cy.window().then((win: any) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       cy.task('log', '  skipping login, console is running with auth disabled');
       return;
     }
-    // Make sure we clear the cookie in case a previous test failed to logout.
+
     cy.clearCookie('openshift-session-token');
+    cy.clearCookies({ domain: `.${win.location.domain}` });
 
     const idp = provider || KUBEADMIN_IDP;
 
@@ -72,6 +73,7 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
       timeout: TIMEOUT_VISIT_PAGE,
     }).click();
     cy.contains('.pf-c-nav__link', 'NodeNetworkConfigurationPolicy').should('be.visible');
+    cy.clearCookies({ domain: `.${win.location.domain}` });
   });
 });
 
