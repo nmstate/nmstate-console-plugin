@@ -53,8 +53,6 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
     // Make sure we clear the cookie in case a previous test failed to logout.
     cy.clearCookie('openshift-session-token');
 
-    const idp = provider || KUBEADMIN_IDP;
-    cy.contains(idp, { timeout: TIMEOUT_VISIT_PAGE }).should('be.visible').click();
     cy.get('#inputUsername').type(username || KUBEADMIN_USERNAME);
     cy.get('#inputPassword').type(password || Cypress.env('KUBEADMIN_PASSWORD'));
     cy.get(submitButton).click();
