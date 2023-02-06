@@ -14,16 +14,18 @@ const deletePolicyFromDetailsPage = (policyName: string) => {
 };
 
 describe('Create new policy with form', () => {
-  it('with bridge interface', () => {
-    const testPolicyName = 'test-bridge-policy-name';
-
+  before(() => {
+    cy.login();
     cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
-
     cy.contains('button[type="button"]', 'Create', { timeout: TIMEOUT_VISIT_PAGE }).click();
 
     cy.contains('button', 'From Form').click();
 
     cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
+  });
+
+  it('with bridge interface', () => {
+    const testPolicyName = 'test-bridge-policy-name';
 
     cy.get('input[name="policy-name"]').clear().type(testPolicyName);
 
@@ -41,13 +43,6 @@ describe('Create new policy with form', () => {
 
   it('with bridge and bond interface', () => {
     const testPolicyName = 'test-bridge-bond-policy-name';
-    cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
-
-    cy.contains('button[type="button"]', 'Create', { timeout: TIMEOUT_VISIT_PAGE }).click();
-
-    cy.contains('button', 'From Form').click();
-
-    cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
 
     cy.get('input[name="policy-name"]').clear().type(testPolicyName);
 

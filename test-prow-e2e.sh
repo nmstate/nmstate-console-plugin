@@ -150,10 +150,8 @@ until \
 
 INSTALLER_DIR=${INSTALLER_DIR:=${ARTIFACT_DIR}/installer}
 
-BRIDGE_KUBEADMIN_PASSWORD="$(cat "${KUBEADMIN_PASSWORD_FILE:-${INSTALLER_DIR}/auth/kubeadmin-password}")"
-export BRIDGE_KUBEADMIN_PASSWORD
-BRIDGE_BASE_ADDRESS="$(oc get consoles.config.openshift.io cluster -o jsonpath='{.status.consoleURL}')"
-export BRIDGE_BASE_ADDRESS
+export CYPRESS_KUBEADMIN_PASSWORD="$(cat "${KUBEADMIN_PASSWORD_FILE:-${INSTALLER_DIR}/auth/kubeadmin-password}")"
+export BRIDGE_BASE_ADDRESS="$(oc get consoles.config.openshift.io cluster -o jsonpath='{.status.consoleURL}')"
 
 # Disable color codes in Cypress since they do not render well CI test logs.
 # https://docs.cypress.io/guides/guides/continuous-integration.html#Colors
