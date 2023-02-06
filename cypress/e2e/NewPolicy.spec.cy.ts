@@ -1,16 +1,14 @@
-import { TIMEOUT_VISIT_PAGE } from '../support/constants';
-
 const deletePolicyFromDetailsPage = (policyName: string) => {
   cy.contains('button', 'Actions', { matchCase: false }).click();
   cy.contains('a', 'Delete').click();
 
   cy.contains('button[disabled]', 'Delete');
 
-  cy.get('input#text-confirmation').type(`{selectAll}${policyName}`);
+  cy.get('input#text-confirmation').clear().type(`${policyName}`);
 
   cy.contains('button', 'Delete').click();
 
-  cy.contains('h1', 'NodeNetworkConfigurationPolicy', { timeout: TIMEOUT_VISIT_PAGE });
+  cy.contains('h1', 'NodeNetworkConfigurationPolicy');
 };
 
 describe('Create new policy with form', () => {
@@ -21,13 +19,13 @@ describe('Create new policy with form', () => {
   it('with bridge interface', () => {
     const testPolicyName = 'test-bridge-policy-name';
     cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
-    cy.contains('button[type="button"]', 'Create', { timeout: TIMEOUT_VISIT_PAGE }).click();
+    cy.contains('button[type="button"]', 'Create').click();
 
     cy.contains('button', 'From Form').click();
 
     cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
 
-    cy.get('input[name="policy-name"]').type(`{selectAll}${testPolicyName}`);
+    cy.get('input[name="policy-name"]').clear().type(`${testPolicyName}`);
 
     cy.get('input[name="policy-description"]').clear().type('test-policy-description');
 
@@ -36,7 +34,7 @@ describe('Create new policy with form', () => {
 
     cy.contains('button', 'Create').click();
 
-    cy.contains('h1', testPolicyName, { timeout: TIMEOUT_VISIT_PAGE });
+    cy.contains('h1', testPolicyName);
 
     deletePolicyFromDetailsPage(testPolicyName);
   });
@@ -44,13 +42,13 @@ describe('Create new policy with form', () => {
   it('with bridge and bond interface', () => {
     const testPolicyName = 'test-bridge-bond-policy-name';
     cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
-    cy.contains('button[type="button"]', 'Create', { timeout: TIMEOUT_VISIT_PAGE }).click();
+    cy.contains('button[type="button"]', 'Create').click();
 
     cy.contains('button', 'From Form').click();
 
     cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
 
-    cy.get('input[name="policy-name"]').type(`{selectAll}${testPolicyName}`);
+    cy.get('input[name="policy-name"]').clear().type(`${testPolicyName}`);
 
     cy.get('input[name="policy-description"]').clear().type('test-policy-description');
 
@@ -66,7 +64,7 @@ describe('Create new policy with form', () => {
 
     cy.contains('button', 'Create').click();
 
-    cy.contains('h1', testPolicyName, { timeout: TIMEOUT_VISIT_PAGE });
+    cy.contains('h1', testPolicyName);
 
     deletePolicyFromDetailsPage(testPolicyName);
   });

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { KUBEADMIN_IDP, KUBEADMIN_USERNAME, TIMEOUT_VISIT_PAGE } from './constants';
+import { KUBEADMIN_IDP, KUBEADMIN_USERNAME } from './constants';
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -44,7 +44,7 @@ const submitButton = 'button[type=submit]';
 Cypress.Commands.add('login', (provider?: string, username?: string, password?: string) => {
   // Check if auth is disabled (for a local development environment).
 
-  cy.visit('', { timeout: TIMEOUT_VISIT_PAGE }); // visits baseUrl which is set in plugins.js
+  cy.visit(''); // visits baseUrl which is set in plugins.js
   cy.window().then((win: any) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       cy.task('log', '  skipping login, console is running with auth disabled');
@@ -52,11 +52,10 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
     }
 
     cy.clearCookie('openshift-session-token');
-    cy.clearCookies({ domain: `.${win.location.domain}` });
 
     const idp = provider || KUBEADMIN_IDP;
 
-    cy.get('.pf-c-login__main-body', { timeout: TIMEOUT_VISIT_PAGE }).should('be.visible');
+    cy.get('.pf-c-login__main-body').should('be.visible');
 
     cy.get('body').then(($body) => {
       if ($body.text().includes(idp)) {
@@ -69,11 +68,8 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
     cy.get(submitButton).click();
     // wait for virtualization page
 
-    cy.contains('.pf-c-nav__link', 'Networking', {
-      timeout: TIMEOUT_VISIT_PAGE,
-    }).click();
+    cy.contains('.pf-c-nav__link', 'Networking').click();
     cy.contains('.pf-c-nav__link', 'NodeNetworkConfigurationPolicy').should('be.visible');
-    cy.clearCookies({ domain: `.${win.location.domain}` });
   });
 });
 
