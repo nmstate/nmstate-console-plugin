@@ -48,6 +48,9 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
   cy.window().then((win: any) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       cy.log('skipping login, console is running with auth disabled');
+
+      cy.contains('.pf-c-nav__link', 'Networking').click();
+      cy.contains('.pf-c-nav__link', 'NodeNetworkConfigurationPolicy').should('be.visible');
       return;
     }
 
