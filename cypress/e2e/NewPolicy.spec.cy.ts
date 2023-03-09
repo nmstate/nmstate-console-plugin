@@ -23,7 +23,7 @@ describe('Create new policy with form', () => {
 
     cy.contains('button', 'From Form').click();
 
-    cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
+    cy.contains('h1', 'Create NodeNetworkConfigurationPolicy', { matchCase: false });
 
     cy.get('input[name="policy-name"]').clear().type(`${testPolicyName}`);
 
@@ -46,7 +46,7 @@ describe('Create new policy with form', () => {
 
     cy.contains('button', 'From Form').click();
 
-    cy.contains('h1', 'Create node network configuration policy', { matchCase: false });
+    cy.contains('h1', 'Create NodeNetworkConfigurationPolicy', { matchCase: false });
 
     cy.get('input[name="policy-name"]').clear().type(`${testPolicyName}`);
 

@@ -36,8 +36,7 @@ const PolicyListEmptyState: React.FC = () => {
       </Title>
       <EmptyStateBody>
         <Trans t={t} ns="plugin__nmstate-console-plugin">
-          Click <strong>Create node network configuration policy</strong> to create your first
-          policy
+          Click <strong>Create NodeNetworkConfigurationPolicy</strong> to create your first policy
         </Trans>
       </EmptyStateBody>
       <EmptyStatePrimary>
@@ -51,7 +50,7 @@ const PolicyListEmptyState: React.FC = () => {
             )
           }
         >
-          {t('Create node network configuration policy')}
+          {t('Create NodeNetworkConfigurationPolicy')}
         </Button>
       </EmptyStatePrimary>
       <EmptyStateSecondaryActions>

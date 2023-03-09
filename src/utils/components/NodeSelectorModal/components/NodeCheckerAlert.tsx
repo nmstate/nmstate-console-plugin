@@ -78,9 +78,7 @@ const NodeCheckerAlert: React.FC<NodeCheckerAlertProps> = ({ qualifiedNodes, nod
           }
         >
           <Button variant="link" isInline>
-            {t('View matching {{matchingNodeText}}', {
-              matchingNodeText,
-            })}
+            {t('View matching Nodes')}
           </Button>
         </Popover>
       ) : (

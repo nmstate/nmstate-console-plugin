@@ -1,5 +1,8 @@
 import { NodeNetworkConfigurationInterfaceIPV4Address } from './NodeNetworkConfigurationInterfaceIPV4Address';
 
+export const AUTO_DNS = 'auto-dns';
+export const AUTO_ROUTES = 'auto-routes';
+export const AUTO_GATEWAY = 'auto-gateway';
 export interface NodeNetworkConfigurationInterfaceIPV4 {
   /**
    * The enabled property is the boolean switch to enable and disable the whole IP stack.
@@ -14,19 +17,19 @@ export interface NodeNetworkConfigurationInterfaceIPV4 {
    * The auto-routes property is the boolean switch for whether apply routes entries(including default gateway) retried from dynamic configuration method.
    * Set to true by default unless current state set to false explicitly.
    */
-  'auto-routes'?: boolean;
+  [AUTO_ROUTES]?: boolean;
 
   /**
    * The auto-routes property is the boolean switch for whether apply default gateway retried from dynamic configuration method.
    * Set to true by default unless current state set to false explicitly.
    */
-  'auto-gateway'?: boolean;
+  [AUTO_GATEWAY]?: boolean;
 
   /**
    * The auto-dns property is the boolean switch for whether apply DNS configurations retried from dynamic configuration method.
    * Set to true by default unless current state set to false explicitly.
    */
-  'auto-dns'?: boolean;
+  [AUTO_DNS]?: boolean;
   /**
    * The auto-route-table-id property is the integer for route table ID of the routes retried from dynamic configuration method.
    * If not mentioned in desire state or set to 0, nmstate will use the main table ID 254.
