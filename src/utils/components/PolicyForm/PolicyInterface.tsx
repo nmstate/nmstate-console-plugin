@@ -14,7 +14,13 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
-import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
+import {
+  AUTO_DNS,
+  AUTO_GATEWAY,
+  AUTO_ROUTES,
+  InterfaceType,
+  NodeNetworkConfigurationInterface,
+} from '@types';
 
 import BondOptions from './BondOptions';
 import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
@@ -78,7 +84,14 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   };
 
   const onDHCPChange = (checked: boolean) => {
-    onInterfaceChange((draftInterface) => (draftInterface.ipv4.dhcp = checked));
+    onInterfaceChange((draftInterface) => {
+      if (!checked) {
+        draftInterface.ipv4[AUTO_DNS] = false;
+        draftInterface.ipv4[AUTO_ROUTES] = false;
+        draftInterface.ipv4[AUTO_GATEWAY] = false;
+      }
+      draftInterface.ipv4.dhcp = checked;
+    });
   };
 
   const onSTPChange = (checked: boolean) => {
@@ -185,14 +198,49 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           isChecked={!!policyInterface.ipv4}
           onChange={onIP4Change}
         />
-        {!!policyInterface.ipv4 && (
-          <Checkbox
-            label={t('DHCP')}
-            id={`policy-interface-dhcp-${id}`}
-            isChecked={policyInterface.ipv4.dhcp}
-            onChange={onDHCPChange}
-          />
-        )}
+        <div className="pf-u-ml-md pf-u-mt-sm">
+          {!!policyInterface.ipv4 && (
+            <Checkbox
+              label={t('DHCP')}
+              id={`policy-interface-dhcp-${id}`}
+              isChecked={policyInterface.ipv4.dhcp}
+              onChange={onDHCPChange}
+            />
+          )}
+
+          {!!policyInterface.ipv4?.dhcp && (
+            <>
+              <Checkbox
+                label={t('Auto-DNS')}
+                id={`policy-interface-dns-${id}`}
+                isChecked={policyInterface.ipv4[AUTO_DNS]}
+                onChange={(checked) =>
+                  onInterfaceChange((draftInterface) => (draftInterface.ipv4[AUTO_DNS] = checked))
+                }
+              />
+              <Checkbox
+                label={t('Auto-routes')}
+                id={`policy-interface-routes-${id}`}
+                isChecked={policyInterface.ipv4[AUTO_ROUTES]}
+                onChange={(checked) =>
+                  onInterfaceChange(
+                    (draftInterface) => (draftInterface.ipv4[AUTO_ROUTES] = checked),
+                  )
+                }
+              />
+              <Checkbox
+                label={t('Auto-gateway')}
+                id={`policy-interface-gateway-${id}`}
+                isChecked={policyInterface.ipv4[AUTO_GATEWAY]}
+                onChange={(checked) =>
+                  onInterfaceChange(
+                    (draftInterface) => (draftInterface.ipv4[AUTO_GATEWAY] = checked),
+                  )
+                }
+              />
+            </>
+          )}
+        </div>
       </FormGroup>
       <FormGroup
         label={t('Port')}
@@ -221,7 +269,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
                 {editForm && (
                   <Popover
                     aria-label={'Help'}
-                    bodyContent={() => <div>{t('STP can be edited in the YAML file')}</div>}
+                    bodyContent={() => <div>{t('Edit the STP in the YAML file')}</div>}
                   >
                     <HelpIcon />
                   </Popover>
