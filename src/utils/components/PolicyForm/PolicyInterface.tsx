@@ -5,8 +5,11 @@ import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import {
   Checkbox,
+  Flex,
+  FlexItem,
   FormGroup,
   Popover,
+  Radio,
   Select,
   SelectOption,
   SelectVariant,
@@ -85,12 +88,13 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
 
   const onDHCPChange = (checked: boolean) => {
     onInterfaceChange((draftInterface) => {
-      if (!checked) {
-        draftInterface.ipv4[AUTO_DNS] = false;
-        draftInterface.ipv4[AUTO_ROUTES] = false;
-        draftInterface.ipv4[AUTO_GATEWAY] = false;
-      }
-      draftInterface.ipv4.dhcp = checked;
+      draftInterface.ipv4 = { enabled: true, dhcp: checked };
+    });
+  };
+
+  const onAddressChange = (value: string) => {
+    onInterfaceChange((draftInterface) => {
+      draftInterface.ipv4 = { enabled: true, address: [{ ip: value }] };
     });
   };
 
@@ -193,27 +197,52 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
       </FormGroup>
       <FormGroup label={t('IP configuration')} fieldId={`policy-interface-ip-${id}`}>
         <Checkbox
-          label={t('IPV4')}
+          label={t('IPv4')}
           id={`policy-interface-ip-${id}`}
-          isChecked={!!policyInterface.ipv4}
+          isChecked={policyInterface?.ipv4?.enabled}
           onChange={onIP4Change}
         />
         <div className="pf-u-ml-md pf-u-mt-sm">
-          {!!policyInterface.ipv4 && (
-            <Checkbox
-              label={t('DHCP')}
-              id={`policy-interface-dhcp-${id}`}
-              isChecked={policyInterface.ipv4.dhcp}
-              onChange={onDHCPChange}
-            />
+          {policyInterface?.ipv4 && (
+            <Flex className="pf-u-mb-md">
+              <FlexItem>
+                <Radio
+                  label={t('IP address')}
+                  name="ip-or-dhcp"
+                  id="ip"
+                  isChecked={!policyInterface?.ipv4?.dhcp}
+                  onChange={() => onAddressChange('')}
+                />
+              </FlexItem>
+
+              <FlexItem>
+                <Radio
+                  label={t('DHCP')}
+                  name="ip-or-dhcp"
+                  id="dhcp"
+                  isChecked={policyInterface?.ipv4?.dhcp}
+                  onChange={onDHCPChange}
+                />
+              </FlexItem>
+            </Flex>
+          )}
+          {policyInterface?.ipv4 && !policyInterface?.ipv4?.dhcp && (
+            <FormGroup label={t('IPV4 address')} isRequired fieldId={`ipv4-address-${id}`}>
+              <TextInput
+                value={policyInterface?.ipv4?.address?.[0].ip}
+                type="text"
+                id={`ipv4-address-${id}`}
+                onChange={onAddressChange}
+              />
+            </FormGroup>
           )}
 
-          {!!policyInterface.ipv4?.dhcp && (
+          {!!policyInterface?.ipv4?.dhcp && (
             <>
               <Checkbox
                 label={t('Auto-DNS')}
                 id={`policy-interface-dns-${id}`}
-                isChecked={policyInterface.ipv4[AUTO_DNS]}
+                isChecked={policyInterface?.ipv4[AUTO_DNS]}
                 onChange={(checked) =>
                   onInterfaceChange((draftInterface) => (draftInterface.ipv4[AUTO_DNS] = checked))
                 }
@@ -221,7 +250,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               <Checkbox
                 label={t('Auto-routes')}
                 id={`policy-interface-routes-${id}`}
-                isChecked={policyInterface.ipv4[AUTO_ROUTES]}
+                isChecked={policyInterface?.ipv4[AUTO_ROUTES]}
                 onChange={(checked) =>
                   onInterfaceChange(
                     (draftInterface) => (draftInterface.ipv4[AUTO_ROUTES] = checked),
@@ -231,7 +260,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               <Checkbox
                 label={t('Auto-gateway')}
                 id={`policy-interface-gateway-${id}`}
-                isChecked={policyInterface.ipv4[AUTO_GATEWAY]}
+                isChecked={policyInterface?.ipv4[AUTO_GATEWAY]}
                 onChange={(checked) =>
                   onInterfaceChange(
                     (draftInterface) => (draftInterface.ipv4[AUTO_GATEWAY] = checked),
