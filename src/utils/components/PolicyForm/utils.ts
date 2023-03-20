@@ -13,7 +13,7 @@ export const getExpandableTitle = (
       nncpInterface.name
     }`;
 
-  return t('Node network configuration policy interface');
+  return t('Policy interface');
 };
 
 export const validateInterfaceName = (name: string): string => {

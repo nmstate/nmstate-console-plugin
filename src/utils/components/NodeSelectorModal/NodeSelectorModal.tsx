@@ -128,9 +128,7 @@ const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ policy, isOpen, onClose
             isInline
             title={t('This node already has a policy matching it')}
           >
-            {t(
-              'Make sure there are no dependencies between the existing policy and the one you are about to define',
-            )}
+            {t('Remove all dependencies between the new and existing polices')}
           </Alert>
         )}
 

@@ -47,7 +47,10 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
   cy.visit(''); // visits baseUrl which is set in plugins.js
   cy.window().then((win: any) => {
     if (win.SERVER_FLAGS?.authDisabled) {
-      cy.task('log', '  skipping login, console is running with auth disabled');
+      cy.log('skipping login, console is running with auth disabled');
+
+      cy.contains('.pf-c-nav__link', 'Networking').click();
+      cy.contains('.pf-c-nav__link', 'NodeNetworkConfigurationPolicy').should('be.visible');
       return;
     }
 
@@ -77,10 +80,10 @@ Cypress.Commands.add('logout', () => {
   // Check if auth is disabled (for a local development environment).
   cy.window().then((win: any) => {
     if (win.SERVER_FLAGS?.authDisabled) {
-      cy.task('log', '  skipping logout, console is running with auth disabled');
+      cy.log('skipping logout, console is running with auth disabled');
       return;
     }
-    cy.task('log', '  Logging out');
+    cy.log('Logging out');
     cy.byTestID('user-dropdown').click();
     cy.byTestID('log-out').should('be.visible');
     cy.byTestID('log-out').click({ force: true });
