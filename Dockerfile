@@ -1,5 +1,5 @@
 # Builder container
-FROM registry.access.redhat.com/ubi9/nodejs-16 AS build
+FROM registry.access.redhat.com/ubi9/nodejs-18 AS build
 
 # Install yarn
 RUN npm install -g yarn -s &>/dev/null
@@ -10,7 +10,7 @@ WORKDIR /opt/app-root/src/app
 
 # Run install as supper tux
 USER 0
-RUN yarn install --frozen-lockfile && yarn build
+RUN yarn install --frozen-lockfile --network-timeout 600000 && yarn build
 
 # Web server container
 FROM registry.access.redhat.com/ubi9/nginx-120
