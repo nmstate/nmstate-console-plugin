@@ -8,6 +8,7 @@ import {
   Flex,
   FlexItem,
   FormGroup,
+  NumberInput,
   Popover,
   Radio,
   Select,
@@ -26,7 +27,7 @@ import {
 } from '@types';
 
 import BondOptions from './BondOptions';
-import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
+import { DEFAULT_PREFIX_LENGTH, INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 import CopyMAC from './CopyMAC';
 import { validateInterfaceName } from './utils';
 
@@ -78,7 +79,14 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   };
 
   const onIP4Change = (checked: boolean) => {
-    if (checked) onInterfaceChange((draftInterface) => (draftInterface.ipv4 = { enabled: true }));
+    if (checked)
+      onInterfaceChange(
+        (draftInterface) =>
+          (draftInterface.ipv4 = {
+            enabled: true,
+            address: [{ ip: '', 'prefix-length': DEFAULT_PREFIX_LENGTH }],
+          }),
+      );
     else {
       onInterfaceChange((draftInterface) => {
         delete draftInterface.ipv4;
@@ -94,7 +102,17 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
 
   const onAddressChange = (value: string) => {
     onInterfaceChange((draftInterface) => {
-      draftInterface.ipv4 = { enabled: true, address: [{ ip: value }] };
+      draftInterface.ipv4 = {
+        enabled: true,
+        address: [{ ip: value, 'prefix-length': DEFAULT_PREFIX_LENGTH }],
+      };
+    });
+  };
+
+  const onPrefixChange = (value: number) => {
+    onInterfaceChange((draftInterface) => {
+      if (draftInterface.ipv4.address.length > 0)
+        draftInterface.ipv4.address[0]['prefix-length'] = value;
     });
   };
 
@@ -227,14 +245,36 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
             </Flex>
           )}
           {policyInterface?.ipv4 && !policyInterface?.ipv4?.dhcp && (
-            <FormGroup label={t('IPV4 address')} isRequired fieldId={`ipv4-address-${id}`}>
-              <TextInput
-                value={policyInterface?.ipv4?.address?.[0].ip}
-                type="text"
-                id={`ipv4-address-${id}`}
-                onChange={onAddressChange}
-              />
-            </FormGroup>
+            <>
+              <FormGroup
+                label={t('IPV4 address')}
+                isRequired
+                fieldId={`ipv4-address-${id}`}
+                className="pf-u-mb-md"
+              >
+                <TextInput
+                  value={policyInterface?.ipv4?.address?.[0]?.ip}
+                  type="text"
+                  id={`ipv4-address-${id}`}
+                  onChange={onAddressChange}
+                />
+              </FormGroup>
+              <FormGroup label={t('Prefix length')} isRequired fieldId={`prefix-length-${id}`}>
+                <NumberInput
+                  value={policyInterface?.ipv4?.address?.[0]?.['prefix-length']}
+                  id={`prefix-length-${id}`}
+                  onChange={(event) => onPrefixChange(event.currentTarget.valueAsNumber)}
+                  onMinus={() =>
+                    onPrefixChange(policyInterface.ipv4.address[0]['prefix-length'] - 1)
+                  }
+                  onPlus={() =>
+                    onPrefixChange(policyInterface.ipv4.address[0]['prefix-length'] + 1)
+                  }
+                  min={0}
+                  max={64}
+                />
+              </FormGroup>
+            </>
           )}
 
           {!!policyInterface?.ipv4?.dhcp && (
