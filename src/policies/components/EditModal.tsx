@@ -55,7 +55,7 @@ const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => 
       onClose={closeModal}
       variant={'small'}
       position="top"
-      title={t('Edit Node network configuration policy')}
+      title={t('Edit NodeNetworkConfigurationPolicy')}
       footer={
         <Stack className="edit-modal-footer pf-u-flex-fill" hasGutter>
           {error && (

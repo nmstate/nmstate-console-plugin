@@ -103,7 +103,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           }
         />
       </FormGroup>
-      <FormGroup label={t('Description')} isRequired fieldId="policy-description-group">
+      <FormGroup label={t('Description')} fieldId="policy-description-group">
         <TextInput
           type="text"
           id="policy-description"
@@ -114,21 +114,16 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
       </FormGroup>
       <div>
         <Text className="pf-u-primary-color-100 pf-u-font-weight-bold pf-u-font-size-lg">
-          {t('Node network configuration policy interface')}{' '}
+          {t('Policy Interface(s)')}{' '}
           <Popover
             aria-label={'Help'}
-            bodyContent={() => (
-              <div>
-                {t(
-                  'Checking this option will create a new PVC of the bootsource for the new template',
-                )}
-              </div>
+            bodyContent={t(
+              'List of network interfaces that should be created, modified, or removed, as a part of this policy.',
             )}
           >
             <HelpIcon />
           </Popover>
         </Text>
-
         <Text className="policy-form-content__add-new-interface pf-u-mt-md">
           <Button
             className="pf-m-link--align-left pf-u-ml-md"

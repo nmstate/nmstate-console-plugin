@@ -5,8 +5,12 @@ import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import {
   Checkbox,
+  Flex,
+  FlexItem,
   FormGroup,
+  NumberInput,
   Popover,
+  Radio,
   Select,
   SelectOption,
   SelectVariant,
@@ -14,10 +18,16 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
-import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
+import {
+  AUTO_DNS,
+  AUTO_GATEWAY,
+  AUTO_ROUTES,
+  InterfaceType,
+  NodeNetworkConfigurationInterface,
+} from '@types';
 
 import BondOptions from './BondOptions';
-import { INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
+import { DEFAULT_PREFIX_LENGTH, INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 import CopyMAC from './CopyMAC';
 import { validateInterfaceName } from './utils';
 
@@ -69,7 +79,14 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   };
 
   const onIP4Change = (checked: boolean) => {
-    if (checked) onInterfaceChange((draftInterface) => (draftInterface.ipv4 = { enabled: true }));
+    if (checked)
+      onInterfaceChange(
+        (draftInterface) =>
+          (draftInterface.ipv4 = {
+            enabled: true,
+            address: [{ ip: '', 'prefix-length': DEFAULT_PREFIX_LENGTH }],
+          }),
+      );
     else {
       onInterfaceChange((draftInterface) => {
         delete draftInterface.ipv4;
@@ -78,7 +95,25 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   };
 
   const onDHCPChange = (checked: boolean) => {
-    onInterfaceChange((draftInterface) => (draftInterface.ipv4.dhcp = checked));
+    onInterfaceChange((draftInterface) => {
+      draftInterface.ipv4 = { enabled: true, dhcp: checked };
+    });
+  };
+
+  const onAddressChange = (value: string) => {
+    onInterfaceChange((draftInterface) => {
+      draftInterface.ipv4 = {
+        enabled: true,
+        address: [{ ip: value, 'prefix-length': DEFAULT_PREFIX_LENGTH }],
+      };
+    });
+  };
+
+  const onPrefixChange = (value: number) => {
+    onInterfaceChange((draftInterface) => {
+      if (draftInterface.ipv4.address.length > 0)
+        draftInterface.ipv4.address[0]['prefix-length'] = value;
+    });
   };
 
   const onSTPChange = (checked: boolean) => {
@@ -180,19 +215,101 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
       </FormGroup>
       <FormGroup label={t('IP configuration')} fieldId={`policy-interface-ip-${id}`}>
         <Checkbox
-          label={t('IPV4')}
+          label={t('IPv4')}
           id={`policy-interface-ip-${id}`}
-          isChecked={!!policyInterface.ipv4}
+          isChecked={policyInterface?.ipv4?.enabled}
           onChange={onIP4Change}
         />
-        {!!policyInterface.ipv4 && (
-          <Checkbox
-            label={t('DHCP')}
-            id={`policy-interface-dhcp-${id}`}
-            isChecked={policyInterface.ipv4.dhcp}
-            onChange={onDHCPChange}
-          />
-        )}
+        <div className="pf-u-ml-md pf-u-mt-sm">
+          {policyInterface?.ipv4 && (
+            <Flex className="pf-u-mb-md">
+              <FlexItem>
+                <Radio
+                  label={t('IP address')}
+                  name="ip-or-dhcp"
+                  id="ip"
+                  isChecked={!policyInterface?.ipv4?.dhcp}
+                  onChange={() => onAddressChange('')}
+                />
+              </FlexItem>
+
+              <FlexItem>
+                <Radio
+                  label={t('DHCP')}
+                  name="ip-or-dhcp"
+                  id="dhcp"
+                  isChecked={policyInterface?.ipv4?.dhcp}
+                  onChange={onDHCPChange}
+                />
+              </FlexItem>
+            </Flex>
+          )}
+          {policyInterface?.ipv4 && !policyInterface?.ipv4?.dhcp && (
+            <>
+              <FormGroup
+                label={t('IPV4 address')}
+                isRequired
+                fieldId={`ipv4-address-${id}`}
+                className="pf-u-mb-md"
+              >
+                <TextInput
+                  value={policyInterface?.ipv4?.address?.[0]?.ip}
+                  type="text"
+                  id={`ipv4-address-${id}`}
+                  onChange={onAddressChange}
+                />
+              </FormGroup>
+              <FormGroup label={t('Prefix length')} isRequired fieldId={`prefix-length-${id}`}>
+                <NumberInput
+                  value={policyInterface?.ipv4?.address?.[0]?.['prefix-length']}
+                  id={`prefix-length-${id}`}
+                  onChange={(event) => onPrefixChange(event.currentTarget.valueAsNumber)}
+                  onMinus={() =>
+                    onPrefixChange(policyInterface.ipv4.address[0]['prefix-length'] - 1)
+                  }
+                  onPlus={() =>
+                    onPrefixChange(policyInterface.ipv4.address[0]['prefix-length'] + 1)
+                  }
+                  min={0}
+                  max={64}
+                />
+              </FormGroup>
+            </>
+          )}
+
+          {!!policyInterface?.ipv4?.dhcp && (
+            <>
+              <Checkbox
+                label={t('Auto-DNS')}
+                id={`policy-interface-dns-${id}`}
+                isChecked={policyInterface?.ipv4[AUTO_DNS]}
+                onChange={(checked) =>
+                  onInterfaceChange((draftInterface) => (draftInterface.ipv4[AUTO_DNS] = checked))
+                }
+              />
+              <Checkbox
+                label={t('Auto-routes')}
+                id={`policy-interface-routes-${id}`}
+                isChecked={policyInterface?.ipv4[AUTO_ROUTES]}
+                onChange={(checked) =>
+                  onInterfaceChange(
+                    (draftInterface) => (draftInterface.ipv4[AUTO_ROUTES] = checked),
+                  )
+                }
+              />
+              <Checkbox
+                label={t('Auto-gateway')}
+                id={`policy-interface-gateway-${id}`}
+                isChecked={policyInterface?.ipv4[AUTO_GATEWAY]}
+                onChange={(checked) =>
+                  onInterfaceChange(
+                    (draftInterface) => (draftInterface.ipv4[AUTO_GATEWAY] = checked),
+                  )
+                }
+              />
+            </>
+          )}
+        </div>
       </FormGroup>
       <FormGroup
         label={t('Port')}
@@ -221,7 +338,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
                 {editForm && (
                   <Popover
                     aria-label={'Help'}
-                    bodyContent={() => <div>{t('STP can be edited in the YAML file')}</div>}
+                    bodyContent={() => <div>{t('Edit the STP in the YAML file')}</div>}
                   >
                     <HelpIcon />
                   </Popover>

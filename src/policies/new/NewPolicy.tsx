@@ -76,7 +76,7 @@ const NewPolicy: FC = () => {
   return (
     <PageSection className="new-policy-content">
       <Title className="new-policy-content__h1" headingLevel="h1">
-        {t('Create node network configuration policy')}
+        {t('Create NodeNetworkConfigurationPolicy')}
 
         <Button variant={ButtonVariant.link} onClick={goToYAMLEditor}>
           {t('Edit YAML')}
