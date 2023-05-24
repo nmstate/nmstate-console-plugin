@@ -76,6 +76,7 @@
   "Policy name": "Policy name",
   "Port": "Port",
   "Port name": "Port name",
+  "Prefix length": "Prefix length",
   "Progressing": "Progressing",
   "Remove": "Remove",
   "Remove all dependencies between the new and existing polices": "Remove all dependencies between the new and existing polices",

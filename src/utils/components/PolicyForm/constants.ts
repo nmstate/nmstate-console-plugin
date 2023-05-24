@@ -27,3 +27,5 @@ export const BOND_OPTIONS_KEYS = [
   'updelay',
   'use_carrier',
 ];
+
+export const DEFAULT_PREFIX_LENGTH = 24;
