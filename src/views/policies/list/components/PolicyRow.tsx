@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { NodeNetworkConfigurationPolicyModelGroupVersionKind } from 'src/console-models';
-import PolicyActions from 'src/policies/actions/PolicyActions';
-import { EnactmentStatuses } from 'src/policies/constants';
 import { ENACTMENT_LABEL_POLICY } from 'src/utils/constants';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
+import PolicyActions from 'src/views/policies/actions/PolicyActions';
+import { EnactmentStatuses } from 'src/views/policies/constants';
 
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
 import { V1beta1NodeNetworkConfigurationEnactment, V1NodeNetworkConfigurationPolicy } from '@types';

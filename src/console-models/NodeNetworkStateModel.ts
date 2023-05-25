@@ -6,7 +6,7 @@ const NodeNetworkStateModel: K8sModel = {
   label: 'NodeNetworkState',
   labelPlural: 'NodeNetworkStates',
   apiVersion: 'v1beta1',
-  apiGroup: 'NodeNetworkState.io',
+  apiGroup: 'nmstate.io',
   plural: 'nodenetworkstates',
   abbr: 'NNS',
   namespaced: false,
