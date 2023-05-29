@@ -130,25 +130,25 @@ oc patch consoles.operator.openshift.io cluster \
 
 A [Helm](https://helm.sh) chart is available to deploy the plugin to an OpenShift environment.
 
-Install the chart using the name of the plugin as the Helm release name into a new namespace or an existing namespace (openshift-nmstate by default) parameter and providing the location of the image within the `image` parameter by using the following command:
+Install the chart using the name of the plugin as the Helm release name into a new or existing namespace (openshift-nmstate by default) parameter and providing the location of the image within the `image` parameter by using the following command:
 
 ```shell
 helm upgrade -i  nmstate-console-plugin deployment/nmstate-console-plugin -n openshift-nmstate --create-namespace
 ```
 
-By default helm will use `quay.io/nmstate/nmstate-console-plugin:latest` as console plugin image.
-If you desire, you can change the image with the parameter `--set image=IMAGE_NAME`
+By default helm will use `quay.io/nmstate/nmstate-console-plugin:latest` as the console plugin image.
+If you desire, you can change the image with the `--set image=IMAGE_NAME` parameter
 
 Consult the chart [values](deployment/nmstate-console-plugin/values.yaml) file for the full set of supported parameters.
 
-If you don't have other console plugins installed
+### If you don't have other console plugins installed
 
 ```sh
 oc patch consoles.operator.openshift.io cluster \
   --patch '{ "spec": { "plugins": ["nmstate-console-plugin"] } }' --type=merge
 ```
 
-If you have other console plugins
+### If you have other console plugins
 
 ```sh
 oc patch consoles.operator.openshift.io cluster \
