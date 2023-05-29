@@ -1,6 +1,6 @@
 import React from 'react';
-import { EnactmentStatuses } from 'src/policies/constants';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
+import { EnactmentStatuses } from 'src/views/policies/constants';
 
 import { RedExclamationCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { Button, ButtonVariant, Stack, StackItem } from '@patternfly/react-core';
