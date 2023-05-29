@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 import { KUBEADMIN_IDP, KUBEADMIN_USERNAME } from './constants';
+import { ConsoleWindowType } from './types';
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -45,7 +46,7 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
   // Check if auth is disabled (for a local development environment).
 
   cy.visit(''); // visits baseUrl which is set in plugins.js
-  cy.window().then((win: any) => {
+  cy.window().then((win: ConsoleWindowType) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       cy.log('skipping login, console is running with auth disabled');
 
@@ -78,7 +79,7 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
 
 Cypress.Commands.add('logout', () => {
   // Check if auth is disabled (for a local development environment).
-  cy.window().then((win: any) => {
+  cy.window().then((win: ConsoleWindowType) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       cy.log('skipping logout, console is running with auth disabled');
       return;
