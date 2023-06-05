@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
+import { CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import {
   NodeNetworkStateModelGroupVersionKind,
   NodeNetworkStateModelRef,
@@ -12,8 +13,9 @@ import {
   ListPageHeader,
   useK8sWatchResource,
   useListPageFilter,
-  VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { Table, TableGridBreakpoint, TableHeader } from '@patternfly/react-table';
+import { AutoSizer, VirtualTableBody } from '@patternfly/react-virtualized-extension';
 import { V1beta1NodeNetworkState } from '@types';
 
 import StateRow from './components/StateRow';
@@ -22,8 +24,9 @@ import useStateFilters from './hooks/useStateFilters';
 
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
+  const measurementCacheRef = useRef(null);
 
-  const [states, statesLoaded, statesLoadError] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
+  const [states, statesLoaded] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
     groupVersionKind: NodeNetworkStateModelGroupVersionKind,
     isList: true,
     namespaced: false,
@@ -32,6 +35,32 @@ const StatesList: FC = () => {
   const [columns, activeColumns] = useStateColumns();
   const filters = useStateFilters();
   const [data, filteredData, onFilterChange] = useListPageFilter(states, filters);
+
+  useEffect(() => {
+    measurementCacheRef.current = new CellMeasurerCache({
+      fixedWidth: true,
+      minHeight: 44,
+      keyMapper: (rowIndex) => rowIndex,
+    });
+  }, []);
+
+  const rowRenderer = ({ index, key, parent }) => {
+    return (
+      <CellMeasurer
+        cache={measurementCacheRef.current}
+        columnIndex={0}
+        key={key}
+        parent={parent}
+        rowIndex={index}
+      >
+        <StateRow
+          obj={filteredData[index]}
+          activeColumnIDs={new Set(activeColumns.map(({ id }) => id))}
+          rowData={{ rowIndex: index }}
+        />
+      </CellMeasurer>
+    );
+  };
 
   return (
     <>
@@ -54,14 +83,32 @@ const StatesList: FC = () => {
           }}
         />
 
-        <VirtualizedTable<V1beta1NodeNetworkState>
-          data={filteredData}
-          unfilteredData={data}
-          loaded={statesLoaded}
-          columns={activeColumns}
-          loadError={statesLoadError}
-          Row={StateRow}
-        />
+        <Table
+          cells={activeColumns}
+          rows={filteredData}
+          gridBreakPoint={TableGridBreakpoint.none}
+          role="presentation"
+        >
+          <TableHeader />
+        </Table>
+        {measurementCacheRef.current && (
+          <AutoSizer disableHeight>
+            {({ width }) => (
+              <VirtualTableBody
+                className="pf-c-table pf-c-virtualized pf-c-window-scroller"
+                deferredMeasurementCache={measurementCacheRef.current}
+                rowHeight={measurementCacheRef.current.rowHeight}
+                height={400}
+                overscanRowCount={2}
+                columnCount={1}
+                rows={filteredData}
+                rowCount={filteredData.length}
+                rowRenderer={rowRenderer}
+                width={width}
+              />
+            )}
+          </AutoSizer>
+        )}
       </ListPageBody>
     </>
   );

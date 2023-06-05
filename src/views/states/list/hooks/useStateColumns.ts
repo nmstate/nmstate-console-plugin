@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { NodeNetworkStateModelRef } from 'src/console-models';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -7,7 +6,6 @@ import {
   TableColumn,
   useActiveColumns,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { sortable } from '@patternfly/react-table';
 
 const useStateColumns = (): [
   TableColumn<K8sResourceCommon>[],
@@ -17,11 +15,13 @@ const useStateColumns = (): [
 
   const columns: TableColumn<K8sResourceCommon>[] = [
     {
+      title: '',
+      id: 'expand-icons',
+      props: { className: 'pf-m-width-10' },
+    },
+    {
       title: t('Name'),
       id: 'name',
-      transforms: [sortable],
-      sort: 'metadata.name',
-      props: { className: 'pf-m-width-30' },
     },
     {
       title: t('Network interface'),
