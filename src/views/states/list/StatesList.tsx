@@ -18,7 +18,9 @@ import { Table, TableGridBreakpoint, TableHeader } from '@patternfly/react-table
 import { AutoSizer, VirtualTableBody } from '@patternfly/react-virtualized-extension';
 import { V1beta1NodeNetworkState } from '@types';
 
+import ListSkeleton from './components/ListSkeleton';
 import StateRow from './components/StateRow';
+import StatusBox from './components/StatusBox';
 import useStateColumns from './hooks/useStateColumns';
 import useStateFilters from './hooks/useStateFilters';
 
@@ -26,7 +28,7 @@ const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
   const measurementCacheRef = useRef(null);
 
-  const [states, statesLoaded] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
+  const [states, statesLoaded, statesError] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
     groupVersionKind: NodeNetworkStateModelGroupVersionKind,
     isList: true,
     namespaced: false,
@@ -62,53 +64,59 @@ const StatesList: FC = () => {
     );
   };
 
+  if (!statesLoaded && !statesError) {
+    return <ListSkeleton />;
+  }
+
   return (
     <>
       <ListPageHeader title={t(NodeNetworkStateModel.label)}></ListPageHeader>
       <ListPageBody>
-        <ListPageFilter
-          data={data}
-          loaded={statesLoaded}
-          rowFilters={filters}
-          onFilterChange={onFilterChange}
-          columnLayout={{
-            columns: columns?.map(({ id, title, additional }) => ({
-              id,
-              title,
-              additional,
-            })),
-            id: NodeNetworkStateModelRef,
-            selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
-            type: t('NodeNetworkState'),
-          }}
-        />
+        <StatusBox loaded={statesLoaded} error={statesError} data={states}>
+          <ListPageFilter
+            data={data}
+            loaded={statesLoaded}
+            rowFilters={filters}
+            onFilterChange={onFilterChange}
+            columnLayout={{
+              columns: columns?.map(({ id, title, additional }) => ({
+                id,
+                title,
+                additional,
+              })),
+              id: NodeNetworkStateModelRef,
+              selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
+              type: t('NodeNetworkState'),
+            }}
+          />
 
-        <Table
-          cells={activeColumns}
-          rows={filteredData}
-          gridBreakPoint={TableGridBreakpoint.none}
-          role="presentation"
-        >
-          <TableHeader />
-        </Table>
-        {measurementCacheRef.current && (
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <VirtualTableBody
-                className="pf-c-table pf-c-virtualized pf-c-window-scroller"
-                deferredMeasurementCache={measurementCacheRef.current}
-                rowHeight={measurementCacheRef.current.rowHeight}
-                height={400}
-                overscanRowCount={2}
-                columnCount={1}
-                rows={filteredData}
-                rowCount={filteredData.length}
-                rowRenderer={rowRenderer}
-                width={width}
-              />
+          <Table
+            cells={activeColumns}
+            rows={filteredData}
+            gridBreakPoint={TableGridBreakpoint.none}
+            role="presentation"
+          >
+            <TableHeader />
+            {measurementCacheRef.current && (
+              <AutoSizer disableHeight>
+                {({ width }) => (
+                  <VirtualTableBody
+                    className="pf-c-table pf-c-virtualized pf-c-window-scroller"
+                    deferredMeasurementCache={measurementCacheRef.current}
+                    rowHeight={measurementCacheRef.current.rowHeight}
+                    height={400}
+                    overscanRowCount={2}
+                    columnCount={1}
+                    rows={filteredData}
+                    rowCount={filteredData.length}
+                    rowRenderer={rowRenderer}
+                    width={width}
+                  />
+                )}
+              </AutoSizer>
             )}
-          </AutoSizer>
-        )}
+          </Table>
+        </StatusBox>
       </ListPageBody>
     </>
   );
