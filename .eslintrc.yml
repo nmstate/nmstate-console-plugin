@@ -6,7 +6,7 @@ extends:
   - plugin:react/recommended
   - plugin:@typescript-eslint/recommended
   - prettier
-parser: '@typescript-eslint/parser'
+parser: "@typescript-eslint/parser"
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -15,9 +15,13 @@ parserOptions:
 plugins:
   - prettier
   - react
-  - '@typescript-eslint'
+  - "@typescript-eslint"
   - simple-import-sort
 rules:
+  "@typescript-eslint/no-unused-vars":
+    - error
+  react/prop-types:
+    - off
   prettier/prettier:
     - error
   simple-import-sort/exports:
@@ -25,13 +29,15 @@ rules:
   simple-import-sort/imports:
     - warn
     - groups:
-      - ["^(assert|buffer|child_process|cluster|console|constants|crypto|dgram|dns|domain|events|fs|http|https|module|net|os|path|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|vm|zlib|freelist|v8|process|async_hooks|http2|perf_hooks)(/.*|$)"]
-      - ["^react", "^\\w"]
-      - ["^(@|config/)(/*|$)"]
-      - ["^\\u0000"]
-      - ["^\\.\\.(?!/?$)", "^\\.\\./?$"]
-      - ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
-      - ["^.+\\.s?css$"]
+        - [
+            "^(assert|buffer|child_process|cluster|console|constants|crypto|dgram|dns|domain|events|fs|http|https|module|net|os|path|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|vm|zlib|freelist|v8|process|async_hooks|http2|perf_hooks)(/.*|$)",
+          ]
+        - ["^react", "^\\w"]
+        - ["^(@|config/)(/*|$)"]
+        - ["^\\u0000"]
+        - ["^\\.\\.(?!/?$)", "^\\.\\./?$"]
+        - ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
+        - ["^.+\\.s?css$"]
 settings:
   react:
     version: detect

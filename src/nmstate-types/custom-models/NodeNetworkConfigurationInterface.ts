@@ -1,5 +1,6 @@
 import { NodeNetworkConfigurationInterfaceBridge } from './NodeNetworkConfigurationInterfaceBridge';
 import { NodeNetworkConfigurationInterfaceEthernet } from './NodeNetworkConfigurationInterfaceEthernet';
+import { NodeNetworkConfigurationInterfaceEthtool } from './NodeNetworkConfigurationInterfaceEthtool';
 import { NodeNetworkConfigurationInterfaceIPV4 } from './NodeNetworkConfigurationInterfaceIPV4';
 import { NodeNetworkConfigurationInterfaceIPV6 } from './NodeNetworkConfigurationInterfaceIPV6';
 import { NodeNetworkConfigurationInterfaceLinkAggregation } from './NodeNetworkConfigurationInterfaceLinkAggregation';
@@ -30,4 +31,6 @@ export interface NodeNetworkConfigurationInterface {
   'link-aggregation'?: NodeNetworkConfigurationInterfaceLinkAggregation;
   bridge?: NodeNetworkConfigurationInterfaceBridge;
   ethernet?: NodeNetworkConfigurationInterfaceEthernet;
+
+  ethtool?: NodeNetworkConfigurationInterfaceEthtool;
 }

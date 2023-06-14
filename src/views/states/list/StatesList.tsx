@@ -18,8 +18,10 @@ import { Table, TableGridBreakpoint, TableHeader } from '@patternfly/react-table
 import { AutoSizer, VirtualTableBody } from '@patternfly/react-virtualized-extension';
 import { V1beta1NodeNetworkState } from '@types';
 
+import InterfaceDrawer from './components/InterfaceDrawer/InterfaceDrawer';
 import StateRow from './components/StateRow';
 import StatusBox from './components/StatusBox';
+import { DrawerContextProvider } from './contexts/DrawerContext';
 import useStateColumns from './hooks/useStateColumns';
 import useStateFilters from './hooks/useStateFilters';
 
@@ -64,7 +66,7 @@ const StatesList: FC = () => {
   };
 
   return (
-    <>
+    <DrawerContextProvider>
       <ListPageHeader title={t(NodeNetworkStateModel.label)}></ListPageHeader>
       <ListPageBody>
         <StatusBox loaded={statesLoaded} error={statesError} data={states}>
@@ -113,7 +115,8 @@ const StatesList: FC = () => {
           </Table>
         </StatusBox>
       </ListPageBody>
-    </>
+      <InterfaceDrawer />
+    </DrawerContextProvider>
   );
 };
 
