@@ -18,7 +18,6 @@ import { Table, TableGridBreakpoint, TableHeader } from '@patternfly/react-table
 import { AutoSizer, VirtualTableBody } from '@patternfly/react-virtualized-extension';
 import { V1beta1NodeNetworkState } from '@types';
 
-import ListSkeleton from './components/ListSkeleton';
 import StateRow from './components/StateRow';
 import StatusBox from './components/StatusBox';
 import useStateColumns from './hooks/useStateColumns';
@@ -63,10 +62,6 @@ const StatesList: FC = () => {
       </CellMeasurer>
     );
   };
-
-  if (!statesLoaded && !statesError) {
-    return <ListSkeleton />;
-  }
 
   return (
     <>

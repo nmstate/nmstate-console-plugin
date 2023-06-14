@@ -69,7 +69,7 @@ jobs:
           yarn create-cluster
           yarn login-cluster
       - name: Cypress run
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v5.8.1
         with:
           start: yarn dev, yarn start-console
           wait-on: "http://localhost:9001"
