@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { Checkbox, CheckboxProps, Flex, FlexItem, Popover } from '@patternfly/react-core';
@@ -9,7 +9,7 @@ type ApplySelectorCheckboxProps = {
   onChange: CheckboxProps['onChange'];
 };
 
-const ApplySelectorCheckbox: React.FC<ApplySelectorCheckboxProps> = ({ isChecked, onChange }) => {
+const ApplySelectorCheckbox: FC<ApplySelectorCheckboxProps> = ({ isChecked, onChange }) => {
   const { t } = useNMStateTranslation();
   return (
     <Flex flexWrap={{ default: 'nowrap' }} spacer={{ default: 'spacerNone' }}>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { Trans } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
@@ -23,7 +23,7 @@ import { NODE_NETWORK_POLICY_DOCUMENTATION_URL } from './constants';
 
 import './policy-list-empty-state.scss';
 
-const PolicyListEmptyState: React.FC = () => {
+const PolicyListEmptyState: FC = () => {
   const { t } = useNMStateTranslation();
   const history = useHistory();
   return (

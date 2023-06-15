@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { EnactmentStatuses } from 'src/views/policies/constants';
 
@@ -27,7 +27,7 @@ type PolicyEnactmentsDrawerProps = {
   enactments: V1beta1NodeNetworkConfigurationEnactment[];
 };
 
-const PolicyEnactmentsDrawer: React.FC<PolicyEnactmentsDrawerProps> = ({
+const PolicyEnactmentsDrawer: FC<PolicyEnactmentsDrawerProps> = ({
   selectedPolicy,
   selectedState,
   onClose,

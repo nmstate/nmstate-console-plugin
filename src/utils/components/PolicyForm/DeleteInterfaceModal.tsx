@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Trans } from 'react-i18next';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -22,7 +22,7 @@ type DeleteInterfaceModalProps = {
   onSubmit: (policyInterface: NodeNetworkConfigurationInterface) => void;
 };
 
-const DeleteInterfaceModal: React.FC<DeleteInterfaceModalProps> = ({
+const DeleteInterfaceModal: FC<DeleteInterfaceModalProps> = ({
   closeModal,
   isOpen,
   policyInterface,

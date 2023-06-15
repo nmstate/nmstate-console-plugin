@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Flex, Skeleton, Stack, StackItem } from '@patternfly/react-core';
 
-const LinkSkeleton: React.FC = () => (
+const LinkSkeleton: FC = () => (
   <div>
     <Stack hasGutter>
       <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>

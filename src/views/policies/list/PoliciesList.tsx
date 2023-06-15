@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   NodeNetworkConfigurationEnactmentModelGroupVersionKind,
@@ -29,7 +29,7 @@ import PolicyRow from './components/PolicyRow';
 import usePolicyColumns from './hooks/usePolicyColumns';
 import usePolicyFilters from './hooks/usePolicyFilters';
 
-const PoliciesList: React.FC = () => {
+const PoliciesList: FC = () => {
   const { t } = useNMStateTranslation();
   const history = useHistory();
   const [selectedPolicy, setSelectedPolicy] = useState<V1NodeNetworkConfigurationPolicy>();

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { Updater } from 'use-immer';
 
 import { Button, FormFieldGroupExpandable, FormFieldGroupHeader } from '@patternfly/react-core';
@@ -16,7 +16,7 @@ type PolicyInterfacesExpandableProps = {
   createForm?: boolean;
 };
 
-const PolicyInterfacesExpandable: React.FC<PolicyInterfacesExpandableProps> = ({
+const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
   policy,
   setPolicy,
   createForm,

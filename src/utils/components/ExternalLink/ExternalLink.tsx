@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
@@ -7,7 +7,7 @@ type ExternalLinkProps = {
   label?: string;
 };
 
-const ExternalLink: React.FC<ExternalLinkProps> = ({ href, label }) => {
+const ExternalLink: FC<ExternalLinkProps> = ({ href, label }) => {
   const { t } = useNMStateTranslation();
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className="co-external-link">

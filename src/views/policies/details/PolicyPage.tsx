@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye } from '@patternfly/react-core';
@@ -15,14 +15,14 @@ type PolicyPageProps = {
   kind: string;
 };
 
-const PolicyPage: React.FC<PolicyPageProps> = ({ name, kind }) => {
+const PolicyPage: FC<PolicyPageProps> = ({ name, kind }) => {
   const { t } = useNMStateTranslation();
   const [policy, loaded] = useK8sWatchResource<V1NodeNetworkConfigurationPolicy>({
     kind,
     name,
   });
 
-  const pages = React.useMemo(
+  const pages = useMemo(
     () => [
       {
         href: '',

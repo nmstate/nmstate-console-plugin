@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { ExpandableSection, FormGroup, Text, TextInput } from '@patternfly/react-core';
@@ -12,7 +12,7 @@ type CopyMACProps = {
   ) => void;
 };
 
-const CopyMAC: React.FC<CopyMACProps> = ({ id, policyInterface, onInterfaceChange }) => {
+const CopyMAC: FC<CopyMACProps> = ({ id, policyInterface, onInterfaceChange }) => {
   const { t } = useNMStateTranslation();
 
   const onPortChange = (value) => {
