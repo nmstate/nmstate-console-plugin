@@ -82,7 +82,7 @@ const PolicyEnactmentsDrawer: FC<PolicyEnactmentsDrawerProps> = ({
 
   return (
     <Modal
-      aria-label="Template drawer"
+      aria-label="Policy enactments drawer"
       className="ocs-modal co-catalog-page__overlay co-catalog-page__overlay--right policy-enactments-drawer"
       isOpen={!!selectedPolicy}
       onClose={onClose}
