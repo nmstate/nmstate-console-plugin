@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { Button, FormGroup, GridItem, TextInput } from '@patternfly/react-core';
@@ -12,7 +12,7 @@ type LabelRowProps = {
   onDelete: (id: number) => void;
 };
 
-const LabelRow: React.FC<LabelRowProps> = ({ label, onChange, onDelete }) => {
+const LabelRow: FC<LabelRowProps> = ({ label, onChange, onDelete }) => {
   const { t } = useNMStateTranslation();
   const { id, key, value } = label;
   return (

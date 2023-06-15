@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useState } from 'react';
+import React, { FC, MouseEventHandler, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useHistory } from 'react-router';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
@@ -29,7 +29,7 @@ type DeleteModalProps = {
   policy: V1NodeNetworkConfigurationPolicy;
 };
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ closeModal, isOpen, policy }) => {
+const DeleteModal: FC<DeleteModalProps> = ({ closeModal, isOpen, policy }) => {
   const { t } = useNMStateTranslation();
   const history = useHistory();
   const [error, setError] = useState(undefined);

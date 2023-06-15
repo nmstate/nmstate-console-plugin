@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useState } from 'react';
+import React, { FC, MouseEventHandler, useState } from 'react';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { useImmer } from 'use-immer';
@@ -25,7 +25,7 @@ type EditModalProps = {
   policy: V1NodeNetworkConfigurationPolicy;
 };
 
-const EditModal: React.FC<EditModalProps> = ({ closeModal, isOpen, policy }) => {
+const EditModal: FC<EditModalProps> = ({ closeModal, isOpen, policy }) => {
   const { t } = useNMStateTranslation();
   const [error, setError] = useState(undefined);
   const [editablePolicy, setEditablePolicy] = useImmer(policy);

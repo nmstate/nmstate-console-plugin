@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
@@ -18,7 +18,7 @@ type PolicyPageTitleProps = {
   name: string;
 };
 
-const PolicyPageTitle: React.FC<PolicyPageTitleProps> = ({ policy, name }) => {
+const PolicyPageTitle: FC<PolicyPageTitleProps> = ({ policy, name }) => {
   const { t } = useNMStateTranslation();
   const formSupported = isPolicySupported(policy);
 

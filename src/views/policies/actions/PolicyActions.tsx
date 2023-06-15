@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { getContentScrollableElement, getResourceUrl } from 'src/utils/helpers';
@@ -26,13 +26,13 @@ type PolicyActionsProps = {
   isPolicyArchived?: boolean | undefined;
 };
 
-const PolicyActions: React.FC<PolicyActionsProps> = ({ policy, isKebabToggle }) => {
+const PolicyActions: FC<PolicyActionsProps> = ({ policy, isKebabToggle }) => {
   const history = useHistory();
   const formSupported = isPolicySupported(policy);
   const { t } = useNMStateTranslation();
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [canUpdatePolicy] = useAccessReview({
     verb: 'update',

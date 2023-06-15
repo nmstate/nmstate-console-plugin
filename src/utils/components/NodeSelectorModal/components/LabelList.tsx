@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC, ReactNode } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
@@ -6,12 +6,12 @@ import { Button, Grid, Split, SplitItem } from '@patternfly/react-core';
 import { ExternalLinkAltIcon, PlusCircleIcon } from '@patternfly/react-icons';
 
 type LabelsListProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   model?: K8sModel;
   onLabelAdd: () => void;
 };
 
-const LabelsList: React.FC<LabelsListProps> = ({ onLabelAdd, model, children }) => {
+const LabelsList: FC<LabelsListProps> = ({ onLabelAdd, model, children }) => {
   const { t } = useNMStateTranslation();
   return (
     <>

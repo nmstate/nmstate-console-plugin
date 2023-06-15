@@ -13,6 +13,7 @@ import {
   Radio,
   Select,
   SelectOption,
+  SelectProps,
   SelectVariant,
   Text,
   TextInput,
@@ -33,6 +34,8 @@ import { validateInterfaceName } from './utils';
 
 export type onInterfaceChangeType = (policyInterface: NodeNetworkConfigurationInterface) => void;
 
+type HandleSelectChange = SelectProps['onSelect'];
+
 type PolicyInterfaceProps = {
   id: number;
   editForm?: boolean;
@@ -51,10 +54,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   const [isTypeOpen, setTypeOpen] = useState(false);
   const [isAggregationOpen, setAggregationOpen] = useState(false);
 
-  const handleStateChange = (
-    event: React.MouseEvent<Element, MouseEvent>,
-    newState: NETWORK_STATES,
-  ) => {
+  const handleStateChange: HandleSelectChange = (event, newState: NETWORK_STATES) => {
     onInterfaceChange((draftInterface) => (draftInterface.state = newState));
     setStateOpen(false);
   };
@@ -63,7 +63,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
     onInterfaceChange((draftInterface) => (draftInterface.name = newName));
   };
 
-  const handleTypechange = (event: React.MouseEvent<Element, MouseEvent>, newType: string) => {
+  const handleTypechange: HandleSelectChange = (event, newType: string) => {
     onInterfaceChange((draftInterface) => {
       draftInterface.type = newType as InterfaceType;
 
@@ -128,10 +128,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
     });
   };
 
-  const handleAggregationChange = (
-    event: React.MouseEvent<Element, MouseEvent>,
-    aggregationMode: string,
-  ) => {
+  const handleAggregationChange: HandleSelectChange = (event, aggregationMode: string) => {
     onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'link-aggregation');
       draftInterface['link-aggregation'].mode =

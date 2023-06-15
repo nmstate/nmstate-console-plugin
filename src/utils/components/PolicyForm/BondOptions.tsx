@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ensurePath } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -16,7 +16,7 @@ type BondOptionsProps = {
   ) => void;
 };
 
-const BondOptions: React.FC<BondOptionsProps> = ({ id, onInterfaceChange, policyInterface }) => {
+const BondOptions: FC<BondOptionsProps> = ({ id, onInterfaceChange, policyInterface }) => {
   const { t } = useNMStateTranslation();
   const options = policyInterface?.['link-aggregation']?.options || {};
 

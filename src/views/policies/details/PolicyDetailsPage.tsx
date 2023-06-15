@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -19,7 +19,7 @@ type PolicyDetailsPageProps = RouteComponentProps<{
   obj?: V1NodeNetworkConfigurationPolicy;
 };
 
-const PolicyDetailsPage: React.FC<PolicyDetailsPageProps> = ({ obj: policy }) => {
+const PolicyDetailsPage: FC<PolicyDetailsPageProps> = ({ obj: policy }) => {
   const { t } = useNMStateTranslation();
 
   const firstInterface = policy?.spec?.desiredState

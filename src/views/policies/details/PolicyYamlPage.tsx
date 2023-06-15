@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Suspense } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
@@ -22,7 +22,7 @@ const PolicyYAMLPage: FC<PolicyYAMLPageProps> = ({ obj: policy }) => {
     );
 
   return (
-    <React.Suspense
+    <Suspense
       fallback={
         <Bullseye>
           <Loading />
@@ -30,7 +30,7 @@ const PolicyYAMLPage: FC<PolicyYAMLPageProps> = ({ obj: policy }) => {
       }
     >
       <ResourceYAMLEditor initialResource={policy} />
-    </React.Suspense>
+    </Suspense>
   );
 };
 

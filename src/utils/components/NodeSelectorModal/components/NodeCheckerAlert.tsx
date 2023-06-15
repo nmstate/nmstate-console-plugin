@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { NodeModelGroupVersionKind } from 'src/console-models/NodeModel';
 
 import { IoK8sApiCoreV1Node } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
@@ -20,7 +20,7 @@ type NodeCheckerAlertProps = {
   nodesLoaded: boolean;
 };
 
-const NodeCheckerAlert: React.FC<NodeCheckerAlertProps> = ({ qualifiedNodes, nodesLoaded }) => {
+const NodeCheckerAlert: FC<NodeCheckerAlertProps> = ({ qualifiedNodes, nodesLoaded }) => {
   const { t } = useNMStateTranslation();
   if (!nodesLoaded) {
     return <Loading />;

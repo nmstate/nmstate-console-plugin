@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { EnactmentStatuses } from 'src/views/policies/constants';
 
@@ -16,7 +16,7 @@ type NNCPStateColumnProps = {
   onStateClick: (state: EnactmentStatuses) => void;
 };
 
-const NNCPStateColumn: React.FC<NNCPStateColumnProps> = ({ enactments, onStateClick }) => {
+const NNCPStateColumn: FC<NNCPStateColumnProps> = ({ enactments, onStateClick }) => {
   const { t } = useNMStateTranslation();
 
   const { available, pending, failing, progressing, aborted } = categorizeEnactments(enactments);
