@@ -4,6 +4,7 @@ import { NodeNetworkConfigurationInterfaceEthtool } from './NodeNetworkConfigura
 import { NodeNetworkConfigurationInterfaceIPV4 } from './NodeNetworkConfigurationInterfaceIPV4';
 import { NodeNetworkConfigurationInterfaceIPV6 } from './NodeNetworkConfigurationInterfaceIPV6';
 import { NodeNetworkConfigurationInterfaceLinkAggregation } from './NodeNetworkConfigurationInterfaceLinkAggregation';
+import { NodeNetworkConfigurationInterfaceLLDP } from './NodeNetworkConfigurationInterfaceLLDP';
 import { InterfaceType } from './NodeNetworkConfigurationInterfaceType';
 
 export interface NodeNetworkConfigurationInterface {
@@ -33,4 +34,6 @@ export interface NodeNetworkConfigurationInterface {
   ethernet?: NodeNetworkConfigurationInterfaceEthernet;
 
   ethtool?: NodeNetworkConfigurationInterfaceEthtool;
+
+  lldp?: NodeNetworkConfigurationInterfaceLLDP;
 }
