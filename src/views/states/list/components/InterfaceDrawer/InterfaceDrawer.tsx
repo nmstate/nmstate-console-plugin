@@ -42,6 +42,7 @@ const InterfaceDrawer: FC = () => {
       onClose={onClose}
       disableFocusTrap
       header={<Title headingLevel="h2">{selectedInterface?.name}</Title>}
+      data-test="interface-drawer"
     >
       <div className="co-m-horizontal-nav pf-u-px-md">
         <ul className="co-m-horizontal-nav__menu">
@@ -51,6 +52,7 @@ const InterfaceDrawer: FC = () => {
               className={`co-m-horizontal-nav__menu-item ${
                 selectedTab === tab.id ? 'co-m-horizontal-nav-item--active' : ''
               }`}
+              data-test={`horizontal-tab-${tab.id}`}
             >
               <a data-test-id="horizontal-link-Details" href={`${location.pathname}#${tab.id}`}>
                 {tab.title}

@@ -36,6 +36,7 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
               isExpanded={isExpanded}
               onToggle={setIsExpanded}
               className="expandable-section-interface-type"
+              data-test={`${interfaceType}-expandable-section-toggle`}
             >
               {interfaceType}
             </ExpandableSectionToggle>
@@ -50,7 +51,11 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
           return (
             <Tr key={iface.name} isExpanded={isExpanded}>
               <Td className="pf-m-width-30">
-                <Button variant={ButtonVariant.link} onClick={() => setSelectedInterface(iface)}>
+                <Button
+                  variant={ButtonVariant.link}
+                  onClick={() => setSelectedInterface(iface)}
+                  data-test={`${interfaceType}-${iface.name}-open-drawer`}
+                >
                   {iface.name}
                   <Icon color="black" className="pf-u-mr-sm" />
                 </Button>

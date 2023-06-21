@@ -1,0 +1,274 @@
+{
+  "apiVersion": "nmstate.io/v1beta1",
+  "items": [
+    {
+      "apiVersion": "nmstate.io/v1beta1",
+      "kind": "NodeNetworkState",
+      "metadata": {
+        "creationTimestamp": "2023-06-02T04:07:37Z",
+        "generation": 1,
+        "managedFields": [
+          {
+            "apiVersion": "nmstate.io/v1beta1",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:metadata": {
+                "f:ownerReferences": {
+                  ".": {},
+                  "k:{\"uid\":\"8285a439-2b8a-4238-ac70-3df4b4235232\"}": {}
+                }
+              }
+            },
+            "manager": "manager",
+            "operation": "Update",
+            "time": "2023-06-02T04:07:37Z"
+          },
+          {
+            "apiVersion": "nmstate.io/v1beta1",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:status": {
+                ".": {},
+                "f:currentState": {
+                  ".": {},
+                  "f:dns-resolver": {
+                    ".": {},
+                    "f:config": {
+                      ".": {},
+                      "f:search": {},
+                      "f:server": {}
+                    },
+                    "f:running": {
+                      ".": {},
+                      "f:search": {},
+                      "f:server": {}
+                    }
+                  },
+                  "f:interfaces": {},
+                  "f:routes": {
+                    ".": {},
+                    "f:config": {},
+                    "f:running": {}
+                  }
+                },
+                "f:handlerNmstateVersion": {},
+                "f:hostNetworkManagerVersion": {},
+                "f:lastSuccessfulUpdateTime": {}
+              }
+            },
+            "manager": "manager",
+            "operation": "Update",
+            "subresource": "status",
+            "time": "2023-06-21T12:50:05Z"
+          }
+        ],
+        "name": "uit-dev-0602-29k82-master-0",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "name": "uit-dev-0602-29k82-master-0",
+            "uid": "8285a439-2b8a-4238-ac70-3df4b4235232"
+          }
+        ],
+        "resourceVersion": "28661459",
+        "uid": "04924a50-b077-4f6a-bc92-8075e398ba09"
+      },
+      "status": {
+        "currentState": {
+          "dns-resolver": {
+            "config": {
+              "search": null,
+              "server": null
+            },
+            "running": {
+              "search": [],
+              "server": ["10.11.5.19", "10.2.32.1"]
+            }
+          },
+          "interfaces": [
+            {
+              "name": "eth1",
+              "type": "ethernet",
+              "state": "up",
+              "ipv4": {
+                "enabled": false,
+                "dhcp": false
+              },
+              "ipv6": {
+                "enabled": false,
+                "autoconf": false,
+                "dhcp": false
+              },
+              "lldp": {
+                "enabled": true,
+                "neighbors": [
+                  [
+                    {
+                      "type": 5,
+                      "system-name": "Summit300-48"
+                    },
+                    {
+                      "type": 6,
+                      "system-description": "Summit300-48 - Version 7.4e.1 (Build 5) 05/27/05 04:53:11"
+                    },
+                    {
+                      "type": 7,
+                      "system-capabilities": ["MAC Bridge component", "Router"]
+                    },
+                    {
+                      "type": 1,
+                      "_description": "MAC address",
+                      "chassis-id": "00:01:30:F9:AD:A0",
+                      "chassis-id-type": 4
+                    },
+                    {
+                      "type": 2,
+                      "_description": "Interface name",
+                      "port-id": "1/1",
+                      "port-id-type": 5
+                    },
+                    {
+                      "type": 127,
+                      "ieee-802-1-vlans": [
+                        {
+                          "name": "v2-0488-03-0505",
+                          "vid": 488
+                        }
+                      ],
+                      "oui": "00:80:c2",
+                      "subtype": 3
+                    },
+                    {
+                      "type": 127,
+                      "ieee-802-3-mac-phy-conf": {
+                        "autoneg": true,
+                        "operational-mau-type": 16,
+                        "pmd-autoneg-cap": 27648
+                      },
+                      "oui": "00:12:0f",
+                      "subtype": 1
+                    },
+                    {
+                      "type": 127,
+                      "ieee-802-1-ppvids": [0],
+                      "oui": "00:80:c2",
+                      "subtype": 2
+                    },
+                    {
+                      "type": 8,
+                      "management-addresses": [
+                        {
+                          "address": "00:01:30:F9:AD:A0",
+                          "address-subtype": "MAC",
+                          "interface-number": 1001,
+                          "interface-number-subtype": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": 127,
+                      "ieee-802-3-max-frame-size": 1522,
+                      "oui": "00:12:0f",
+                      "subtype": 4
+                    }
+                  ]
+                ]
+              },
+              "mac-address": "82:75:BE:6F:8C:7A",
+              "mtu": 1500
+            }
+          ],
+          "routes": {
+            "config": [
+              {
+                "destination": "172.30.0.0/16",
+                "next-hop-address": "10.130.0.1",
+                "next-hop-interface": "ovn-k8s-mp0",
+                "table-id": 7
+              },
+              {
+                "destination": "10.128.0.0/14",
+                "next-hop-address": "10.130.0.1",
+                "next-hop-interface": "ovn-k8s-mp0",
+                "table-id": 254
+              },
+              {
+                "destination": "169.254.169.1/32",
+                "next-hop-address": "0.0.0.0",
+                "next-hop-interface": "br-ex",
+                "table-id": 254
+              },
+              {
+                "destination": "169.254.169.3/32",
+                "next-hop-address": "10.130.0.1",
+                "next-hop-interface": "ovn-k8s-mp0",
+                "table-id": 254
+              },
+              {
+                "destination": "172.30.0.0/16",
+                "next-hop-address": "169.254.169.4",
+                "next-hop-interface": "br-ex",
+                "table-id": 254
+              }
+            ],
+            "running": [
+              {
+                "destination": "172.30.0.0/16",
+                "next-hop-address": "10.130.0.1",
+                "next-hop-interface": "ovn-k8s-mp0",
+                "table-id": 7
+              },
+              {
+                "destination": "10.128.0.0/14",
+                "next-hop-address": "10.130.0.1",
+                "next-hop-interface": "ovn-k8s-mp0",
+                "table-id": 254
+              },
+              {
+                "destination": "169.254.169.1/32",
+                "next-hop-address": "0.0.0.0",
+                "next-hop-interface": "br-ex",
+                "table-id": 254
+              },
+              {
+                "destination": "169.254.169.3/32",
+                "next-hop-address": "10.130.0.1",
+                "next-hop-interface": "ovn-k8s-mp0",
+                "table-id": 254
+              },
+              {
+                "destination": "172.30.0.0/16",
+                "next-hop-address": "169.254.169.4",
+                "next-hop-interface": "br-ex",
+                "table-id": 254
+              },
+              {
+                "destination": "0.0.0.0/0",
+                "metric": 48,
+                "next-hop-address": "192.168.0.1",
+                "next-hop-interface": "br-ex",
+                "table-id": 254
+              },
+              {
+                "destination": "169.254.169.254/32",
+                "metric": 48,
+                "next-hop-address": "192.168.0.10",
+                "next-hop-interface": "br-ex",
+                "table-id": 254
+              }
+            ]
+          }
+        },
+        "handlerNmstateVersion": "nmstatectl 2.2.9",
+        "hostNetworkManagerVersion": "1.42.2",
+        "lastSuccessfulUpdateTime": "2023-06-21T12:50:05Z"
+      }
+    }
+  ],
+  "kind": "NodeNetworkStateList",
+  "metadata": {
+    "continue": "",
+    "resourceVersion": "28666056"
+  }
+}
