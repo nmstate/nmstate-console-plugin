@@ -22,6 +22,7 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
   createForm,
 }) => {
   const createdPolicy = useRef(createForm ? undefined : policy);
+
   const [interfaceToDelete, setInterfaceToDelete] = useState<NodeNetworkConfigurationInterface>();
   const { t } = useNMStateTranslation();
 
@@ -72,7 +73,11 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
         >
           <PolicyInterface
             id={index}
-            editForm={!createForm}
+            createdInterface={
+              !!createdPolicy?.current?.spec?.desiredState?.interfaces?.find(
+                (iface) => iface.name === policyInterface.name,
+              )
+            }
             policyInterface={policyInterface}
             onInterfaceChange={(updateInterface: onInterfaceChangeType) =>
               setPolicy((draftPolicy) => {

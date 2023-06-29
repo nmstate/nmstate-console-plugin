@@ -38,7 +38,7 @@ type HandleSelectChange = SelectProps['onSelect'];
 
 type PolicyInterfaceProps = {
   id: number;
-  editForm?: boolean;
+  createdInterface?: boolean;
   policyInterface?: NodeNetworkConfigurationInterface;
   onInterfaceChange?: (updateInterface: onInterfaceChangeType) => void;
 };
@@ -47,7 +47,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   id,
   policyInterface,
   onInterfaceChange,
-  editForm = true,
+  createdInterface = true,
 }) => {
   const { t } = useNMStateTranslation();
   const [isStateOpen, setStateOpen] = useState(false);
@@ -167,7 +167,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           name={`policy-interface-name-${id}`}
           value={policyInterface?.name}
           onChange={handleNameChange}
-          isDisabled={editForm}
+          isDisabled={createdInterface}
         />
       </FormGroup>
       <FormGroup
@@ -201,7 +201,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           onSelect={handleTypechange}
           variant={SelectVariant.single}
           selections={policyInterface?.type}
-          isDisabled={editForm}
+          isDisabled={createdInterface}
         >
           {Object.entries(INTERFACE_TYPE_OPTIONS).map(([key, value]) => (
             <SelectOption key={key} value={key}>
@@ -332,7 +332,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
             label={
               <Text>
                 {t('Enable STP')}{' '}
-                {editForm && (
+                {createdInterface && (
                   <Popover
                     aria-label={'Help'}
                     bodyContent={() => <div>{t('Edit the STP in the YAML file')}</div>}
@@ -345,7 +345,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
             id={`policy-interface-stp-${id}`}
             isChecked={policyInterface?.bridge?.options?.stp?.enabled}
             onChange={onSTPChange}
-            isDisabled={editForm}
+            isDisabled={createdInterface}
           />
         </FormGroup>
       )}
