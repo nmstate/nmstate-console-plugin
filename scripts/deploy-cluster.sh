@@ -49,9 +49,8 @@ reg_name='kind-registry'
 reg_port='5001'
 
 # Create the kind network
-if ! ${CONTAINER_CMD} network exists kind; then
-  ${CONTAINER_CMD} network create kind
-fi
+${CONTAINER_CMD} network create kind  --driver bridge
+${CONTAINER_CMD} network ls
 
 # Create the registry
 if [ "$(${CONTAINER_CMD} inspect -f {{.State.Running}} "${reg_name}" 2>/dev/null || true)" != 'true' ]; then

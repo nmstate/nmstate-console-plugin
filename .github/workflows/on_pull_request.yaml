@@ -62,7 +62,12 @@ jobs:
           sudo install kubectl /usr/local/bin/kubectl
       - name: Install podman
         run: |
-          sudo apt-get -y install podman
+          curl -LO https://github.com/containers/podman/releases/download/v3.4.4/podman-remote-static.tar.gz
+          tar -xvf podman-remote-static.tar.gz
+          sudo install podman-remote-static /usr/local/bin/podman
+
+          curl -O http://archive.ubuntu.com/ubuntu/pool/universe/g/golang-github-containernetworking-plugins/containernetworking-plugins_1.1.1+ds1-1_amd64.deb
+          sudo dpkg -i containernetworking-plugins_1.1.1+ds1-1_amd64.deb
 
       - name: Create Cluster
         run: |
