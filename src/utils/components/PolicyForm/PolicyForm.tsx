@@ -96,6 +96,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           id="policy-name"
           name="policy-name"
           value={policy?.metadata?.name}
+          isDisabled={!createForm}
           onChange={(newName) =>
             setPolicy((draftPolicy) => {
               draftPolicy.metadata.name = newName;
