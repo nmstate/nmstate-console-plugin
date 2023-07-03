@@ -47,25 +47,18 @@ const NNCPStateColumn: FC<NNCPStateColumnProps> = ({ enactments, onStateClick })
       number: pending.length,
       label: EnactmentStatuses.Pending,
     },
-  ];
+  ].filter((state) => state.number > 0);
 
   return (
     <Stack hasGutter>
-      {states.map((state) => {
-        if (state.number > 0) {
-          return (
-            <StackItem key={state.label}>
-              <Button
-                variant={ButtonVariant.link}
-                isInline
-                onClick={() => onStateClick(state.label)}
-              >
-                {state.icon} {state.number} {t(state.label)}
-              </Button>
-            </StackItem>
-          );
-        }
-      })}
+      {states.length === 0 && <StackItem>-</StackItem>}
+      {states.map((state) => (
+        <StackItem key={state.label}>
+          <Button variant={ButtonVariant.link} isInline onClick={() => onStateClick(state.label)}>
+            {state.icon} {state.number} {t(state.label)}
+          </Button>
+        </StackItem>
+      ))}
     </Stack>
   );
 };
