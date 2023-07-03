@@ -33,6 +33,7 @@ const EditModal: FC<EditModalProps> = ({ closeModal, isOpen, policy }) => {
 
   const handleSubmit: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
+    setError(undefined);
     setLoading(true);
 
     return k8sUpdate({
@@ -44,7 +45,6 @@ const EditModal: FC<EditModalProps> = ({ closeModal, isOpen, policy }) => {
       .then(() => closeModal())
       .catch(setError)
       .finally(() => {
-        setError(undefined);
         setLoading(false);
       });
   };

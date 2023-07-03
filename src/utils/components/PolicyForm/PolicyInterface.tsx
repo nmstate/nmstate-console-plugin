@@ -134,6 +134,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
       draftInterface['link-aggregation'].mode =
         aggregationMode as NodeNetworkConfigurationInterfaceBondMode;
     });
+    setAggregationOpen(false);
   };
 
   const onPortChange = (value: string) => {
@@ -372,7 +373,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               selections={policyInterface?.['link-aggregation']?.mode}
             >
               {Object.entries(NodeNetworkConfigurationInterfaceBondMode).map(([key, value]) => (
-                <SelectOption key={key} value={key}>
+                <SelectOption key={key} value={value}>
                   {value}
                 </SelectOption>
               ))}
