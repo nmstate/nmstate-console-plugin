@@ -4,7 +4,7 @@ import { NodeNetworkStateModelGroupVersionKind } from 'src/console-models';
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
 import { List, ListItem, Title } from '@patternfly/react-core';
 import { ExpandableRowContent, Tbody, Td, Tr } from '@patternfly/react-table';
-import { V1beta1NodeNetworkState } from '@types';
+import { InterfaceType, V1beta1NodeNetworkState } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 import InterfacesTable from './InterfacesTable';
@@ -19,6 +19,9 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
   const interfaces = obj?.status?.currentState?.interfaces;
 
   const interfacesByType = interfaces?.reduce((acc, iface) => {
+    // Skip loopback interfaces from the list
+    if (iface.type === InterfaceType.LOOPBACK) return acc;
+
     acc[iface.type] ??= [];
     acc[iface.type].push(iface);
     return acc;

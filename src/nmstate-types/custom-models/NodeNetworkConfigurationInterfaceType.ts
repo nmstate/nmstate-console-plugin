@@ -12,4 +12,5 @@ export enum InterfaceType {
   MAC_VLAN = 'mac-vlan',
   MAC_VTAP = 'mac-vtap',
   VETH = 'veth',
+  LOOPBACK = 'loopback',
 }
