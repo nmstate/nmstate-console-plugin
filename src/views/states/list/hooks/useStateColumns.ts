@@ -16,7 +16,7 @@ const useStateColumns = (): [
   const columns: TableColumn<K8sResourceCommon>[] = [
     {
       title: '',
-      id: 'expand-icons',
+      id: '',
       props: { className: 'pf-m-width-10' },
     },
     {
