@@ -3,6 +3,7 @@ import React, { FC, memo, useState } from 'react';
 import {
   Button,
   ButtonVariant,
+  Checkbox,
   ExpandableSectionToggle,
   List,
   ListItem,
@@ -77,7 +78,13 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
                 )}
               </Td>
               <Td>{iface?.['mac-address'] || '-'}</Td>
-              <Td>-</Td>
+              <Td>
+                <Checkbox
+                  id={`lldp-enabled-${interfaceType}-${iface.name}`}
+                  isDisabled
+                  isChecked={iface.lldp?.enabled}
+                />
+              </Td>
               <Td>{iface?.mtu || '-'}</Td>
             </Tr>
           );
