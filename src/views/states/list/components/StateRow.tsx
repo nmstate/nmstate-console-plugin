@@ -2,11 +2,12 @@ import React, { FC, useState } from 'react';
 import { NodeNetworkStateModelGroupVersionKind } from 'src/console-models';
 
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
-import { List, ListItem, Title } from '@patternfly/react-core';
+import { Button, ButtonVariant, List, ListItem, Popover, Title } from '@patternfly/react-core';
 import { ExpandableRowContent, Tbody, Td, Tr } from '@patternfly/react-table';
 import { InterfaceType, V1beta1NodeNetworkState } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
+import InterfacesPopoverBody from './InterfacesPopoverBody';
 import InterfacesTable from './InterfacesTable';
 
 const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
@@ -52,7 +53,24 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
           <List isPlain>
             {Object.keys(interfacesByType)?.map((interfaceType) => (
               <ListItem key={interfaceType}>
-                {interfaceType} ({interfacesByType[interfaceType].length})
+                <Popover
+                  headerContent={
+                    <>
+                      {interfaceType} ({interfacesByType[interfaceType].length})
+                    </>
+                  }
+                  bodyContent={(hide) => (
+                    <InterfacesPopoverBody
+                      interfaces={interfacesByType[interfaceType]}
+                      hide={hide}
+                    />
+                  )}
+                  aria-label="Interfaces list"
+                >
+                  <Button variant={ButtonVariant.link}>
+                    {interfaceType} ({interfacesByType[interfaceType].length})
+                  </Button>
+                </Popover>
               </ListItem>
             ))}
           </List>
