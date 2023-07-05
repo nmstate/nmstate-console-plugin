@@ -125,7 +125,7 @@ const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selecte
 
       {selectedInterface['mac-address'] && (
         <div className="pf-u-mb-md">
-          <Title headingLevel="h4">{t('Mac Address')}</Title>
+          <Title headingLevel="h4">{t('MAC Address')}</Title>
           <p>{selectedInterface['mac-address']}</p>
         </div>
       )}
