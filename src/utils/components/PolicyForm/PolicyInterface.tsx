@@ -67,13 +67,23 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
     onInterfaceChange((draftInterface) => {
       draftInterface.type = newType as InterfaceType;
 
-      if (newType === InterfaceType.LINUX_BRIDGE) draftInterface.bridge = { port: [], options: {} };
+      if (newType === InterfaceType.LINUX_BRIDGE) {
+        delete draftInterface['link-aggregation'];
+        draftInterface.bridge = { port: [], options: {} };
+      }
 
-      if (newType === InterfaceType.BOND)
+      if (newType === InterfaceType.BOND) {
+        delete draftInterface.bridge;
         draftInterface['link-aggregation'] = {
           mode: NodeNetworkConfigurationInterfaceBondMode.BALANCE_RR,
           port: [],
         };
+      }
+
+      if (newType === InterfaceType.ETHERNET) {
+        delete draftInterface.bridge;
+        delete draftInterface['link-aggregation'];
+      }
     });
     setTypeOpen(false);
   };
@@ -309,24 +319,26 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           )}
         </div>
       </FormGroup>
-      <FormGroup
-        label={t('Port')}
-        fieldId={`policy-interface-port-${id}`}
-        helperText={
-          policyInterface.type === InterfaceType.BOND && t('Use commas to separate between ports')
-        }
-      >
-        <TextInput
-          value={
-            policyInterface?.bridge?.port?.[0]?.name ||
-            policyInterface?.['link-aggregation']?.port.join(',')
-          }
-          type="text"
-          id={`policy-interface-port-${id}`}
-          onChange={onPortChange}
-        />
-      </FormGroup>
 
+      {policyInterface.type !== InterfaceType.ETHERNET && (
+        <FormGroup
+          label={t('Port')}
+          fieldId={`policy-interface-port-${id}`}
+          helperText={
+            policyInterface.type === InterfaceType.BOND && t('Use commas to separate ports')
+          }
+        >
+          <TextInput
+            value={
+              policyInterface?.bridge?.port?.[0]?.name ||
+              policyInterface?.['link-aggregation']?.port.join(',')
+            }
+            type="text"
+            id={`policy-interface-port-${id}`}
+            onChange={onPortChange}
+          />
+        </FormGroup>
+      )}
       {policyInterface.type === InterfaceType.LINUX_BRIDGE && (
         <FormGroup fieldId={`policy-interface-stp-${id}`}>
           <Checkbox
