@@ -269,7 +269,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
                     onPrefixChange(policyInterface.ipv4.address[0]['prefix-length'] + 1)
                   }
                   min={0}
-                  max={64}
+                  max={32}
                 />
               </FormGroup>
             </>
