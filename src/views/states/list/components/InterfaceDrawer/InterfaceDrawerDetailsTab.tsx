@@ -65,7 +65,7 @@ const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selecte
           </List>
         </div>
       )}
-      <div className="pf-u-mb-md">
+      <div className="pf-u-mb-md" data-test="lldp-section">
         <Title headingLevel="h4">LLDP</Title>
         <p className="pf-u-mb-md">
           {selectedInterface.lldp?.enabled ? t('Enabled') : t('Disabled')}

@@ -1,48 +1,30 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /// <reference types="cypress" />
-
 import { KUBEADMIN_IDP, KUBEADMIN_USERNAME } from './constants';
 import { ConsoleWindowType } from './types';
 
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+import Loggable = Cypress.Loggable;
+import Timeoutable = Cypress.Timeoutable;
+import Withinable = Cypress.Withinable;
+import Shadow = Cypress.Shadow;
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(provider?: string, username?: string, password?: string): Chainable<void>;
+      logout(): Chainable<void>;
+      byTestID(
+        selector: string,
+        options?: Partial<Loggable & Timeoutable & Withinable & Shadow>,
+      ): Chainable;
+      byLegacyTestID(selector: string): Chainable;
+    }
+  }
+}
 
 const submitButton = 'button[type=submit]';
 
-Cypress.Commands.add('login', (provider?: string, username?: string, password?: string) => {
+Cypress.Commands.add('login', (provider, username, password) => {
   // Check if auth is disabled (for a local development environment).
 
   cy.visit(''); // visits baseUrl which is set in plugins.js
@@ -91,3 +73,9 @@ Cypress.Commands.add('logout', () => {
     cy.byLegacyTestID('login').should('be.visible');
   });
 });
+
+Cypress.Commands.add('byTestID', (selector, options) =>
+  cy.get(`[data-test="${selector}"]`, options),
+);
+
+Cypress.Commands.add('byLegacyTestID', (selector) => cy.get(`[data-test-id="${selector}"]`));
