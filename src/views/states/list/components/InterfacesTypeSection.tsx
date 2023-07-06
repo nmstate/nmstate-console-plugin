@@ -56,7 +56,7 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
                 </Button>
               </Td>
               <Td>
-                {address ? (
+                {address?.[0] ? (
                   <>
                     {address?.[0]?.ip}/{address?.[0]?.['prefix-length']}
                   </>

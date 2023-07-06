@@ -20,7 +20,7 @@ const useInterfaceColumns = (): TableColumn<K8sResourceCommon>[] => {
       id: 'ports',
     },
     {
-      title: t('Mac address'),
+      title: t('MAC address'),
       id: 'mac-address',
     },
     {
