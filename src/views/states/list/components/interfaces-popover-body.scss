@@ -1,6 +1,6 @@
 .interfaces-popover-body {
   max-height: 700px;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   &__list-item {
     & > div > div {

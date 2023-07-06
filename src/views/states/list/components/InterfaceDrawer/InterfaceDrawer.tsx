@@ -5,7 +5,9 @@ import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 import { useDrawerContext } from '../../contexts/DrawerContext';
 
+import { InterfaceDrawerTabId, InterfaceDrawerTabProps } from './constants';
 import InterfaceDrawerDetailsTab from './InterfaceDrawerDetailsTab';
+import InterfaceDrawerYAMLFooter from './InterfaceDrawerFooter';
 import InterfaceDrawerYAMLTab from './InterfaceDrawerYAMLTab';
 
 const InterfaceDrawer: FC = () => {
@@ -16,7 +18,7 @@ const InterfaceDrawer: FC = () => {
     setSelectedInterface(null);
   }, []);
 
-  const Tabs = [
+  const Tabs: InterfaceDrawerTabProps[] = [
     {
       title: t('Details'),
       id: 'drawer-details',
@@ -29,7 +31,7 @@ const InterfaceDrawer: FC = () => {
     },
   ];
 
-  const selectedTab = location.hash.replace('#', '') || Tabs?.[0]?.id;
+  const selectedTab = (location.hash.replace('#', '') as InterfaceDrawerTabId) || Tabs?.[0]?.id;
 
   const SelectedTabComponent =
     Tabs.find((tab) => tab.id === selectedTab)?.component ?? Tabs?.[0]?.component;
@@ -43,6 +45,11 @@ const InterfaceDrawer: FC = () => {
       disableFocusTrap
       header={<Title headingLevel="h2">{selectedInterface?.name}</Title>}
       data-test="interface-drawer"
+      footer={
+        selectedTab === 'drawer-yaml' && (
+          <InterfaceDrawerYAMLFooter selectedInterface={selectedInterface} />
+        )
+      }
     >
       <div className="co-m-horizontal-nav pf-u-px-md">
         <ul className="co-m-horizontal-nav__menu">
