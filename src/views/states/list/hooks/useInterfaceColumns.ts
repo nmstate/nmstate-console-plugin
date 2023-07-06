@@ -9,7 +9,7 @@ const useInterfaceColumns = (): TableColumn<K8sResourceCommon>[] => {
     {
       title: t('Name'),
       id: 'name',
-      props: { className: 'pf-m-width-20' },
+      props: { className: 'pf-m-width-30' },
     },
     {
       title: t('IP address'),

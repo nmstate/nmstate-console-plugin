@@ -9,6 +9,7 @@ import {
   ListItem,
   Tooltip,
 } from '@patternfly/react-core';
+import { LongArrowAltDownIcon, LongArrowAltUpIcon } from '@patternfly/react-icons';
 import { Td, Tr } from '@patternfly/react-table';
 import { NodeNetworkConfigurationInterface } from '@types';
 
@@ -43,12 +44,15 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
 
         {interfaces.map((iface) => {
           const address = iface.ipv4?.address || iface.ipv6?.address;
+          const Icon =
+            iface.state.toLowerCase() === 'up' ? LongArrowAltUpIcon : LongArrowAltDownIcon;
 
           return (
             <Tr key={iface.name} isExpanded={isExpanded}>
-              <Td className="pf-m-width-20">
+              <Td className="pf-m-width-30">
                 <Button variant={ButtonVariant.link} onClick={() => setSelectedInterface(iface)}>
                   {iface.name}
+                  <Icon color="black" className="pf-u-mr-sm" />
                 </Button>
               </Td>
               <Td>
