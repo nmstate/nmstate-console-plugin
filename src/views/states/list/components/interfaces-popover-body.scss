@@ -1,0 +1,15 @@
+.interfaces-popover-body {
+  max-height: 700px;
+  overflow-y: scroll;
+
+  &__list-item {
+    & > div > div {
+      padding: var(--pf-global--spacer--xs);
+    }
+
+    .interface-button-name {
+      padding: 0;
+      white-space: break-spaces;
+    } 
+  }
+}
