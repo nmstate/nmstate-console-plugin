@@ -1,4 +1,6 @@
 import React, { FC, useCallback } from 'react';
+import { useHistory } from 'react-router';
+import NodeNetworkStateModel from 'src/console-models/NodeNetworkStateModel';
 
 import {
   Button,
@@ -11,8 +13,7 @@ import {
 } from '@patternfly/react-core';
 import { LongArrowAltDownIcon, LongArrowAltUpIcon } from '@patternfly/react-icons';
 import { NodeNetworkConfigurationInterface } from '@types';
-
-import { useDrawerContext } from '../contexts/DrawerContext';
+import { getResourceUrl } from '@utils/helpers';
 
 import './interfaces-popover-body.scss';
 
@@ -26,14 +27,21 @@ const FirstColumn = ({ children }) => <FlexItem flex={{ default: 'flex_1' }}>{ch
 const SecondColumn = ({ children }) => <FlexItem flex={{ default: 'flex_3' }}>{children}</FlexItem>;
 
 const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({ interfaces, hide }) => {
-  const { setSelectedInterface } = useDrawerContext();
+  const history = useHistory();
 
   const onInterfaceNameClick = useCallback(
     (iface: NodeNetworkConfigurationInterface) => {
-      setSelectedInterface(iface);
+      const baseListUrl = getResourceUrl({ model: NodeNetworkStateModel });
+
+      const query = new URLSearchParams({
+        selectedInterface: iface.name,
+      });
+
+      history.push(`${baseListUrl}?${query.toString()}`);
+
       hide();
     },
-    [hide, setSelectedInterface],
+    [hide],
   );
 
   return (

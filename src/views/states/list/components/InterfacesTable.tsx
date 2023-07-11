@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Table, TableGridBreakpoint, TableHeader, Tbody } from '@patternfly/react-table';
-import { NodeNetworkConfigurationInterface } from '@types';
+import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
 
 import useInterfaceColumns from '../hooks/useInterfaceColumns';
 
@@ -11,9 +11,10 @@ import './interfaces-table.scss';
 
 interface InterfacesTableProps {
   interfacesByType: { [interfaceType in string]: NodeNetworkConfigurationInterface[] };
+  nodeNetworkState: V1beta1NodeNetworkState;
 }
 
-const InterfacesTable: FC<InterfacesTableProps> = ({ interfacesByType }) => {
+const InterfacesTable: FC<InterfacesTableProps> = ({ interfacesByType, nodeNetworkState }) => {
   const columns = useInterfaceColumns();
 
   return (
@@ -30,6 +31,7 @@ const InterfacesTable: FC<InterfacesTableProps> = ({ interfacesByType }) => {
             key={interfaceType}
             interfaceType={interfaceType}
             interfaces={interfacesByType[interfaceType]}
+            nodeNetworkState={nodeNetworkState}
           />
         ))}
       </Tbody>

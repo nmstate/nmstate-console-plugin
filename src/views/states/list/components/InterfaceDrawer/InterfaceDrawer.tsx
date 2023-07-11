@@ -1,19 +1,22 @@
 import React, { FC, useCallback } from 'react';
 
 import { Modal, Title } from '@patternfly/react-core';
+import { NodeNetworkConfigurationInterface } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
-import { useDrawerContext } from '../../contexts/DrawerContext';
+import useDrawerInterface from '../../hooks/useDrawerInterface';
 
 import InterfaceDrawerDetailsTab from './InterfaceDrawerDetailsTab';
 import InterfaceDrawerYAMLTab from './InterfaceDrawerYAMLTab';
 
-const InterfaceDrawer: FC = () => {
+const InterfaceDrawer: FC<{ selectedInterface: NodeNetworkConfigurationInterface }> = ({
+  selectedInterface,
+}) => {
   const { t } = useNMStateTranslation();
-  const { selectedInterface, setSelectedInterface } = useDrawerContext();
+  const { setSelectedInterfaceName } = useDrawerInterface();
 
   const onClose = useCallback(() => {
-    setSelectedInterface(null);
+    setSelectedInterfaceName();
   }, []);
 
   const Tabs = [
@@ -54,7 +57,10 @@ const InterfaceDrawer: FC = () => {
               }`}
               data-test={`horizontal-tab-${tab.id}`}
             >
-              <a data-test-id="horizontal-link-Details" href={`${location.pathname}#${tab.id}`}>
+              <a
+                data-test-id="horizontal-link-Details"
+                href={`${location.pathname}${location.search}#${tab.id}`}
+              >
                 {tab.title}
               </a>
             </li>
