@@ -1,7 +1,12 @@
 import React, { FC, useRef, useState } from 'react';
 import { Updater } from 'use-immer';
 
-import { Button, FormFieldGroupExpandable, FormFieldGroupHeader } from '@patternfly/react-core';
+import {
+  Button,
+  FormFieldGroupExpandable,
+  FormFieldGroupHeader,
+  Tooltip,
+} from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons';
 import { NodeNetworkConfigurationInterface, V1NodeNetworkConfigurationPolicy } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
@@ -60,13 +65,15 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
                 id: `nncp-interface-${index}`,
               }}
               actions={
-                <Button
-                  variant="plain"
-                  aria-label={t('Remove')}
-                  onClick={() => removeInterface(index)}
-                >
-                  <MinusCircleIcon />
-                </Button>
+                <Tooltip content={t('Remove interface')}>
+                  <Button
+                    variant="plain"
+                    aria-label={t('Remove')}
+                    onClick={() => removeInterface(index)}
+                  >
+                    <MinusCircleIcon />
+                  </Button>
+                </Tooltip>
               }
             />
           }

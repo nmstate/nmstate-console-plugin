@@ -1,4 +1,5 @@
 import React, { FC, MouseEventHandler } from 'react';
+import produce from 'immer';
 import { NodeNetworkConfigurationEnactmentModelGroupVersionKind } from 'src/console-models';
 import NodeModel, { NodeModelGroupVersionKind } from 'src/console-models/NodeModel';
 import { ENACTMENT_LABEL_NODE } from 'src/utils/constants';
@@ -83,7 +84,14 @@ const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ policy, isOpen, onClose
       acc[selector.key] = selector.value;
       return acc;
     }, {});
-    return onSubmit({ ...policy, spec: { ...policy.spec, nodeSelector } });
+
+    const newPolicy = produce(policy, (draftPolicy) => {
+      selectorLabels.length === 0
+        ? delete draftPolicy.spec.nodeSelector
+        : (draftPolicy.spec.nodeSelector = nodeSelector);
+    });
+
+    return onSubmit(newPolicy);
   };
 
   const nodeAlreadyCovered = qualifiedNodes.find((node) =>
