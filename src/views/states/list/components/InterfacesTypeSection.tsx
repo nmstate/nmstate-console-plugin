@@ -49,7 +49,11 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
             iface.state.toLowerCase() === 'up' ? LongArrowAltUpIcon : LongArrowAltDownIcon;
 
           return (
-            <Tr key={iface.name} isExpanded={isExpanded}>
+            <Tr
+              key={iface.name}
+              isExpanded={isExpanded}
+              className="interfaces-table__interfaces-expandable-row"
+            >
               <Td className="pf-m-width-30">
                 <Button
                   variant={ButtonVariant.link}

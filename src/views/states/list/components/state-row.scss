@@ -1,0 +1,7 @@
+.pf-c-table {
+  .state-row {
+    tr:has(~ tr.state-row__expanded-true) {
+      border-bottom: none;
+    }
+  }
+}

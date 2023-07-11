@@ -10,6 +10,8 @@ import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 import InterfacesPopoverBody from './InterfacesPopoverBody';
 import InterfacesTable from './InterfacesTable';
 
+import './state-row.scss';
+
 const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
   obj,
   activeColumnIDs,
@@ -29,7 +31,7 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
   }, {} as { [key: string]: number });
 
   return (
-    <Tbody key={obj.metadata.name} isExpanded={isExpanded} role="rowgroup">
+    <Tbody key={obj.metadata.name} isExpanded={isExpanded} role="rowgroup" className="state-row">
       <Tr>
         <Td
           expand={{
@@ -76,12 +78,14 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
           </List>
         </TableData>
       </Tr>
-      <Tr isExpanded={isExpanded}>
+      <Tr isExpanded={isExpanded} className={`state-row__expanded-${isExpanded}`}>
         <Td colSpan={3}>
           <ExpandableRowContent>
-            <Title headingLevel="h2">{t('Network details')}</Title>
-            <Title headingLevel="h3">
-              {interfaces.length} {t('Interfaces')}
+            <Title headingLevel="h2">
+              {t('Network details')}
+              <small className="pf-u-ml-md">
+                {interfaces.length} {t('Interfaces')}
+              </small>
             </Title>
 
             <InterfacesTable interfacesByType={interfacesByType} />
