@@ -290,7 +290,10 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               <Checkbox
                 label={t('Auto-DNS')}
                 id={`policy-interface-dns-${id}`}
-                isChecked={policyInterface?.ipv4[AUTO_DNS]}
+                isChecked={
+                  policyInterface?.ipv4[AUTO_DNS] === true ||
+                  policyInterface?.ipv4[AUTO_DNS] === undefined
+                }
                 onChange={(checked) =>
                   onInterfaceChange((draftInterface) => (draftInterface.ipv4[AUTO_DNS] = checked))
                 }
@@ -298,7 +301,10 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               <Checkbox
                 label={t('Auto-routes')}
                 id={`policy-interface-routes-${id}`}
-                isChecked={policyInterface?.ipv4[AUTO_ROUTES]}
+                isChecked={
+                  policyInterface?.ipv4[AUTO_ROUTES] === true ||
+                  policyInterface?.ipv4[AUTO_ROUTES] === undefined
+                }
                 onChange={(checked) =>
                   onInterfaceChange(
                     (draftInterface) => (draftInterface.ipv4[AUTO_ROUTES] = checked),
@@ -308,7 +314,10 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               <Checkbox
                 label={t('Auto-gateway')}
                 id={`policy-interface-gateway-${id}`}
-                isChecked={policyInterface?.ipv4[AUTO_GATEWAY]}
+                isChecked={
+                  policyInterface?.ipv4[AUTO_GATEWAY] === true ||
+                  policyInterface?.ipv4[AUTO_GATEWAY] === undefined
+                }
                 onChange={(checked) =>
                   onInterfaceChange(
                     (draftInterface) => (draftInterface.ipv4[AUTO_GATEWAY] = checked),

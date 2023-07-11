@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
-import { Button, FormGroup, GridItem, TextInput } from '@patternfly/react-core';
+import { Button, FormGroup, GridItem, TextInput, Tooltip } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons';
 
 import { IDLabel } from '../utils/types';
@@ -46,9 +46,11 @@ const LabelRow: FC<LabelRowProps> = ({ label, onChange, onDelete }) => {
 
       <GridItem span={1}>
         <FormGroup label=" " fieldId={`label-${id}-delete-btn`}>
-          <Button variant="plain" onClick={() => onDelete(id)}>
-            <MinusCircleIcon />
-          </Button>
+          <Tooltip content={t('Remove label selector')}>
+            <Button variant="plain" onClick={() => onDelete(id)}>
+              <MinusCircleIcon />
+            </Button>
+          </Tooltip>
         </FormGroup>
       </GridItem>
     </>

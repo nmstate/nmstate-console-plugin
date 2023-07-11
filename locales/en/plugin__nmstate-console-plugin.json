@@ -99,6 +99,8 @@
   "Progressing": "Progressing",
   "Remove": "Remove",
   "Remove all dependencies between the new and existing polices": "Remove all dependencies between the new and existing polices",
+  "Remove interface": "Remove interface",
+  "Remove label selector": "Remove label selector",
   "Save": "Save",
   "Scheduling will not be possible at this state": "Scheduling will not be possible at this state",
   "selector key": "selector key",
