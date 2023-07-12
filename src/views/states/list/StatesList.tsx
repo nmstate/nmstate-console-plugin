@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react';
-import { CellMeasurer, CellMeasurerCache } from 'react-virtualized';
+import React, { FC } from 'react';
 import {
   NodeNetworkStateModelGroupVersionKind,
   NodeNetworkStateModelRef,
@@ -14,9 +13,11 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { Pagination } from '@patternfly/react-core';
 import { Table, TableGridBreakpoint, TableHeader } from '@patternfly/react-table';
-import { AutoSizer, VirtualTableBody } from '@patternfly/react-virtualized-extension';
 import { V1beta1NodeNetworkState } from '@types';
+import usePagination from '@utils/hooks/usePagination/usePagination';
+import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 
 import InterfaceDrawer from './components/InterfaceDrawer/InterfaceDrawer';
 import StateRow from './components/StateRow';
@@ -27,10 +28,7 @@ import useStateFilters from './hooks/useStateFilters';
 
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
-
   const { selectedInterfaceName, selectedStateName, selectedInterfaceType } = useDrawerInterface();
-
-  const measurementCacheRef = useRef(null);
 
   const [states, statesLoaded, statesError] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
     groupVersionKind: NodeNetworkStateModelGroupVersionKind,
@@ -43,83 +41,74 @@ const StatesList: FC = () => {
     (iface) => iface.name === selectedInterfaceName && iface.type === selectedInterfaceType,
   );
 
+  const { onPaginationChange, pagination } = usePagination();
   const [columns, activeColumns] = useStateColumns();
   const filters = useStateFilters();
   const [data, filteredData, onFilterChange] = useListPageFilter(states, filters);
 
-  useEffect(() => {
-    measurementCacheRef.current = new CellMeasurerCache({
-      fixedWidth: true,
-      minHeight: 44,
-      keyMapper: (rowIndex) => rowIndex,
-    });
-  }, []);
-
-  const rowRenderer = ({ index, key, parent }) => {
-    return (
-      <CellMeasurer
-        cache={measurementCacheRef.current}
-        columnIndex={0}
-        key={key}
-        parent={parent}
-        rowIndex={index}
-      >
-        <StateRow
-          obj={filteredData[index]}
-          activeColumnIDs={new Set(activeColumns.map(({ id }) => id))}
-          rowData={{ rowIndex: index }}
-        />
-      </CellMeasurer>
-    );
-  };
+  const paginatedData = filteredData.slice(pagination?.startIndex, pagination?.endIndex + 1);
 
   return (
     <>
       <ListPageHeader title={t(NodeNetworkStateModel.label)}></ListPageHeader>
       <ListPageBody>
         <StatusBox loaded={statesLoaded} error={statesError} data={states}>
-          <ListPageFilter
-            data={data}
-            loaded={statesLoaded}
-            rowFilters={filters}
-            onFilterChange={onFilterChange}
-            columnLayout={{
-              columns: columns?.map(({ id, title, additional }) => ({
-                id,
-                title,
-                additional,
-              })),
-              id: NodeNetworkStateModelRef,
-              selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
-              type: t('NodeNetworkState'),
-            }}
-          />
+          <div className="list-managment-group">
+            <ListPageFilter
+              data={data}
+              loaded={statesLoaded}
+              rowFilters={filters}
+              onFilterChange={(...args) => {
+                onFilterChange(...args);
+                onPaginationChange({
+                  endIndex: pagination?.perPage,
+                  page: 1,
+                  perPage: pagination?.perPage,
+                  startIndex: 0,
+                });
+              }}
+              columnLayout={{
+                columns: columns?.map(({ id, title, additional }) => ({
+                  id,
+                  title,
+                  additional,
+                })),
+                id: NodeNetworkStateModelRef,
+                selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
+                type: t('NodeNetworkState'),
+              }}
+            />
+            <Pagination
+              onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
+                onPaginationChange({ endIndex, page, perPage, startIndex })
+              }
+              onSetPage={(_e, page, perPage, startIndex, endIndex) =>
+                onPaginationChange({ endIndex, page, perPage, startIndex })
+              }
+              className="list-managment-group__pagination"
+              defaultToFullPage
+              itemCount={filteredData?.length}
+              page={pagination?.page}
+              perPage={pagination?.perPage}
+              perPageOptions={paginationDefaultValues}
+            />
+          </div>
 
           <Table
             cells={activeColumns}
-            rows={filteredData}
+            rows={paginatedData}
             gridBreakPoint={TableGridBreakpoint.none}
             role="presentation"
           >
             <TableHeader />
-            {measurementCacheRef.current && (
-              <AutoSizer disableHeight>
-                {({ width }) => (
-                  <VirtualTableBody
-                    className="pf-c-table pf-c-virtualized pf-c-window-scroller"
-                    deferredMeasurementCache={measurementCacheRef.current}
-                    rowHeight={measurementCacheRef.current.rowHeight}
-                    height={400}
-                    overscanRowCount={2}
-                    columnCount={1}
-                    rows={filteredData}
-                    rowCount={filteredData.length}
-                    rowRenderer={rowRenderer}
-                    width={width}
-                  />
-                )}
-              </AutoSizer>
-            )}
+            {paginatedData.map((nns, index) => (
+              <StateRow
+                key={nns?.metadata?.name}
+                obj={nns}
+                activeColumnIDs={new Set(activeColumns.map(({ id }) => id))}
+                rowData={{ rowIndex: index }}
+              />
+            ))}
           </Table>
         </StatusBox>
       </ListPageBody>
