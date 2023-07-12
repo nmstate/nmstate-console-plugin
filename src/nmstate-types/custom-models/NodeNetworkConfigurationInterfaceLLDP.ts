@@ -11,7 +11,7 @@ export const ADDRESS_SUBTYPE = 'address-subtype';
 export const INTERFACE_NUMBER = 'interface-number';
 export const INTERFACE_NUMBER_SUBTYPE = 'interface-number-subtype';
 
-export interface NodeNetworkConfigurationInterfaceLLDPNeighbor {
+export type NodeNetworkConfigurationInterfaceLLDPNeighbor = {
   type?: number;
   subtype?: number;
   oui?: string;
@@ -34,7 +34,7 @@ export interface NodeNetworkConfigurationInterfaceLLDPNeighbor {
     vid?: number;
     name?: string;
   }[];
-}
+}[];
 
 export interface NodeNetworkConfigurationInterfaceLLDP {
   enabled: boolean;
