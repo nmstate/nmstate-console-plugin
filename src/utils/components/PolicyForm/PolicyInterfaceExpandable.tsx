@@ -54,7 +54,7 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
     <>
       {policy?.spec?.desiredState?.interfaces.map((policyInterface, index) => (
         <FormFieldGroupExpandable
-          key={`${policyInterface.type}-${index}`}
+          key={`${policyInterface.type}-${policyInterface?.name}`}
           className="policy-interface__expandable"
           toggleAriaLabel={t('Details')}
           isExpanded={true}

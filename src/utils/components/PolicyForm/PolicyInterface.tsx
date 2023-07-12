@@ -234,8 +234,8 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               <FlexItem>
                 <Radio
                   label={t('IP address')}
-                  name="ip-or-dhcp"
-                  id="ip"
+                  name={`ip-or-dhcp-${id}`}
+                  id={`ip-${id}`}
                   isChecked={!policyInterface?.ipv4?.dhcp}
                   onChange={() => onAddressChange('')}
                 />
@@ -244,8 +244,8 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               <FlexItem>
                 <Radio
                   label={t('DHCP')}
-                  name="ip-or-dhcp"
-                  id="dhcp"
+                  name={`ip-or-dhcp-${id}`}
+                  id={`dhcp-${id}`}
                   isChecked={policyInterface?.ipv4?.dhcp}
                   onChange={onDHCPChange}
                 />
