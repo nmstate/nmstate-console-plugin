@@ -88,7 +88,7 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
               </small>
             </Title>
 
-            <InterfacesTable interfacesByType={interfacesByType} />
+            <InterfacesTable interfacesByType={interfacesByType} nodeNetworkState={obj} />
           </ExpandableRowContent>
         </Td>
       </Tr>

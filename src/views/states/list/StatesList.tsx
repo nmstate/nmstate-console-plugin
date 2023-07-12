@@ -21,12 +21,15 @@ import { V1beta1NodeNetworkState } from '@types';
 import InterfaceDrawer from './components/InterfaceDrawer/InterfaceDrawer';
 import StateRow from './components/StateRow';
 import StatusBox from './components/StatusBox';
-import { DrawerContextProvider } from './contexts/DrawerContext';
+import useDrawerInterface from './hooks/useDrawerInterface';
 import useStateColumns from './hooks/useStateColumns';
 import useStateFilters from './hooks/useStateFilters';
 
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
+
+  const { selectedInterfaceName, selectedStateName, selectedInterfaceType } = useDrawerInterface();
+
   const measurementCacheRef = useRef(null);
 
   const [states, statesLoaded, statesError] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
@@ -34,6 +37,11 @@ const StatesList: FC = () => {
     isList: true,
     namespaced: false,
   });
+
+  const selectedState = states?.find((state) => state.metadata.name === selectedStateName);
+  const selectedInterface = selectedState?.status?.currentState?.interfaces?.find(
+    (iface) => iface.name === selectedInterfaceName && iface.type === selectedInterfaceType,
+  );
 
   const [columns, activeColumns] = useStateColumns();
   const filters = useStateFilters();
@@ -66,7 +74,7 @@ const StatesList: FC = () => {
   };
 
   return (
-    <DrawerContextProvider>
+    <>
       <ListPageHeader title={t(NodeNetworkStateModel.label)}></ListPageHeader>
       <ListPageBody>
         <StatusBox loaded={statesLoaded} error={statesError} data={states}>
@@ -115,8 +123,8 @@ const StatesList: FC = () => {
           </Table>
         </StatusBox>
       </ListPageBody>
-      <InterfaceDrawer />
-    </DrawerContextProvider>
+      <InterfaceDrawer selectedInterface={selectedInterface} />
+    </>
   );
 };
 

@@ -11,22 +11,23 @@ import {
 } from '@patternfly/react-core';
 import { LongArrowAltDownIcon, LongArrowAltUpIcon } from '@patternfly/react-icons';
 import { Td, Tr } from '@patternfly/react-table';
-import { NodeNetworkConfigurationInterface } from '@types';
+import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
 
-import { useDrawerContext } from '../contexts/DrawerContext';
+import useDrawerInterface from '../hooks/useDrawerInterface';
 
 import './interfaces-table.scss';
 
 interface InterfacesTypeSectionProps {
   interfaces: NodeNetworkConfigurationInterface[];
   interfaceType: string;
+  nodeNetworkState: V1beta1NodeNetworkState;
 }
 
 const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
-  ({ interfaceType, interfaces }) => {
+  ({ interfaceType, interfaces, nodeNetworkState }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const { setSelectedInterface } = useDrawerContext();
+    const { setSelectedInterfaceName } = useDrawerInterface();
 
     return (
       <>
@@ -57,7 +58,7 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
               <Td className="pf-m-width-30">
                 <Button
                   variant={ButtonVariant.link}
-                  onClick={() => setSelectedInterface(iface)}
+                  onClick={() => setSelectedInterfaceName(nodeNetworkState, iface)}
                   data-test={`${interfaceType}-${iface.name}-open-drawer`}
                 >
                   {iface.name}
