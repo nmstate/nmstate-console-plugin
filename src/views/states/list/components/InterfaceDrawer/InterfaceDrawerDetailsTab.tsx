@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { Checkbox, Flex, FlexItem, List, ListItem, Title } from '@patternfly/react-core';
 import { NodeNetworkConfigurationInterface } from '@types';
-import { t } from '@utils/hooks/useNMStateTranslation';
+import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 import { getSystemName } from '@utils/neighbors/getters';
 
 import NeighborInformations from './NeighborInformations';
@@ -12,10 +12,30 @@ type InterfaceDrawerDetailsTabProps = {
 };
 
 const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selectedInterface }) => {
+  const { t } = useNMStateTranslation();
   const ports = selectedInterface.bridge?.port?.map((port) => port.name);
 
   return (
     <div>
+      {selectedInterface.vlan && (
+        <div className="pf-u-mb-md" data-test="lldp-section">
+          <Title headingLevel="h4">VLAN details</Title>
+
+          <Flex>
+            <FlexItem>
+              <strong>{t('Id')}:</strong>
+            </FlexItem>
+            <FlexItem>{selectedInterface.vlan.id}</FlexItem>
+          </Flex>
+          <Flex>
+            <FlexItem>
+              <strong>{t('Base interface')}:</strong>
+            </FlexItem>
+            <FlexItem>{selectedInterface.vlan['base-iface']}</FlexItem>
+          </Flex>
+        </div>
+      )}
+
       <div className="pf-u-mb-md" data-test="lldp-section">
         <Title headingLevel="h4">LLDP</Title>
         <p className="pf-u-mb-md">
