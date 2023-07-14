@@ -64,6 +64,7 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
                   bodyContent={(hide) => (
                     <InterfacesPopoverBody
                       interfaces={interfacesByType[interfaceType]}
+                      nodeNetworkState={obj}
                       hide={hide}
                     />
                   )}

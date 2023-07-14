@@ -1,6 +1,4 @@
 import React, { FC, useCallback } from 'react';
-import { useHistory } from 'react-router';
-import NodeNetworkStateModel from 'src/console-models/NodeNetworkStateModel';
 
 import {
   Button,
@@ -12,13 +10,15 @@ import {
   ListItem,
 } from '@patternfly/react-core';
 import { LongArrowAltDownIcon, LongArrowAltUpIcon } from '@patternfly/react-icons';
-import { NodeNetworkConfigurationInterface } from '@types';
-import { getResourceUrl } from '@utils/helpers';
+import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
+
+import useDrawerInterface from '../hooks/useDrawerInterface';
 
 import './interfaces-popover-body.scss';
 
 type InterfacesPopoverBodyProps = {
   interfaces: NodeNetworkConfigurationInterface[];
+  nodeNetworkState: V1beta1NodeNetworkState;
   hide: () => void;
 };
 
@@ -26,19 +26,16 @@ const Row = ({ children }) => <Flex flexWrap={{ default: 'nowrap' }}>{children}<
 const FirstColumn = ({ children }) => <FlexItem flex={{ default: 'flex_1' }}>{children}</FlexItem>;
 const SecondColumn = ({ children }) => <FlexItem flex={{ default: 'flex_3' }}>{children}</FlexItem>;
 
-const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({ interfaces, hide }) => {
-  const history = useHistory();
+const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
+  interfaces,
+  nodeNetworkState,
+  hide,
+}) => {
+  const { setSelectedInterfaceName } = useDrawerInterface();
 
   const onInterfaceNameClick = useCallback(
     (iface: NodeNetworkConfigurationInterface) => {
-      const baseListUrl = getResourceUrl({ model: NodeNetworkStateModel });
-
-      const query = new URLSearchParams({
-        selectedInterface: iface.name,
-      });
-
-      history.push(`${baseListUrl}?${query.toString()}`);
-
+      setSelectedInterfaceName(nodeNetworkState, iface);
       hide();
     },
     [hide],
