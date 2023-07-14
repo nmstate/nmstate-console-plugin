@@ -16,31 +16,6 @@ const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selecte
 
   return (
     <div>
-      {selectedInterface.ethtool?.feature && (
-        <div className="pf-u-mb-md">
-          <Title headingLevel="h4">{t('Features')}</Title>
-          <List isPlain>
-            {Object.keys(selectedInterface.ethtool?.feature)
-              .sort((a, b) => (a > b ? 1 : -1))
-              ?.map((feature) => (
-                <ListItem key={feature}>
-                  <Flex>
-                    <FlexItem>
-                      <Checkbox
-                        isDisabled
-                        id={`checkbox-${feature}`}
-                        value={feature}
-                        isChecked={selectedInterface.ethtool?.feature?.[feature]}
-                      />
-                    </FlexItem>
-
-                    <FlexItem>{feature}</FlexItem>
-                  </Flex>
-                </ListItem>
-              ))}
-          </List>
-        </div>
-      )}
       <div className="pf-u-mb-md" data-test="lldp-section">
         <Title headingLevel="h4">LLDP</Title>
         <p className="pf-u-mb-md">
@@ -75,6 +50,32 @@ const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selecte
         <div className="pf-u-mb-md">
           <Title headingLevel="h4">{t('MAC Address')}</Title>
           <p>{selectedInterface['mac-address']}</p>
+        </div>
+      )}
+
+      {selectedInterface.ethtool?.feature && (
+        <div className="pf-u-mb-md">
+          <Title headingLevel="h4">{t('Features')}</Title>
+          <List isPlain>
+            {Object.keys(selectedInterface.ethtool?.feature)
+              .sort((a, b) => (a > b ? 1 : -1))
+              ?.map((feature) => (
+                <ListItem key={feature}>
+                  <Flex>
+                    <FlexItem>
+                      <Checkbox
+                        isDisabled
+                        id={`checkbox-${feature}`}
+                        value={feature}
+                        isChecked={selectedInterface.ethtool?.feature?.[feature]}
+                      />
+                    </FlexItem>
+
+                    <FlexItem>{feature}</FlexItem>
+                  </Flex>
+                </ListItem>
+              ))}
+          </List>
         </div>
       )}
     </div>
