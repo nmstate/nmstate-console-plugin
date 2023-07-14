@@ -1,6 +1,15 @@
 import React, { FC } from 'react';
 
-import { Checkbox, Flex, FlexItem, List, ListItem, Title } from '@patternfly/react-core';
+import {
+  Checkbox,
+  Flex,
+  FlexItem,
+  List,
+  ListItem,
+  Stack,
+  StackItem,
+  Title,
+} from '@patternfly/react-core';
 import { NodeNetworkConfigurationInterface } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 import { getSystemName } from '@utils/neighbors/getters';
@@ -13,13 +22,13 @@ type InterfaceDrawerDetailsTabProps = {
 
 const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selectedInterface }) => {
   const { t } = useNMStateTranslation();
-  const ports = selectedInterface.bridge?.port?.map((port) => port.name);
+  const ports = selectedInterface.bridge?.port?.map((port) => port.name)?.sort();
 
   return (
-    <div>
+    <Stack hasGutter>
       {selectedInterface.vlan && (
-        <div className="pf-u-mb-md" data-test="lldp-section">
-          <Title headingLevel="h4">VLAN details</Title>
+        <StackItem data-test="vlan-section">
+          <Title headingLevel="h4">{t('VLAN details')}</Title>
 
           <Flex>
             <FlexItem>
@@ -33,11 +42,11 @@ const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selecte
             </FlexItem>
             <FlexItem>{selectedInterface.vlan['base-iface']}</FlexItem>
           </Flex>
-        </div>
+        </StackItem>
       )}
 
-      <div className="pf-u-mb-md" data-test="lldp-section">
-        <Title headingLevel="h4">LLDP</Title>
+      <StackItem data-test="lldp-section">
+        <Title headingLevel="h4">{t('LLDP')}</Title>
         <p className="pf-u-mb-md">
           {selectedInterface.lldp?.enabled ? t('Enabled') : t('Disabled')}
         </p>
@@ -53,28 +62,28 @@ const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selecte
             </List>
           </>
         )}
-      </div>
+      </StackItem>
 
       {selectedInterface.bridge?.port?.length > 0 && (
-        <div className="pf-u-mb-md">
+        <StackItem>
           <Title headingLevel="h4">{t('Ports')}</Title>
           <List isPlain>
             {ports?.map((port) => (
               <ListItem key={port}>{port}</ListItem>
             ))}
           </List>
-        </div>
+        </StackItem>
       )}
 
       {selectedInterface['mac-address'] && (
-        <div className="pf-u-mb-md">
+        <StackItem>
           <Title headingLevel="h4">{t('MAC Address')}</Title>
           <p>{selectedInterface['mac-address']}</p>
-        </div>
+        </StackItem>
       )}
 
       {selectedInterface.ethtool?.feature && (
-        <div className="pf-u-mb-md">
+        <StackItem>
           <Title headingLevel="h4">{t('Features')}</Title>
           <List isPlain>
             {Object.keys(selectedInterface.ethtool?.feature)
@@ -96,9 +105,9 @@ const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selecte
                 </ListItem>
               ))}
           </List>
-        </div>
+        </StackItem>
       )}
-    </div>
+    </Stack>
   );
 };
 

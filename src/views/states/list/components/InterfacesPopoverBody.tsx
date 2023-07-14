@@ -11,6 +11,7 @@ import {
 } from '@patternfly/react-core';
 import { LongArrowAltDownIcon, LongArrowAltUpIcon } from '@patternfly/react-icons';
 import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
+import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 import useDrawerInterface from '../hooks/useDrawerInterface';
 
@@ -31,6 +32,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
   nodeNetworkState,
   hide,
 }) => {
+  const { t } = useNMStateTranslation();
   const { setSelectedInterfaceName } = useDrawerInterface();
 
   const onInterfaceNameClick = useCallback(
@@ -51,7 +53,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
           <ListItem key={iface.name} className="interfaces-popover-body__list-item">
             <Row>
               <FirstColumn>
-                <strong>Name</strong>
+                <strong>{t('Name')}</strong>
               </FirstColumn>
               <SecondColumn>
                 <Button
@@ -65,7 +67,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
             </Row>
             <Row>
               <FirstColumn>
-                <strong>IP address</strong>
+                <strong>{t('IP address')}</strong>
               </FirstColumn>
               <SecondColumn>
                 {address?.[0] ? (
@@ -79,13 +81,13 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
             </Row>
             <Row>
               <FirstColumn>
-                <strong>Ports</strong>
+                <strong>{t('Ports')}</strong>
               </FirstColumn>
               <SecondColumn>{iface.bridge?.port?.length || '-'}</SecondColumn>
             </Row>
             <Row>
               <FirstColumn>
-                <strong>LLDP</strong>
+                <strong>{t('LLDP')}</strong>
               </FirstColumn>
               <SecondColumn>
                 <Checkbox
@@ -98,7 +100,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
 
             <Row>
               <FirstColumn>
-                <strong>MTU</strong>
+                <strong>{t('MTU')}</strong>
               </FirstColumn>
               <SecondColumn>{iface?.mtu || '-'}</SecondColumn>
             </Row>

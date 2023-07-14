@@ -36,5 +36,14 @@
     &:not(:last-child) td {
       padding-bottom: var(--pf-global--spacer--sm);
     }
+
+    &__status-icon {
+      color: var(--pf-global--Color--200);
+      margin-right: var(--pf-global--spacer--sm);
+    }
+
+    &__column-name {
+      width: 30%;
+    }
   }
 }
