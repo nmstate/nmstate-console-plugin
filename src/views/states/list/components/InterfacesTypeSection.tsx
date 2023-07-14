@@ -62,7 +62,7 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
                   data-test={`${interfaceType}-${iface.name}-open-drawer`}
                 >
                   {iface.name}
-                  <Icon color="black" className="pf-u-mr-sm" />
+                  <Icon className="pf-u-mr-sm pf-u-color-200" />
                 </Button>
               </Td>
               <Td>
