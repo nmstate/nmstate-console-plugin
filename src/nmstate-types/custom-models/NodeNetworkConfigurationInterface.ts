@@ -36,4 +36,10 @@ export interface NodeNetworkConfigurationInterface {
   ethtool?: NodeNetworkConfigurationInterfaceEthtool;
 
   lldp?: NodeNetworkConfigurationInterfaceLLDP;
+
+  vlan?: {
+    id: number;
+    'base-iface': string;
+    protocol?: string;
+  };
 }

@@ -3,5 +3,13 @@
     tr:has(~ tr.state-row__expanded-true) {
       border-bottom: none;
     }
+
+    &__flex-interfaces button {
+      color: var(--pf-global--Color--100);
+
+      text-decoration: underline;
+      text-decoration-style: dashed;
+      text-underline-offset: 4px;
+    }
   }
 }

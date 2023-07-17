@@ -1,6 +1,4 @@
 import React, { FC, useCallback } from 'react';
-import { useHistory } from 'react-router';
-import NodeNetworkStateModel from 'src/console-models/NodeNetworkStateModel';
 
 import {
   Button,
@@ -12,13 +10,16 @@ import {
   ListItem,
 } from '@patternfly/react-core';
 import { LongArrowAltDownIcon, LongArrowAltUpIcon } from '@patternfly/react-icons';
-import { NodeNetworkConfigurationInterface } from '@types';
-import { getResourceUrl } from '@utils/helpers';
+import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
+import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
+
+import useDrawerInterface from '../hooks/useDrawerInterface';
 
 import './interfaces-popover-body.scss';
 
 type InterfacesPopoverBodyProps = {
   interfaces: NodeNetworkConfigurationInterface[];
+  nodeNetworkState: V1beta1NodeNetworkState;
   hide: () => void;
 };
 
@@ -26,19 +27,17 @@ const Row = ({ children }) => <Flex flexWrap={{ default: 'nowrap' }}>{children}<
 const FirstColumn = ({ children }) => <FlexItem flex={{ default: 'flex_1' }}>{children}</FlexItem>;
 const SecondColumn = ({ children }) => <FlexItem flex={{ default: 'flex_3' }}>{children}</FlexItem>;
 
-const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({ interfaces, hide }) => {
-  const history = useHistory();
+const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
+  interfaces,
+  nodeNetworkState,
+  hide,
+}) => {
+  const { t } = useNMStateTranslation();
+  const { setSelectedInterfaceName } = useDrawerInterface();
 
   const onInterfaceNameClick = useCallback(
     (iface: NodeNetworkConfigurationInterface) => {
-      const baseListUrl = getResourceUrl({ model: NodeNetworkStateModel });
-
-      const query = new URLSearchParams({
-        selectedInterface: iface.name,
-      });
-
-      history.push(`${baseListUrl}?${query.toString()}`);
-
+      setSelectedInterfaceName(nodeNetworkState, iface);
       hide();
     },
     [hide],
@@ -54,7 +53,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({ interfaces, hid
           <ListItem key={iface.name} className="interfaces-popover-body__list-item">
             <Row>
               <FirstColumn>
-                <strong>Name</strong>
+                <strong>{t('Name')}</strong>
               </FirstColumn>
               <SecondColumn>
                 <Button
@@ -68,7 +67,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({ interfaces, hid
             </Row>
             <Row>
               <FirstColumn>
-                <strong>IP address</strong>
+                <strong>{t('IP address')}</strong>
               </FirstColumn>
               <SecondColumn>
                 {address?.[0] ? (
@@ -82,13 +81,13 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({ interfaces, hid
             </Row>
             <Row>
               <FirstColumn>
-                <strong>Ports</strong>
+                <strong>{t('Ports')}</strong>
               </FirstColumn>
               <SecondColumn>{iface.bridge?.port?.length || '-'}</SecondColumn>
             </Row>
             <Row>
               <FirstColumn>
-                <strong>LLDP</strong>
+                <strong>{t('LLDP')}</strong>
               </FirstColumn>
               <SecondColumn>
                 <Checkbox
@@ -101,7 +100,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({ interfaces, hid
 
             <Row>
               <FirstColumn>
-                <strong>MTU</strong>
+                <strong>{t('MTU')}</strong>
               </FirstColumn>
               <SecondColumn>{iface?.mtu || '-'}</SecondColumn>
             </Row>

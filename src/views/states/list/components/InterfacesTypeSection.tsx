@@ -46,6 +46,7 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
 
         {interfaces.map((iface) => {
           const address = iface.ipv4?.address || iface.ipv6?.address;
+          const ports = iface.bridge?.port?.map((port) => port.name)?.sort();
           const Icon =
             iface.state.toLowerCase() === 'up' ? LongArrowAltUpIcon : LongArrowAltDownIcon;
 
@@ -55,14 +56,14 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
               isExpanded={isExpanded}
               className="interfaces-table__interfaces-expandable-row"
             >
-              <Td className="pf-m-width-30">
+              <Td className="interfaces-table__interfaces-expandable-row__column-name">
                 <Button
                   variant={ButtonVariant.link}
                   onClick={() => setSelectedInterfaceName(nodeNetworkState, iface)}
                   data-test={`${interfaceType}-${iface.name}-open-drawer`}
                 >
                   {iface.name}
-                  <Icon color="black" className="pf-u-mr-sm" />
+                  <Icon className="interfaces-table__interfaces-expandable-row__status-icon" />
                 </Button>
               </Td>
               <Td>
@@ -75,17 +76,17 @@ const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
                 )}
               </Td>
               <Td>
-                {iface.bridge?.port?.length ? (
+                {ports?.length ? (
                   <Tooltip
                     content={
                       <List isPlain>
-                        {iface?.bridge?.port.map((portItem) => (
-                          <ListItem key={portItem.name}>{portItem.name}</ListItem>
+                        {ports.map((port) => (
+                          <ListItem key={port}>{port}</ListItem>
                         ))}
                       </List>
                     }
                   >
-                    <span> {iface?.bridge?.port?.length}</span>
+                    <span>{ports.length}</span>
                   </Tooltip>
                 ) : (
                   '-'

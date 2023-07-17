@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { NodeNetworkStateModelGroupVersionKind } from 'src/console-models';
 
 import { ResourceLink, RowProps, TableData } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, ButtonVariant, List, ListItem, Popover, Title } from '@patternfly/react-core';
+import { Button, ButtonVariant, Flex, FlexItem, Popover, Title } from '@patternfly/react-core';
 import { ExpandableRowContent, Tbody, Td, Tr } from '@patternfly/react-table';
 import { InterfaceType, V1beta1NodeNetworkState } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
@@ -52,9 +52,9 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
           activeColumnIDs={activeColumnIDs}
           className="pf-m-width-50"
         >
-          <List isPlain>
+          <Flex flexWrap={{ default: 'wrap' }} className="state-row__flex-interfaces">
             {Object.keys(interfacesByType)?.map((interfaceType) => (
-              <ListItem key={interfaceType}>
+              <FlexItem key={interfaceType}>
                 <Popover
                   headerContent={
                     <>
@@ -64,6 +64,7 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
                   bodyContent={(hide) => (
                     <InterfacesPopoverBody
                       interfaces={interfacesByType[interfaceType]}
+                      nodeNetworkState={obj}
                       hide={hide}
                     />
                   )}
@@ -73,9 +74,9 @@ const StateRow: FC<RowProps<V1beta1NodeNetworkState, { rowIndex: number }>> = ({
                     {interfaceType} ({interfacesByType[interfaceType].length})
                   </Button>
                 </Popover>
-              </ListItem>
+              </FlexItem>
             ))}
-          </List>
+          </Flex>
         </TableData>
       </Tr>
       <Tr isExpanded={isExpanded} className={`state-row__expanded-${isExpanded}`}>
