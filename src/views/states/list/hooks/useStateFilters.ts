@@ -3,13 +3,15 @@ import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 import { RowFilter } from '@openshift-console/dynamic-plugin-sdk';
 import { InterfaceType, NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
 
+import { FILTERS_TYPES } from '../constants';
+
 const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
   const { t } = useNMStateTranslation();
 
   return [
     {
       filterGroupName: t('Interface state'),
-      type: 'interface-state',
+      type: FILTERS_TYPES.INTERFACE_STATE,
       filter: (selectedIpTypes, obj) => {
         if (!selectedIpTypes.selected.length) return true;
         return selectedIpTypes.selected.some((status) =>
@@ -33,7 +35,7 @@ const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
     },
     {
       filterGroupName: t('Interface type'),
-      type: 'interface-type',
+      type: FILTERS_TYPES.INTERFACE_TYPE,
       filter: (selectedInterfaceTypes, obj) => {
         if (!selectedInterfaceTypes.selected.length) return true;
         return selectedInterfaceTypes.selected.some((interfaceType) =>
@@ -58,7 +60,7 @@ const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
     },
     {
       filterGroupName: t('IP'),
-      type: 'ip-filter',
+      type: FILTERS_TYPES.IP_FILTER,
       filter: (selectedIpTypes, obj) => {
         if (!selectedIpTypes.selected.length) return true;
         return selectedIpTypes.selected.some((ipType) =>

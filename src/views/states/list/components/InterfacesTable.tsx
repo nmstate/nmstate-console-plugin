@@ -26,14 +26,16 @@ const InterfacesTable: FC<InterfacesTableProps> = ({ interfacesByType, nodeNetwo
     >
       <TableHeader />
       <Tbody>
-        {Object.keys(interfacesByType).map((interfaceType) => (
-          <InterfacesTypeSection
-            key={interfaceType}
-            interfaceType={interfaceType}
-            interfaces={interfacesByType[interfaceType]}
-            nodeNetworkState={nodeNetworkState}
-          />
-        ))}
+        {Object.keys(interfacesByType)
+          .sort()
+          .map((interfaceType) => (
+            <InterfacesTypeSection
+              key={interfaceType}
+              interfaceType={interfaceType}
+              interfaces={interfacesByType[interfaceType]}
+              nodeNetworkState={nodeNetworkState}
+            />
+          ))}
       </Tbody>
     </Table>
   );

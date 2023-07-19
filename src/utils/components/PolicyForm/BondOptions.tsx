@@ -50,7 +50,6 @@ const BondOptions: FC<BondOptionsProps> = ({ id, onInterfaceChange, policyInterf
   const onOptionAdd = () => {
     onInterfaceChange((draftInterface) => {
       ensurePath(draftInterface, 'link-aggregation.options');
-      console.log(selectableOptions[0]);
       draftInterface['link-aggregation'].options[selectableOptions[0]] = '';
     });
   };
