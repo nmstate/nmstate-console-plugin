@@ -1,19 +1,31 @@
 import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
+import { getIPV4Address, getIPV6Address } from '@utils/interfaces/getters';
 
-import { FILTERS_TYPES } from '../constants';
+import { FILTER_TYPES } from '../constants';
 
-export const interfaceFilters = {
-  [FILTERS_TYPES.INTERFACE_STATE]: (selectedInput, obj) => {
+export const interfaceFilters: Record<
+  string,
+  (selectedInput: string[], obj: NodeNetworkConfigurationInterface) => boolean
+> = {
+  [FILTER_TYPES.INTERFACE_STATE]: (selectedInput, obj) => {
     if (!selectedInput.length) return true;
     return selectedInput.some((status) => obj.state.toLowerCase() === status);
   },
-  [FILTERS_TYPES.INTERFACE_TYPE]: (selectedInput, obj) => {
+  [FILTER_TYPES.INTERFACE_TYPE]: (selectedInput, obj) => {
     if (!selectedInput.length) return true;
     return selectedInput.some((interfaceType) => obj.type === interfaceType);
   },
-  [FILTERS_TYPES.IP_FILTER]: (selectedInput, obj) => {
+  [FILTER_TYPES.IP_FILTER]: (selectedInput, obj) => {
     if (!selectedInput.length) return true;
     return selectedInput.some((ipType) => !!obj[ipType]);
+  },
+  [FILTER_TYPES.IP_ADDRESS]: (selectedInput, obj) => {
+    const searchIPAddress = selectedInput?.[0];
+    if (!searchIPAddress) return true;
+
+    const addresses = [getIPV4Address(obj), getIPV6Address(obj)].filter(Boolean);
+
+    return addresses?.some((address) => address?.toLowerCase().includes(searchIPAddress));
   },
 } as const;
 
