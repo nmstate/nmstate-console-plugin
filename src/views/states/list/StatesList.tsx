@@ -23,6 +23,7 @@ import InterfaceDrawer from './components/InterfaceDrawer/InterfaceDrawer';
 import StateRow from './components/StateRow';
 import StatusBox from './components/StatusBox';
 import useDrawerInterface from './hooks/useDrawerInterface';
+import useSelectedFilters from './hooks/useSelectedFilters';
 import useStateColumns from './hooks/useStateColumns';
 import useStateFilters from './hooks/useStateFilters';
 
@@ -44,6 +45,7 @@ const StatesList: FC = () => {
   const { onPaginationChange, pagination } = usePagination();
   const [columns, activeColumns] = useStateColumns();
   const filters = useStateFilters();
+  const selectedFilters = useSelectedFilters();
   const [data, filteredData, onFilterChange] = useListPageFilter(states, filters);
 
   const paginatedData = filteredData.slice(pagination?.startIndex, pagination?.endIndex + 1);
@@ -106,7 +108,7 @@ const StatesList: FC = () => {
                 key={nns?.metadata?.name}
                 obj={nns}
                 activeColumnIDs={new Set(activeColumns.map(({ id }) => id))}
-                rowData={{ rowIndex: index }}
+                rowData={{ rowIndex: index, selectedFilters }}
               />
             ))}
           </Table>
