@@ -17,7 +17,7 @@ const CopyMAC: FC<CopyMACProps> = ({ id, policyInterface, onInterfaceChange }) =
 
   const onPortChange = (value) => {
     onInterfaceChange((draftInterface) => {
-      draftInterface['copy-mac-from'] = value;
+      value ? (draftInterface['copy-mac-from'] = value) : delete draftInterface['copy-mac-from'];
     });
   };
 
