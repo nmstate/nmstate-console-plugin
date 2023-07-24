@@ -26,6 +26,7 @@ import useDrawerInterface from './hooks/useDrawerInterface';
 import useSelectedFilters from './hooks/useSelectedFilters';
 import useStateColumns from './hooks/useStateColumns';
 import useStateFilters from './hooks/useStateFilters';
+import { FILTER_TYPES } from './constants';
 
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
@@ -59,7 +60,11 @@ const StatesList: FC = () => {
             <ListPageFilter
               data={data}
               loaded={statesLoaded}
-              rowFilters={filters}
+              rowFilters={filters.filter((filter) => filter?.type !== FILTER_TYPES.IP_ADDRESS)}
+              hideLabelFilter
+              nameFilterTitle={t('IP address')}
+              nameFilterPlaceholder={t('Search by IP address...')}
+              nameFilter={FILTER_TYPES.IP_ADDRESS}
               onFilterChange={(...args) => {
                 onFilterChange(...args);
                 onPaginationChange({

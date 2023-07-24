@@ -2,16 +2,36 @@ import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { RowFilter } from '@openshift-console/dynamic-plugin-sdk';
 import { InterfaceType, NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
+import { getIPV4Address, getIPV6Address } from '@utils/interfaces/getters';
 
-import { FILTERS_TYPES } from '../constants';
+import { FILTER_TYPES } from '../constants';
 
 const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
   const { t } = useNMStateTranslation();
 
   return [
     {
+      type: FILTER_TYPES.IP_ADDRESS,
+      filter: (searchText, obj) => {
+        const searchIPAddress = searchText?.selected?.[0];
+        if (!searchIPAddress) return true;
+
+        const interfaces = obj?.status?.currentState
+          ?.interfaces as NodeNetworkConfigurationInterface[];
+
+        const addresses = interfaces
+          ?.reduce((acc, iface) => [...acc, getIPV4Address(iface), getIPV6Address(iface)], [])
+          .filter(Boolean);
+
+        return addresses?.some((address) => address?.toLowerCase().includes(searchIPAddress));
+      },
+      isMatch: () => true,
+      filterGroupName: t('Search IP address'),
+      items: [],
+    },
+    {
       filterGroupName: t('Interface state'),
-      type: FILTERS_TYPES.INTERFACE_STATE,
+      type: FILTER_TYPES.INTERFACE_STATE,
       filter: (selectedIpTypes, obj) => {
         if (!selectedIpTypes.selected.length) return true;
         return selectedIpTypes.selected.some((status) =>
@@ -35,7 +55,7 @@ const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
     },
     {
       filterGroupName: t('Interface type'),
-      type: FILTERS_TYPES.INTERFACE_TYPE,
+      type: FILTER_TYPES.INTERFACE_TYPE,
       filter: (selectedInterfaceTypes, obj) => {
         if (!selectedInterfaceTypes.selected.length) return true;
         return selectedInterfaceTypes.selected.some((interfaceType) =>
@@ -60,7 +80,7 @@ const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
     },
     {
       filterGroupName: t('IP'),
-      type: FILTERS_TYPES.IP_FILTER,
+      type: FILTER_TYPES.IP_FILTER,
       filter: (selectedIpTypes, obj) => {
         if (!selectedIpTypes.selected.length) return true;
         return selectedIpTypes.selected.some((ipType) =>
