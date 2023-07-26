@@ -28,14 +28,14 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
 }) => {
   const createdPolicy = useRef(createForm ? undefined : policy);
 
-  const createdInterfacesNames = createdPolicy?.current?.spec?.desiredState?.interfaces?.map(
-    (inFace) => inFace?.name,
-  );
-
   const [interfaceToDelete, setInterfaceToDelete] = useState<NodeNetworkConfigurationInterface>();
   const { t } = useNMStateTranslation();
 
   const removeInterface = (interfaceIndex: number) => {
+    const createdInterfacesNames = createdPolicy?.current?.spec?.desiredState?.interfaces?.map(
+      (inFace) => inFace?.name,
+    );
+
     if (
       createdInterfacesNames?.includes(policy?.spec?.desiredState?.interfaces[interfaceIndex]?.name)
     ) {
@@ -52,58 +52,48 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
 
   return (
     <>
-      {policy?.spec?.desiredState?.interfaces.map((policyInterface, index) => {
-        const createdInterface = createdInterfacesNames?.includes(policyInterface?.name);
-        return (
-          <FormFieldGroupExpandable
-            key={`${policyInterface.type}-${policyInterface?.name}`}
-            className="policy-interface__expandable"
-            toggleAriaLabel={t('Details')}
-            isExpanded={true}
-            header={
-              <FormFieldGroupHeader
-                titleText={{
-                  text: getExpandableTitle(policyInterface, t),
-                  id: `nncp-interface-${index}`,
-                }}
-                actions={
-                  <Tooltip
-                    content={
-                      createdInterface ? t('Interface already created') : t('Remove interface')
-                    }
+      {policy?.spec?.desiredState?.interfaces.map((policyInterface, index) => (
+        <FormFieldGroupExpandable
+          key={`${policyInterface.type}-${policyInterface?.name}`}
+          className="policy-interface__expandable"
+          toggleAriaLabel={t('Details')}
+          isExpanded={true}
+          header={
+            <FormFieldGroupHeader
+              titleText={{
+                text: getExpandableTitle(policyInterface, t),
+                id: `nncp-interface-${index}`,
+              }}
+              actions={
+                <Tooltip content={t('Remove interface')}>
+                  <Button
+                    variant="plain"
+                    aria-label={t('Remove')}
+                    onClick={() => removeInterface(index)}
                   >
-                    <span>
-                      <Button
-                        variant="plain"
-                        aria-label={t('Remove')}
-                        isDisabled={!!createdInterface}
-                        onClick={() => removeInterface(index)}
-                      >
-                        <MinusCircleIcon />
-                      </Button>
-                    </span>
-                  </Tooltip>
-                }
-              />
-            }
-          >
-            <PolicyInterface
-              id={index}
-              createdInterface={
-                !!createdPolicy?.current?.spec?.desiredState?.interfaces?.find(
-                  (iface) => iface.name === policyInterface.name,
-                )
-              }
-              policyInterface={policyInterface}
-              onInterfaceChange={(updateInterface: onInterfaceChangeType) =>
-                setPolicy((draftPolicy) => {
-                  updateInterface(draftPolicy.spec.desiredState.interfaces[index]);
-                })
+                    <MinusCircleIcon />
+                  </Button>
+                </Tooltip>
               }
             />
-          </FormFieldGroupExpandable>
-        );
-      })}
+          }
+        >
+          <PolicyInterface
+            id={index}
+            createdInterface={
+              !!createdPolicy?.current?.spec?.desiredState?.interfaces?.find(
+                (iface) => iface.name === policyInterface.name,
+              )
+            }
+            policyInterface={policyInterface}
+            onInterfaceChange={(updateInterface: onInterfaceChangeType) =>
+              setPolicy((draftPolicy) => {
+                updateInterface(draftPolicy.spec.desiredState.interfaces[index]);
+              })
+            }
+          />
+        </FormFieldGroupExpandable>
+      ))}
       {interfaceToDelete && (
         <DeleteInterfaceModal
           policyInterface={interfaceToDelete}
