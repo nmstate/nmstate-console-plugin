@@ -38,7 +38,7 @@ type HandleSelectChange = SelectProps['onSelect'];
 
 type PolicyInterfaceProps = {
   id: number;
-  createdInterface?: boolean;
+  isInterfaceCreated?: boolean;
   policyInterface?: NodeNetworkConfigurationInterface;
   onInterfaceChange?: (updateInterface: onInterfaceChangeType) => void;
 };
@@ -47,7 +47,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   id,
   policyInterface,
   onInterfaceChange,
-  createdInterface = true,
+  isInterfaceCreated = true,
 }) => {
   const { t } = useNMStateTranslation();
   const [isStateOpen, setStateOpen] = useState(false);
@@ -178,7 +178,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           name={`policy-interface-name-${id}`}
           value={policyInterface?.name}
           onChange={handleNameChange}
-          isDisabled={createdInterface}
+          isDisabled={isInterfaceCreated}
         />
       </FormGroup>
       <FormGroup
@@ -212,7 +212,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           onSelect={handleTypechange}
           variant={SelectVariant.single}
           selections={policyInterface?.type}
-          isDisabled={createdInterface}
+          isDisabled={isInterfaceCreated}
         >
           {Object.entries(INTERFACE_TYPE_OPTIONS).map(([key, value]) => (
             <SelectOption key={key} value={key}>
@@ -354,7 +354,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
             label={
               <Text>
                 {t('Enable STP')}{' '}
-                {createdInterface && (
+                {isInterfaceCreated && (
                   <Popover
                     aria-label={'Help'}
                     bodyContent={() => <div>{t('Edit the STP in the YAML file')}</div>}
@@ -367,7 +367,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
             id={`policy-interface-stp-${id}`}
             isChecked={policyInterface?.bridge?.options?.stp?.enabled}
             onChange={onSTPChange}
-            isDisabled={createdInterface}
+            isDisabled={isInterfaceCreated}
           />
         </FormGroup>
       )}
