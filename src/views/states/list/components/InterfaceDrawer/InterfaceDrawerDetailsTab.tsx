@@ -12,6 +12,7 @@ import {
 } from '@patternfly/react-core';
 import { NodeNetworkConfigurationInterface } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
+import { getPorts } from '@utils/interfaces/getters';
 import { getSystemName } from '@utils/neighbors/getters';
 
 import NeighborInformations from './NeighborInformations';
@@ -22,7 +23,7 @@ type InterfaceDrawerDetailsTabProps = {
 
 const InterfaceDrawerDetailsTab: FC<InterfaceDrawerDetailsTabProps> = ({ selectedInterface }) => {
   const { t } = useNMStateTranslation();
-  const ports = selectedInterface.bridge?.port?.map((port) => port.name)?.sort();
+  const ports = getPorts(selectedInterface);
 
   return (
     <Stack hasGutter>
