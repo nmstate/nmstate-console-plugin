@@ -10,6 +10,18 @@ describe('NodeNetworkState list', () => {
     cy.login();
   });
 
+  it('Empty state', () => {
+    cy.intercept('GET', '/api/kubernetes/apis/nmstate.io/v1beta1/nodenetworkstates*', {
+      fixture: 'NodeNetworkStatusEmpty.json',
+    }).as('getStatuses');
+
+    cy.visit('/k8s/cluster/nmstate.io~v1beta1~NodeNetworkState');
+
+    cy.wait(['@getStatuses'], { timeout: 40000 });
+
+    cy.get('.pf-c-empty-state').should('contain', 'No NodeNetworkStates found');
+  });
+
   it('with one VID instace ', () => {
     cy.intercept('GET', '/api/kubernetes/apis/nmstate.io/v1beta1/nodenetworkstates*', {
       fixture: 'NodeNetworkStatusWithVID.json',

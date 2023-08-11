@@ -20,6 +20,7 @@ import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 
 import InterfaceDrawer from './components/InterfaceDrawer/InterfaceDrawer';
+import NNStateEmptyState from './components/NNStateEmptyState';
 import StateRow from './components/StateRow';
 import StatusBox from './components/StatusBox';
 import useDrawerInterface from './hooks/useDrawerInterface';
@@ -55,7 +56,7 @@ const StatesList: FC = () => {
     <>
       <ListPageHeader title={t(NodeNetworkStateModel.label)}></ListPageHeader>
       <ListPageBody>
-        <StatusBox loaded={statesLoaded} error={statesError} data={states}>
+        <StatusBox loaded={statesLoaded} error={statesError}>
           <div className="list-managment-group">
             <ListPageFilter
               data={data}
@@ -101,22 +102,26 @@ const StatesList: FC = () => {
             />
           </div>
 
-          <Table
-            cells={activeColumns}
-            rows={paginatedData}
-            gridBreakPoint={TableGridBreakpoint.none}
-            role="presentation"
-          >
-            <TableHeader />
-            {paginatedData.map((nns, index) => (
-              <StateRow
-                key={nns?.metadata?.name}
-                obj={nns}
-                activeColumnIDs={new Set(activeColumns.map(({ id }) => id))}
-                rowData={{ rowIndex: index, selectedFilters }}
-              />
-            ))}
-          </Table>
+          {filteredData.length > 0 ? (
+            <Table
+              cells={activeColumns}
+              rows={paginatedData}
+              gridBreakPoint={TableGridBreakpoint.none}
+              role="presentation"
+            >
+              <TableHeader />
+              {paginatedData.map((nnstate, index) => (
+                <StateRow
+                  key={nnstate?.metadata?.name}
+                  obj={nnstate}
+                  activeColumnIDs={new Set(activeColumns.map(({ id }) => id))}
+                  rowData={{ rowIndex: index, selectedFilters }}
+                />
+              ))}
+            </Table>
+          ) : (
+            <NNStateEmptyState />
+          )}
         </StatusBox>
       </ListPageBody>
       <InterfaceDrawer selectedInterface={selectedInterface} />

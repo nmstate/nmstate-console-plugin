@@ -2,7 +2,6 @@ import React, { FC, PropsWithChildren } from 'react';
 import { Trans } from 'react-i18next';
 
 import { Button, ButtonVariant } from '@patternfly/react-core';
-import { V1beta1NodeNetworkState } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 import ListSkeleton from './ListSkeleton';
@@ -11,10 +10,9 @@ type StatusBoxProps = PropsWithChildren<{
   loaded: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any;
-  data: V1beta1NodeNetworkState[];
 }>;
 
-const StatusBox: FC<StatusBoxProps> = ({ loaded, error, data, children }) => {
+const StatusBox: FC<StatusBoxProps> = ({ loaded, error, children }) => {
   const { t } = useNMStateTranslation();
 
   if (error)
@@ -36,15 +34,6 @@ const StatusBox: FC<StatusBoxProps> = ({ loaded, error, data, children }) => {
   if (!loaded) {
     return <ListSkeleton />;
   }
-
-  if (!data.length)
-    return (
-      <div className="cos-status-box">
-        <div data-test="empty-message" className="pf-u-text-align-center">
-          {t('No NodeNetworkStates found')}
-        </div>
-      </div>
-    );
 
   return <>{children}</>;
 };

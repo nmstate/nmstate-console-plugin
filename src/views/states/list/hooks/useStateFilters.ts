@@ -73,6 +73,7 @@ const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
         InterfaceType.OVS_INTERFACE,
         InterfaceType.BOND,
         InterfaceType.ETHERNET,
+        InterfaceType.LINUX_BRIDGE,
       ].map((interfaceType) => ({
         id: interfaceType,
         title: interfaceType,
