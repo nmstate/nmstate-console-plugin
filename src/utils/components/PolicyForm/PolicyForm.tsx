@@ -48,6 +48,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
       draftPolicy.spec.desiredState.interfaces.unshift({
         type: InterfaceType.LINUX_BRIDGE,
         name: `interface-${draftPolicy.spec.desiredState.interfaces.length}`,
+        state: 'up',
       });
     });
   };
