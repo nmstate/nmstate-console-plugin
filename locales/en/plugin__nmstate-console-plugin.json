@@ -28,6 +28,7 @@
   "Create": "Create",
   "Create NodeNetworkConfigurationPolicy": "Create NodeNetworkConfigurationPolicy",
   "Create NodeNetworkConfigurationPolicy error": "Create NodeNetworkConfigurationPolicy error",
+  "Created interfaces cannot be removed": "Created interfaces cannot be removed",
   "Delete": "Delete",
   "Delete NodeNetworkConfigurationPolicy?": "Delete NodeNetworkConfigurationPolicy?",
   "Delete NodeNetworkConfigurationPolicyInterface?": "Delete NodeNetworkConfigurationPolicyInterface?",
