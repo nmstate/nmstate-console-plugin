@@ -67,7 +67,13 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
                   id: `nncp-interface-${index}`,
                 }}
                 actions={
-                  <Tooltip content={t('Remove interface')}>
+                  <Tooltip
+                    content={
+                      interfaceCreated
+                        ? t('Created interfaces cannot be removed')
+                        : t('Remove interface')
+                    }
+                  >
                     <span>
                       <Button
                         variant="plain"
