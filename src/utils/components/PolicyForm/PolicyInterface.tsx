@@ -151,12 +151,17 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
     onInterfaceChange((draftInterface) => {
       if (draftInterface.type === InterfaceType.BOND) {
         ensurePath(draftInterface, 'link-aggregation.port');
-        draftInterface['link-aggregation'].port = value.split(',');
+
+        value
+          ? (draftInterface['link-aggregation'].port = value.split(','))
+          : delete draftInterface['link-aggregation'].port;
       }
 
       if (draftInterface.type === InterfaceType.LINUX_BRIDGE) {
         ensurePath(draftInterface, 'bridge.port');
-        draftInterface.bridge.port = [{ name: value }];
+        value
+          ? (draftInterface.bridge.port = [{ name: value }])
+          : delete draftInterface.bridge.port;
       }
     });
   };
