@@ -8,10 +8,12 @@ import {
   FlexItem,
   List,
   ListItem,
+  Tooltip,
 } from '@patternfly/react-core';
 import { LongArrowAltDownIcon, LongArrowAltUpIcon } from '@patternfly/react-icons';
 import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
+import { getPorts } from '@utils/interfaces/getters';
 
 import useDrawerInterface from '../hooks/useDrawerInterface';
 
@@ -47,6 +49,7 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
     <List isPlain className="interfaces-popover-body" isBordered>
       {interfaces.map((iface) => {
         const address = iface.ipv4?.address || iface.ipv6?.address;
+        const ports = getPorts(iface);
         const Icon = iface.state.toLowerCase() === 'up' ? LongArrowAltUpIcon : LongArrowAltDownIcon;
 
         return (
@@ -83,7 +86,23 @@ const InterfacesPopoverBody: FC<InterfacesPopoverBodyProps> = ({
               <FirstColumn>
                 <strong>{t('Ports')}</strong>
               </FirstColumn>
-              <SecondColumn>{iface.bridge?.port?.length || '-'}</SecondColumn>
+              <SecondColumn>
+                {ports?.length ? (
+                  <Tooltip
+                    content={
+                      <List isPlain>
+                        {ports.map((port) => (
+                          <ListItem key={port}>{port}</ListItem>
+                        ))}
+                      </List>
+                    }
+                  >
+                    <span>{ports.length}</span>
+                  </Tooltip>
+                ) : (
+                  '-'
+                )}
+              </SecondColumn>
             </Row>
             <Row>
               <FirstColumn>
