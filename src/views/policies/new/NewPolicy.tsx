@@ -111,6 +111,10 @@ const NewPolicy: FC = () => {
         >
           {t('Create')}
         </Button>
+
+        <Button onClick={history.goBack} variant={ButtonVariant.secondary}>
+          {t('Cancel')}
+        </Button>
       </ActionGroup>
     </PageSection>
   );
