@@ -1,5 +1,5 @@
 # Builder container
-FROM registry.access.redhat.com/ubi9/nodejs-18 AS build
+FROM registry.ci.openshift.org/ocp/builder:rhel-8-base-nodejs-openshift-4.15 AS build
 
 # Install yarn
 RUN npm install -g yarn -s &>/dev/null

@@ -41,28 +41,28 @@ echo "Found: ${CONTAINER_CMD}"
 
 # Starting local registry and temp data dir
 # ---------------------------------------------
-echo ""
-echo "Starting local registry and tmp local storage"
-echo "=============================================="
+# echo ""
+# echo "Starting local registry and tmp local storage"
+# echo "=============================================="
 
-reg_name='kind-registry'
-reg_port='5001'
+# reg_name='kind-registry'
+# reg_port='5001'
 
-# Create the kind network
-${CONTAINER_CMD} network create kind  --driver bridge
-${CONTAINER_CMD} network ls
+# # Create the kind network
+# ${CONTAINER_CMD} network create kind
+# ${CONTAINER_CMD} network ls
 
-# Create the registry
-if [ "$(${CONTAINER_CMD} inspect -f {{.State.Running}} "${reg_name}" 2>/dev/null || true)" != 'true' ]; then
-  ${CONTAINER_CMD} run \
-    -d --restart=always -p "127.0.0.1:${reg_port}:5000" --name "${reg_name}" --net kind \
-    registry:2
-fi
-reg_ip=$(${CONTAINER_CMD} inspect -f {{.NetworkSettings.Networks.kind.IPAddress}} ${reg_name})
+# # Create the registry
+# if [ "$(${CONTAINER_CMD} inspect -f {{.State.Running}} "${reg_name}" 2>/dev/null || true)" != 'true' ]; then
+#   ${CONTAINER_CMD} run \
+#     -d --restart=always -p "127.0.0.1:${reg_port}:5000" --name "${reg_name}" --net kind \
+#     registry:2
+# fi
+# reg_ip=$(${CONTAINER_CMD} inspect -f {{.NetworkSettings.Networks.kind.IPAddress}} ${reg_name})
 
-echo "reg_name: ${reg_name}"
-echo "reg_port: ${reg_port} (localhost, http://localhost:${reg_port})"
-echo "reg_ip:   ${reg_ip} (cluster, http://${reg_ip}:5000)"
+# echo "reg_name: ${reg_name}"
+# echo "reg_port: ${reg_port} (localhost, http://localhost:${reg_port})"
+# echo "reg_ip:   ${reg_ip} (cluster, http://${reg_ip}:5000)"
 
 # Create tmp storage dir
 host_path=$(mktemp -d -t kind-storage-XXXXX)
@@ -95,10 +95,6 @@ nodes:
     containerPath: /data
 - role: worker
 - role: worker
-containerdConfigPatches:
-- |-
-  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
-    endpoint = ["http://${reg_ip}:5000"]
 EOF
 
 # Install Openshift console
@@ -156,7 +152,7 @@ echo "==========================================="
 echo ""
 echo "Routes:"
 echo "  server:      https://127.0.0.1:6443/"
-echo "  registry:    http://localhost:${reg_port}/"
+# echo "  registry:    http://localhost:${reg_port}/"
 echo "  web console: http://localhost:30080/"
 
 echo ""
