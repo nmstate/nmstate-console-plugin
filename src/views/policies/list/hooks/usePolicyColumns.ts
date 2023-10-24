@@ -30,7 +30,7 @@ const usePolicyColumns = (): [
         props: { className: 'pf-m-width-30' },
       },
       {
-        title: t('Node network state'),
+        title: t('Enactment states'),
         id: 'status',
         props: { className: 'pf-m-width-30' },
       },
