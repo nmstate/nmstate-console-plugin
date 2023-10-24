@@ -2,9 +2,9 @@ import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { RowFilter } from '@openshift-console/dynamic-plugin-sdk';
 import { InterfaceType, NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
-import { getIPV4Address, getIPV6Address } from '@utils/interfaces/getters';
 
 import { FILTER_TYPES } from '../constants';
+import { searchInterfaceByIP } from '../utilts';
 
 const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
   const { t } = useNMStateTranslation();
@@ -19,11 +19,7 @@ const useStateFilters = (): RowFilter<V1beta1NodeNetworkState>[] => {
         const interfaces = obj?.status?.currentState
           ?.interfaces as NodeNetworkConfigurationInterface[];
 
-        const addresses = interfaces
-          ?.reduce((acc, iface) => [...acc, getIPV4Address(iface), getIPV6Address(iface)], [])
-          .filter(Boolean);
-
-        return addresses?.some((address) => address?.toLowerCase().includes(searchIPAddress));
+        return interfaces?.some((iface) => searchInterfaceByIP(searchIPAddress, iface));
       },
       isMatch: () => true,
       filterGroupName: t('Search IP address'),

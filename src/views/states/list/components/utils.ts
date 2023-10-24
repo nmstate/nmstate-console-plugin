@@ -1,7 +1,7 @@
 import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
-import { getIPV4Address, getIPV6Address } from '@utils/interfaces/getters';
 
 import { FILTER_TYPES } from '../constants';
+import { searchInterfaceByIP } from '../utilts';
 
 export const interfaceFilters: Record<
   string,
@@ -21,11 +21,8 @@ export const interfaceFilters: Record<
   },
   [FILTER_TYPES.IP_ADDRESS]: (selectedInput, obj) => {
     const searchIPAddress = selectedInput?.[0];
-    if (!searchIPAddress) return true;
 
-    const addresses = [getIPV4Address(obj), getIPV6Address(obj)].filter(Boolean);
-
-    return addresses?.some((address) => address?.toLowerCase().includes(searchIPAddress));
+    return searchInterfaceByIP(searchIPAddress, obj);
   },
 } as const;
 
