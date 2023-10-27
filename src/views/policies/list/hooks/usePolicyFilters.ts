@@ -24,7 +24,7 @@ const usePolicyFilters = (
 
   return [
     {
-      filterGroupName: t('Enactment state'),
+      filterGroupName: t('Enactment states'),
       type: 'enactment-state',
       isMatch: (obj, status) => enactmentsByPolicies[obj?.metadata?.name]?.[status],
       filter: ({ selected }, obj) =>
