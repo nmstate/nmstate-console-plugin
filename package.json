@@ -84,5 +84,7 @@
     "webpack": "^5.68.0",
     "@types/react": "17.0.40"
   },
-  "dependencies": {}
+  "dependencies": {
+    "word-wrap": "^1.2.5"
+  }
 }
