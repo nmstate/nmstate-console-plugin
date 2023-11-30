@@ -49,8 +49,10 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
     if (win.SERVER_FLAGS?.authDisabled) {
       cy.log('skipping login, console is running with auth disabled');
 
-      cy.contains('.pf-c-nav__link', 'Networking').click();
-      cy.contains('.pf-c-nav__link', 'NodeNetworkConfigurationPolicy').should('be.visible');
+      cy.contains('li[data-test="nav"]', 'Networking').click();
+      cy.contains('*[data-test-id="policy-nav-list"]', 'NodeNetworkConfigurationPolicy').should(
+        'be.visible',
+      );
       return;
     }
 
@@ -71,8 +73,10 @@ Cypress.Commands.add('login', (provider?: string, username?: string, password?: 
     cy.get(submitButton).click();
     // wait for virtualization page
 
-    cy.contains('.pf-c-nav__link', 'Networking').click();
-    cy.contains('.pf-c-nav__link', 'NodeNetworkConfigurationPolicy').should('be.visible');
+    cy.contains('li[data-test="nav"]', 'Networking').click();
+    cy.contains('*[data-test-id="policy-nav-list"]', 'NodeNetworkConfigurationPolicy').should(
+      'be.visible',
+    );
   });
 });
 
