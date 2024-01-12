@@ -7,6 +7,8 @@ import {
   useActiveColumns,
 } from '@openshift-console/dynamic-plugin-sdk';
 
+export const COLUMN_NAME_ID = 'name';
+
 const useStateColumns = (): [
   TableColumn<K8sResourceCommon>[],
   TableColumn<K8sResourceCommon>[],
@@ -21,7 +23,7 @@ const useStateColumns = (): [
     },
     {
       title: t('Name'),
-      id: 'name',
+      id: COLUMN_NAME_ID,
     },
     {
       title: t('Network interface'),

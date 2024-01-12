@@ -14,7 +14,7 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
-import { Table, TableGridBreakpoint, TableHeader } from '@patternfly/react-table';
+import { TableComposable, TableGridBreakpoint, Th, Thead, Tr } from '@patternfly/react-table';
 import { V1beta1NodeNetworkState } from '@types';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
@@ -25,9 +25,12 @@ import StateRow from './components/StateRow';
 import StatusBox from './components/StatusBox';
 import useDrawerInterface from './hooks/useDrawerInterface';
 import useSelectedFilters from './hooks/useSelectedFilters';
-import useStateColumns from './hooks/useStateColumns';
+import useSortStates from './hooks/useSortStates';
+import useStateColumns, { COLUMN_NAME_ID } from './hooks/useStateColumns';
 import useStateFilters from './hooks/useStateFilters';
 import { FILTER_TYPES } from './constants';
+
+import './states-list.scss';
 
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
@@ -50,14 +53,16 @@ const StatesList: FC = () => {
   const selectedFilters = useSelectedFilters();
   const [data, filteredData, onFilterChange] = useListPageFilter(states, filters);
 
-  const paginatedData = filteredData.slice(pagination?.startIndex, pagination?.endIndex + 1);
+  const { sortedStates, nameSortParams } = useSortStates(filteredData);
+
+  const paginatedData = sortedStates.slice(pagination?.startIndex, pagination?.endIndex + 1);
 
   return (
     <>
       <ListPageHeader title={t(NodeNetworkStateModel.label)}></ListPageHeader>
       <ListPageBody>
         <StatusBox loaded={statesLoaded} error={statesError}>
-          <div className="list-managment-group">
+          <div className="nns-list-management-group">
             <ListPageFilter
               data={data}
               loaded={statesLoaded}
@@ -95,21 +100,30 @@ const StatesList: FC = () => {
               }
               className="list-managment-group__pagination"
               defaultToFullPage
-              itemCount={filteredData?.length}
+              itemCount={sortedStates?.length}
               page={pagination?.page}
               perPage={pagination?.perPage}
               perPageOptions={paginationDefaultValues}
             />
           </div>
 
-          {filteredData.length > 0 ? (
-            <Table
-              cells={activeColumns}
-              rows={paginatedData}
-              gridBreakPoint={TableGridBreakpoint.none}
-              role="presentation"
-            >
-              <TableHeader />
+          {sortedStates?.length ? (
+            <TableComposable gridBreakPoint={TableGridBreakpoint.none} role="presentation">
+              <Thead>
+                <Tr>
+                  {activeColumns.map((column) => (
+                    <Th
+                      {...column.props}
+                      id={column.id}
+                      sort={column.id === COLUMN_NAME_ID ? nameSortParams : null}
+                      key={column.id}
+                    >
+                      {column.title}
+                    </Th>
+                  ))}
+                </Tr>
+              </Thead>
+
               {paginatedData.map((nnstate, index) => (
                 <StateRow
                   key={nnstate?.metadata?.name}
@@ -118,7 +132,7 @@ const StatesList: FC = () => {
                   rowData={{ rowIndex: index, selectedFilters }}
                 />
               ))}
-            </Table>
+            </TableComposable>
           ) : (
             <NNStateEmptyState />
           )}
