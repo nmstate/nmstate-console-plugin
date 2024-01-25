@@ -25,7 +25,7 @@ spec:
           ports:
             - containerPort: 9443
               protocol: TCP
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           resources:
               requests:
                 cpu: 10m
