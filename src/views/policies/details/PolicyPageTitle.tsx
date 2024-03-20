@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom-v5-compat';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -29,8 +29,8 @@ const PolicyPageTitle: FC<PolicyPageTitleProps> = ({ policy, name }) => {
 
   return (
     <>
-      <div className="pf-c-page__main-breadcrumb">
-        <Breadcrumb className="pf-c-breadcrumb co-breadcrumb">
+      <div className="pf-v5-c-page__main-breadcrumb">
+        <Breadcrumb className="pf-v5-c-breadcrumb co-breadcrumb">
           <BreadcrumbItem>
             <Link to={getResourceUrl({ model: NodeNetworkConfigurationPolicyModel })}>
               {t(NodeNetworkConfigurationPolicyModel.label)}

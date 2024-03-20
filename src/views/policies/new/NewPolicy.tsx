@@ -14,6 +14,7 @@ import {
   ButtonType,
   ButtonVariant,
   PageSection,
+  PageSectionVariants,
   Title,
 } from '@patternfly/react-core';
 import {
@@ -74,7 +75,7 @@ const NewPolicy: FC = () => {
   };
 
   return (
-    <PageSection className="new-policy-content">
+    <PageSection className="new-policy-content" variant={PageSectionVariants.light}>
       <Title className="new-policy-content__h1" headingLevel="h1">
         {t('Create NodeNetworkConfigurationPolicy')}
 
@@ -100,7 +101,7 @@ const NewPolicy: FC = () => {
         </Alert>
       )}
 
-      <ActionGroup className="pf-c-form" form="">
+      <ActionGroup className="pf-v5-c-form" form="">
         <Button
           isDisabled={loading}
           type={ButtonType.submit}

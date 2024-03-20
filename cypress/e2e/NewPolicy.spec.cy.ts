@@ -1,6 +1,6 @@
 const deletePolicyFromDetailsPage = (policyName: string) => {
   cy.contains('button', 'Actions', { matchCase: false }).click();
-  cy.contains('a', 'Delete').click();
+  cy.contains('button', 'Delete').click();
 
   cy.contains('button[disabled]', 'Delete');
 
@@ -57,8 +57,7 @@ describe('Create new policy with form', () => {
 
     cy.contains('button', 'Add another interface to the policy', { matchCase: false }).click();
 
-    cy.get('button#policy-interface-type-0').click();
-    cy.contains('button', 'Bonding').click();
+    cy.get('#policy-interface-type-0').select('bond');
 
     cy.get('input#policy-interface-port-0').type('eth1');
 

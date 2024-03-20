@@ -125,11 +125,11 @@ const DeleteModal: FC<DeleteModalProps> = ({ closeModal, isOpen, policy }) => {
         <FormGroup fieldId="text-confirmation">
           <TextInput
             id="text-confirmation"
-            className="pf-c-form-control "
+            className="pf-v5-c-form-control "
             aria-label={t('Enter name')}
             placeholder={t('Enter name')}
             value={inputValue}
-            onChange={setInputValue}
+            onChange={(_, value) => setInputValue(value)}
           />
         </FormGroup>
       </form>

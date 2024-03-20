@@ -1,9 +1,9 @@
 .policy-form-content {
   .policy-interface__expandable {
     margin-top: var(--pf-global--spacer--md);
-    --pf-c-form__field-group--field-group--MarginTop: 0;
+    --pf-v5-c-form__field-group--field-group--MarginTop: 0;
 
-    .pf-c-form__group:first-child {
+    .pf-v5-c-form__group:first-child {
       margin-top: calc(0px - var(--pf-global--spacer--md));
     }
   }

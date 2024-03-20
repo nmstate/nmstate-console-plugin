@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Table, TableGridBreakpoint, TableHeader, Tbody } from '@patternfly/react-table';
+import { Table, TableGridBreakpoint, Tbody, Th, Thead, Tr } from '@patternfly/react-table';
 import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
 
 import useInterfaceColumns from '../hooks/useInterfaceColumns';
@@ -19,12 +19,19 @@ const InterfacesTable: FC<InterfacesTableProps> = ({ interfacesByType, nodeNetwo
 
   return (
     <Table
-      cells={columns}
       gridBreakPoint={TableGridBreakpoint.none}
       role="presentation"
       className="interfaces-table"
     >
-      <TableHeader />
+      <Thead>
+        <Tr>
+          {columns.map((column) => (
+            <Th key={column.id} {...column?.props}>
+              {column.title}
+            </Th>
+          ))}
+        </Tr>
+      </Thead>
       <Tbody>
         {Object.keys(interfacesByType)
           .sort()

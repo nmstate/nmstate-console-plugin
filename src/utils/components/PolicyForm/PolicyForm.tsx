@@ -79,7 +79,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           <FormGroup fieldId="apply-selector">
             <ApplySelectorCheckbox
               isChecked={!!policy?.spec.nodeSelector}
-              onChange={(checked) => {
+              onChange={(_, checked) => {
                 if (checked) setModalOpen(true);
                 else
                   setPolicy((draftPolicy) => {
@@ -98,7 +98,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           name="policy-name"
           value={policy?.metadata?.name}
           isDisabled={!createForm}
-          onChange={(newName) =>
+          onChange={(_, newName) =>
             setPolicy((draftPolicy) => {
               draftPolicy.metadata.name = newName;
             })
@@ -111,7 +111,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           id="policy-description"
           name="policy-description"
           value={policy?.metadata?.annotations?.description}
-          onChange={onDescriptionChange}
+          onChange={(_, newValue) => onDescriptionChange(newValue)}
         />
       </FormGroup>
       <div>

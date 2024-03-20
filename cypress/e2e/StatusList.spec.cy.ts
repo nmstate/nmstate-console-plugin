@@ -19,7 +19,7 @@ describe('NodeNetworkState list', () => {
 
     cy.wait(['@getStatuses'], { timeout: 40000 });
 
-    cy.get('.pf-c-empty-state').should('contain', 'No NodeNetworkStates found');
+    cy.get('.pf-v5-c-empty-state').should('contain', 'No NodeNetworkStates found');
   });
 
   it('with one VID instace ', () => {

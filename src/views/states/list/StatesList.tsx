@@ -14,7 +14,7 @@ import {
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
-import { TableComposable, TableGridBreakpoint, Th, Thead, Tr } from '@patternfly/react-table';
+import { Table, TableGridBreakpoint, Th, Thead, Tr } from '@patternfly/react-table';
 import { V1beta1NodeNetworkState } from '@types';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
@@ -99,7 +99,6 @@ const StatesList: FC = () => {
                 onPaginationChange({ endIndex, page, perPage, startIndex })
               }
               className="list-managment-group__pagination"
-              defaultToFullPage
               itemCount={sortedStates?.length}
               page={pagination?.page}
               perPage={pagination?.perPage}
@@ -108,22 +107,20 @@ const StatesList: FC = () => {
           </div>
 
           {sortedStates?.length ? (
-            <TableComposable gridBreakPoint={TableGridBreakpoint.none} role="presentation">
+            <Table gridBreakPoint={TableGridBreakpoint.none} role="presentation">
               <Thead>
                 <Tr>
                   {activeColumns.map((column) => (
                     <Th
-                      {...column.props}
-                      id={column.id}
-                      sort={column.id === COLUMN_NAME_ID ? nameSortParams : null}
                       key={column.id}
+                      {...column?.props}
+                      sort={column.id === COLUMN_NAME_ID ? nameSortParams : null}
                     >
                       {column.title}
                     </Th>
                   ))}
                 </Tr>
               </Thead>
-
               {paginatedData.map((nnstate, index) => (
                 <StateRow
                   key={nnstate?.metadata?.name}
@@ -132,7 +129,7 @@ const StatesList: FC = () => {
                   rowData={{ rowIndex: index, selectedFilters }}
                 />
               ))}
-            </TableComposable>
+            </Table>
           ) : (
             <NNStateEmptyState />
           )}
