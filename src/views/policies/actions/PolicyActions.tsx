@@ -1,18 +1,13 @@
 import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router';
 import NodeNetworkConfigurationPolicyModel from 'src/console-models/NodeNetworkConfigurationPolicyModel';
-import { getContentScrollableElement, getResourceUrl } from 'src/utils/helpers';
+import { asAccessReview, getResourceUrl } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownPosition,
-  DropdownToggle,
-  KebabToggle,
-} from '@patternfly/react-core';
 import { V1NodeNetworkConfigurationPolicy } from '@types';
+import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
+import Loading from '@utils/components/Loading/Loading';
 
 import DeleteModal from '../components/DeleteModal';
 import EditModal from '../components/EditModal';
@@ -30,7 +25,6 @@ const PolicyActions: FC<PolicyActionsProps> = ({ policy, isKebabToggle }) => {
   const history = useHistory();
   const formSupported = isPolicySupported(policy);
   const { t } = useNMStateTranslation();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -59,39 +53,31 @@ const PolicyActions: FC<PolicyActionsProps> = ({ policy, isKebabToggle }) => {
     setIsDeleteModalOpen(true);
   };
 
+  const actions = [
+    {
+      accessReview: asAccessReview(NodeNetworkConfigurationPolicyModel, policy, 'update'),
+      cta: onEditModalToggle,
+      id: 'edit-policy',
+      label: t('Edit'),
+      description: getEditDescrition(formSupported, canUpdatePolicy),
+    },
+    {
+      accessReview: asAccessReview(NodeNetworkConfigurationPolicyModel, policy, 'delete'),
+      cta: onDeleteModalToggle,
+      id: 'delete-policy',
+      label: t('Delete'),
+      description: canDeletePolicy === false && t('Cannot delete in view-only mode'),
+    },
+  ];
+
+  if (!policy) return <Loading />;
+
   return (
     <>
-      <Dropdown
-        menuAppendTo={getContentScrollableElement}
-        onSelect={() => setIsDropdownOpen(false)}
-        toggle={
-          isKebabToggle ? (
-            <KebabToggle onToggle={setIsDropdownOpen} />
-          ) : (
-            <DropdownToggle onToggle={setIsDropdownOpen}>{t('Actions')}</DropdownToggle>
-          )
-        }
-        isOpen={isDropdownOpen}
-        isPlain={isKebabToggle}
-        dropdownItems={[
-          <DropdownItem
-            onClick={onEditModalToggle}
-            key="edit"
-            isDisabled={canUpdatePolicy === false}
-            description={getEditDescrition(formSupported, canUpdatePolicy)}
-          >
-            {t('Edit')}
-          </DropdownItem>,
-          <DropdownItem
-            onClick={onDeleteModalToggle}
-            key="delete"
-            isDisabled={canDeletePolicy === false}
-            description={canDeletePolicy === false && t('Cannot delete in view-only mode')}
-          >
-            {t('Delete')}
-          </DropdownItem>,
-        ]}
-        position={DropdownPosition.right}
+      <ActionsDropdown
+        actions={actions}
+        id="virtual-machine-instance-migration-actions"
+        isKebabToggle={isKebabToggle}
       />
       {policy && isEditModalOpen && (
         <EditModal

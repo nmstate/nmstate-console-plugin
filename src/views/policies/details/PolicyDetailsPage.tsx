@@ -8,6 +8,7 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
   PageSection,
+  PageSectionVariants,
   Title,
 } from '@patternfly/react-core';
 import { NodeNetworkConfigurationInterface, V1NodeNetworkConfigurationPolicy } from '@types';
@@ -31,34 +32,52 @@ const PolicyDetailsPage: FC<PolicyDetailsPageProps> = ({ obj: policy }) => {
 
   return (
     <div>
-      <PageSection>
+      <PageSection variant={PageSectionVariants.light}>
         <Title headingLevel="h2" className="co-section-heading">
           {t('Policy details')}
         </Title>
-        <DescriptionList>
-          <DescriptionListGroup>
-            <DescriptionListTerm>{t('Name')}</DescriptionListTerm>
-            <DescriptionListDescription>{policy?.metadata?.name}</DescriptionListDescription>
+        <DescriptionList className="pf-c-description-list">
+          <DescriptionListGroup className="pf-c-description-list__group">
+            <DescriptionListTerm className="pf-c-description-list__term">
+              {t('Name')}
+            </DescriptionListTerm>
+            <DescriptionListDescription className="pf-c-description-list__description">
+              {policy?.metadata?.name}
+            </DescriptionListDescription>
           </DescriptionListGroup>
           {description && (
-            <DescriptionListGroup>
-              <DescriptionListTerm>{t('Description')}</DescriptionListTerm>
-              <DescriptionListDescription>{description}</DescriptionListDescription>
+            <DescriptionListGroup className="pf-c-description-list__group">
+              <DescriptionListTerm className="pf-c-description-list__term">
+                {t('Description')}
+              </DescriptionListTerm>
+              <DescriptionListDescription className="pf-c-description-list__description">
+                {description}
+              </DescriptionListDescription>
             </DescriptionListGroup>
           )}
           {firstInterface && (
             <>
-              <DescriptionListGroup>
-                <DescriptionListTerm>{t('Type')}</DescriptionListTerm>
-                <DescriptionListDescription>{firstInterface?.type}</DescriptionListDescription>
+              <DescriptionListGroup className="pf-c-description-list__group">
+                <DescriptionListTerm className="pf-c-description-list__term">
+                  {t('Type')}
+                </DescriptionListTerm>
+                <DescriptionListDescription className="pf-c-description-list__description">
+                  {firstInterface?.type}
+                </DescriptionListDescription>
               </DescriptionListGroup>
-              <DescriptionListGroup>
-                <DescriptionListTerm>{t('Network state')}</DescriptionListTerm>
-                <DescriptionListDescription>{firstInterface?.state}</DescriptionListDescription>
+              <DescriptionListGroup className="pf-c-description-list__group">
+                <DescriptionListTerm className="pf-c-description-list__term">
+                  {t('Network state')}
+                </DescriptionListTerm>
+                <DescriptionListDescription className="pf-c-description-list__description">
+                  {firstInterface?.state}
+                </DescriptionListDescription>
               </DescriptionListGroup>
-              <DescriptionListGroup>
-                <DescriptionListTerm>{t('IP configuration')}</DescriptionListTerm>
-                <DescriptionListDescription>
+              <DescriptionListGroup className="pf-c-description-list__group">
+                <DescriptionListTerm className="pf-c-description-list__term">
+                  {t('IP configuration')}
+                </DescriptionListTerm>
+                <DescriptionListDescription className="pf-c-description-list__description">
                   {!!firstInterface?.ipv4 && t('IPv4')}
                   {!!firstInterface?.ipv6 && !firstInterface?.ipv4 && t('IPv6')}
                   {!firstInterface?.ipv6 && !firstInterface?.ipv4 && t('None')}
@@ -69,9 +88,11 @@ const PolicyDetailsPage: FC<PolicyDetailsPageProps> = ({ obj: policy }) => {
 
           {dnsResolver?.config?.search && (
             <>
-              <DescriptionListGroup>
-                <DescriptionListTerm>{t('Search')}</DescriptionListTerm>
-                <DescriptionListDescription>
+              <DescriptionListGroup className="pf-c-description-list__group">
+                <DescriptionListTerm className="pf-c-description-list__term">
+                  {t('Search')}
+                </DescriptionListTerm>
+                <DescriptionListDescription className="pf-c-description-list__description">
                   {dnsResolver?.config?.search.join(', ')}
                 </DescriptionListDescription>
               </DescriptionListGroup>
@@ -80,9 +101,11 @@ const PolicyDetailsPage: FC<PolicyDetailsPageProps> = ({ obj: policy }) => {
 
           {dnsResolver?.config?.server && (
             <>
-              <DescriptionListGroup>
-                <DescriptionListTerm>{t('Server')}</DescriptionListTerm>
-                <DescriptionListDescription>
+              <DescriptionListGroup className="pf-c-description-list__group">
+                <DescriptionListTerm className="pf-c-description-list__term">
+                  {t('Server')}
+                </DescriptionListTerm>
+                <DescriptionListDescription className="pf-c-description-list__description">
                   {dnsResolver?.config?.server.join(', ')}
                 </DescriptionListDescription>
               </DescriptionListGroup>

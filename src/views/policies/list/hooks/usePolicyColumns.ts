@@ -37,7 +37,7 @@ const usePolicyColumns = (): [
       {
         title: '',
         id: '',
-        props: { className: 'dropdown-kebab-pf pf-c-table__action' },
+        props: { className: 'dropdown-kebab-pf pf-v5-c-table__action' },
       },
     ],
     [t],

@@ -43,7 +43,7 @@ Cypress.Commands.add('login', (provider, username, password) => {
 
     const idp = provider || KUBEADMIN_IDP;
 
-    cy.get('.pf-c-login__main-body').should('be.visible');
+    cy.get('.pf-v5-c-login__main-body').should('be.visible');
 
     cy.get('body').then(($body) => {
       if ($body.text().includes(idp)) {

@@ -25,7 +25,7 @@ const LabelRow: FC<LabelRowProps> = ({ label, onChange, onDelete }) => {
             isRequired
             type="text"
             value={key}
-            onChange={(newKey) => onChange({ ...label, key: newKey })}
+            onChange={(_, newKey) => onChange({ ...label, key: newKey })}
             aria-label={t('selector key')}
           />
         </FormGroup>
@@ -38,7 +38,7 @@ const LabelRow: FC<LabelRowProps> = ({ label, onChange, onDelete }) => {
             isRequired
             type="text"
             value={value}
-            onChange={(newValue) => onChange({ ...label, value: newValue })}
+            onChange={(_, newValue) => onChange({ ...label, value: newValue })}
             aria-label={t('selector value')}
           />
         </FormGroup>

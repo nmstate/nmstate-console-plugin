@@ -1,7 +1,7 @@
 import { MouseEvent, useState } from 'react';
 
 import { SortByDirection } from '@patternfly/react-table';
-import { ThSortType } from '@patternfly/react-table/dist/esm/components/Table/base';
+import { ThSortType } from '@patternfly/react-table/dist/esm/components/Table/base/types';
 import { V1beta1NodeNetworkState } from '@types';
 
 const useSortStates = (

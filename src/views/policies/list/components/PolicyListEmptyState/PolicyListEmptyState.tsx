@@ -10,10 +10,9 @@ import {
   Button,
   ButtonVariant,
   EmptyState,
+  EmptyStateActions,
   EmptyStateBody,
   EmptyStateIcon,
-  EmptyStatePrimary,
-  EmptyStateSecondaryActions,
   EmptyStateVariant,
   Title,
 } from '@patternfly/react-core';
@@ -27,7 +26,7 @@ const PolicyListEmptyState: FC = () => {
   const { t } = useNMStateTranslation();
   const history = useHistory();
   return (
-    <EmptyState variant={EmptyStateVariant.large}>
+    <EmptyState variant={EmptyStateVariant.lg}>
       <EmptyStateIcon
         icon={() => <img src={EmptyPolicyStateImage} className="policy-empty-state-icon" />}
       />
@@ -39,7 +38,7 @@ const PolicyListEmptyState: FC = () => {
           Click <strong>Create NodeNetworkConfigurationPolicy</strong> to create your first policy
         </Trans>
       </EmptyStateBody>
-      <EmptyStatePrimary>
+      <EmptyStateActions>
         <Button
           variant={ButtonVariant.primary}
           onClick={() =>
@@ -52,8 +51,8 @@ const PolicyListEmptyState: FC = () => {
         >
           {t('Create NodeNetworkConfigurationPolicy')}
         </Button>
-      </EmptyStatePrimary>
-      <EmptyStateSecondaryActions>
+      </EmptyStateActions>
+      <EmptyStateActions>
         <Button
           variant={ButtonVariant.link}
           icon={<ExternalLinkSquareAltIcon />}
@@ -63,7 +62,7 @@ const PolicyListEmptyState: FC = () => {
             {t('View documentation')}
           </a>
         </Button>
-      </EmptyStateSecondaryActions>
+      </EmptyStateActions>
     </EmptyState>
   );
 };

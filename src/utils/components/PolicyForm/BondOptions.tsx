@@ -20,9 +20,7 @@ const BondOptions: FC<BondOptionsProps> = ({ id, onInterfaceChange, policyInterf
   const { t } = useNMStateTranslation();
   const options = policyInterface?.['link-aggregation']?.options || {};
 
-  const selectableOptions = BOND_OPTIONS_KEYS.filter(
-    (optionKey) => !Object.hasOwn(options, optionKey),
-  );
+  const selectableOptions = BOND_OPTIONS_KEYS.filter((optionKey) => !(optionKey in options));
 
   const onKeyChange = (oldKey, newKey) => {
     onInterfaceChange((draftInterface) => {

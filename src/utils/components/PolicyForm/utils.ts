@@ -1,6 +1,7 @@
 import { TFunction } from 'react-i18next';
 
 import { NodeNetworkConfigurationInterface } from '@types';
+import { t } from '@utils/hooks/useNMStateTranslation';
 
 import { INTERFACE_TYPE_OPTIONS } from './constants';
 
@@ -21,12 +22,16 @@ export const validateInterfaceName = (name: string): string => {
 
   if (name.length > 15) {
     // t('Interface name should follow the linux kernel naming convention. The name should be smaller than 16 characters.')
-    return 'Interface name should follow the linux kernel naming convention. The name should be smaller than 16 characters.';
+    return t(
+      'Interface name should follow the linux kernel naming convention. The name should be smaller than 16 characters.',
+    );
   }
 
   if (/[/ ]/.test(name)) {
     // t('Interface name should follow the linux kernel naming convention. Whitespaces and slashes are not allowed.')
-    return 'Interface name should follow the linux kernel naming convention. Whitespaces and slashes are not allowed.';
+    return t(
+      'Interface name should follow the linux kernel naming convention. Whitespaces and slashes are not allowed.',
+    );
   }
   return '';
 };

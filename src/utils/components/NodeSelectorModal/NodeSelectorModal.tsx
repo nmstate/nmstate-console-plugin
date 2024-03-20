@@ -140,7 +140,7 @@ const NodeSelectorModal: FC<NodeSelectorModalProps> = ({ policy, isOpen, onClose
           </Alert>
         )}
 
-        <ActionGroup className="pf-c-form">
+        <ActionGroup className="pf-v5-c-form">
           <Button type={ButtonType.submit} variant={ButtonVariant.primary} onClick={onSave}>
             {t('Save')}
           </Button>
