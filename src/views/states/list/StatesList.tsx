@@ -27,8 +27,7 @@ import useDrawerInterface from './hooks/useDrawerInterface';
 import useSelectedFilters from './hooks/useSelectedFilters';
 import useSortStates from './hooks/useSortStates';
 import useStateColumns, { COLUMN_NAME_ID } from './hooks/useStateColumns';
-import useStateFilters from './hooks/useStateFilters';
-import { FILTER_TYPES } from './constants';
+import { useStateFilters, useStateSearchFilters } from './hooks/useStateFilters';
 
 import './states-list.scss';
 
@@ -50,8 +49,13 @@ const StatesList: FC = () => {
   const { onPaginationChange, pagination } = usePagination();
   const [columns, activeColumns] = useStateColumns();
   const filters = useStateFilters();
+  const searchFilters = useStateSearchFilters();
+
   const selectedFilters = useSelectedFilters();
-  const [data, filteredData, onFilterChange] = useListPageFilter(states, filters);
+  const [data, filteredData, onFilterChange] = useListPageFilter(states, [
+    ...filters,
+    ...searchFilters,
+  ]);
 
   const { sortedStates, nameSortParams } = useSortStates(filteredData);
 
@@ -66,11 +70,9 @@ const StatesList: FC = () => {
             <ListPageFilter
               data={data}
               loaded={statesLoaded}
-              rowFilters={filters.filter((filter) => filter?.type !== FILTER_TYPES.IP_ADDRESS)}
+              rowFilters={filters}
+              rowSearchFilters={searchFilters}
               hideLabelFilter
-              nameFilterTitle={t('IP address')}
-              nameFilterPlaceholder={t('Search by IP address...')}
-              nameFilter={FILTER_TYPES.IP_ADDRESS}
               onFilterChange={(...args) => {
                 onFilterChange(...args);
                 onPaginationChange({
