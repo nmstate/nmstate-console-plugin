@@ -1,6 +1,7 @@
 import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
+import { isEmpty } from '@utils/helpers';
 
-import { FILTER_TYPES } from '../constants';
+import { FILTER_TYPES, LLDP_ENABLED } from '../constants';
 import { searchInterfaceByIP } from '../utilts';
 
 export const interfaceFilters: Record<
@@ -8,21 +9,27 @@ export const interfaceFilters: Record<
   (selectedInput: string[], obj: NodeNetworkConfigurationInterface) => boolean
 > = {
   [FILTER_TYPES.INTERFACE_STATE]: (selectedInput, obj) => {
-    if (!selectedInput.length) return true;
+    if (isEmpty(selectedInput)) return true;
     return selectedInput.some((status) => obj.state.toLowerCase() === status);
   },
   [FILTER_TYPES.INTERFACE_TYPE]: (selectedInput, obj) => {
-    if (!selectedInput.length) return true;
+    if (isEmpty(selectedInput)) return true;
     return selectedInput.some((interfaceType) => obj.type === interfaceType);
   },
   [FILTER_TYPES.IP_FILTER]: (selectedInput, obj) => {
-    if (!selectedInput.length) return true;
+    if (isEmpty(selectedInput)) return true;
     return selectedInput.some((ipType) => !!obj[ipType]);
   },
   [FILTER_TYPES.IP_ADDRESS]: (selectedInput, obj) => {
     const searchIPAddress = selectedInput?.[0];
 
     return searchInterfaceByIP(searchIPAddress, obj);
+  },
+  [FILTER_TYPES.LLDP]: (selectedInput, obj) => {
+    if (isEmpty(selectedInput)) return true;
+    return selectedInput.some((status) =>
+      status === LLDP_ENABLED ? Boolean(obj?.lldp?.enabled) : !obj?.lldp?.enabled,
+    );
   },
 } as const;
 
