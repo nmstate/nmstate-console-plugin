@@ -5,7 +5,7 @@ import { InterfaceType, NodeNetworkConfigurationInterface, V1beta1NodeNetworkSta
 import { isEmpty } from '@utils/helpers';
 
 import { FILTER_TYPES, LLDP_DISABLED, LLDP_ENABLED } from '../constants';
-import { searchInterfaceByIP } from '../utilts';
+import { searchInterfaceByIP, searchInterfaceByMAC } from '../utilts';
 
 export const useStateSearchFilters = (): RowSearchFilter<V1beta1NodeNetworkState>[] => {
   const { t } = useNMStateTranslation();
@@ -23,6 +23,20 @@ export const useStateSearchFilters = (): RowSearchFilter<V1beta1NodeNetworkState
       },
       filterGroupName: t('IP address'),
       placeholder: t('Search by IP address...'),
+    },
+    {
+      type: FILTER_TYPES.MAC_ADDRESS,
+      filter: (searchText, obj) => {
+        const searchMACAddress = searchText?.selected?.[0];
+        if (!searchMACAddress) return true;
+
+        const interfaces = obj?.status?.currentState
+          ?.interfaces as NodeNetworkConfigurationInterface[];
+
+        return interfaces?.some((iface) => searchInterfaceByMAC(searchMACAddress, iface));
+      },
+      filterGroupName: t('MAC address'),
+      placeholder: t('Search by MAC address...'),
     },
   ];
 };

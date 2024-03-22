@@ -2,7 +2,7 @@ import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 import { isEmpty } from '@utils/helpers';
 
 import { FILTER_TYPES, LLDP_ENABLED } from '../constants';
-import { searchInterfaceByIP } from '../utilts';
+import { searchInterfaceByIP, searchInterfaceByMAC } from '../utilts';
 
 export const interfaceFilters: Record<
   string,
@@ -20,17 +20,14 @@ export const interfaceFilters: Record<
     if (isEmpty(selectedInput)) return true;
     return selectedInput.some((ipType) => !!obj[ipType]);
   },
-  [FILTER_TYPES.IP_ADDRESS]: (selectedInput, obj) => {
-    const searchIPAddress = selectedInput?.[0];
-
-    return searchInterfaceByIP(searchIPAddress, obj);
-  },
+  [FILTER_TYPES.IP_ADDRESS]: (selectedInput, obj) => searchInterfaceByIP(selectedInput?.[0], obj),
   [FILTER_TYPES.LLDP]: (selectedInput, obj) => {
     if (isEmpty(selectedInput)) return true;
     return selectedInput.some((status) =>
       status === LLDP_ENABLED ? Boolean(obj?.lldp?.enabled) : !obj?.lldp?.enabled,
     );
   },
+  [FILTER_TYPES.MAC_ADDRESS]: (selectedInput, obj) => searchInterfaceByMAC(selectedInput?.[0], obj),
 } as const;
 
 export const filterInterfaces = (

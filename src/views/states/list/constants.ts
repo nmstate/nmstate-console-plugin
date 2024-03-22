@@ -5,6 +5,7 @@ import { getResourceUrl } from '@utils/helpers';
 export const baseListUrl = getResourceUrl({ model: NodeNetworkStateModel });
 
 export const FILTER_TYPES = {
+  MAC_ADDRESS: 'mac-address',
   INTERFACE_STATE: 'interface-state',
   INTERFACE_TYPE: 'interface-type',
   IP_FILTER: 'ip-filter',
