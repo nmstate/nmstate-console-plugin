@@ -16,9 +16,12 @@ import { filterInterfaces, getInterfacesByType } from './utils';
 import './state-row.scss';
 
 const StateRow: FC<
-  RowProps<V1beta1NodeNetworkState, { rowIndex: number; selectedFilters: SelectedFilters }>
-> = ({ obj, activeColumnIDs, rowData: { rowIndex, selectedFilters } }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  RowProps<
+    V1beta1NodeNetworkState,
+    { rowIndex: number; selectedFilters: SelectedFilters; expandAll: boolean }
+  >
+> = ({ obj, activeColumnIDs, rowData: { rowIndex, selectedFilters, expandAll } }) => {
+  const [expand, setExpand] = useState(false);
   const { t } = useNMStateTranslation();
   const interfaces = obj?.status?.currentState?.interfaces as NodeNetworkConfigurationInterface[];
 
@@ -32,6 +35,8 @@ const StateRow: FC<
     [filteredInterfaces],
   );
 
+  const isExpanded = expandAll || expand;
+
   return (
     <Tbody key={obj.metadata.name} isExpanded={isExpanded} role="rowgroup" className="state-row">
       <Tr>
@@ -39,7 +44,7 @@ const StateRow: FC<
           expand={{
             rowIndex,
             isExpanded,
-            onToggle: (event, rowIndex, isOpen) => setIsExpanded(isOpen),
+            onToggle: (event, rowIndex, isOpen) => setExpand(isOpen),
             expandId: 'expand-interfaces-list',
           }}
         />
@@ -93,7 +98,11 @@ const StateRow: FC<
               </small>
             </Title>
 
-            <InterfacesTable interfacesByType={interfacesByType} nodeNetworkState={obj} />
+            <InterfacesTable
+              interfacesByType={interfacesByType}
+              nodeNetworkState={obj}
+              expandAll={expandAll}
+            />
           </ExpandableRowContent>
         </Td>
       </Tr>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   NodeNetworkStateModelGroupVersionKind,
   NodeNetworkStateModelRef,
@@ -13,7 +13,7 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Pagination } from '@patternfly/react-core';
+import { Button, Flex, Pagination } from '@patternfly/react-core';
 import { Table, TableGridBreakpoint, Th, Thead, Tr } from '@patternfly/react-table';
 import { V1beta1NodeNetworkState } from '@types';
 import usePagination from '@utils/hooks/usePagination/usePagination';
@@ -34,6 +34,8 @@ import './states-list.scss';
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
   const { selectedInterfaceName, selectedStateName, selectedInterfaceType } = useDrawerInterface();
+
+  const [expandAll, setExpandAll] = useState(false);
 
   const [states, statesLoaded, statesError] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
     groupVersionKind: NodeNetworkStateModelGroupVersionKind,
@@ -67,32 +69,37 @@ const StatesList: FC = () => {
       <ListPageBody>
         <StatusBox loaded={statesLoaded} error={statesError}>
           <div className="nns-list-management-group">
-            <ListPageFilter
-              data={data}
-              loaded={statesLoaded}
-              rowFilters={filters}
-              rowSearchFilters={searchFilters}
-              hideLabelFilter
-              onFilterChange={(...args) => {
-                onFilterChange(...args);
-                onPaginationChange({
-                  endIndex: pagination?.perPage,
-                  page: 1,
-                  perPage: pagination?.perPage,
-                  startIndex: 0,
-                });
-              }}
-              columnLayout={{
-                columns: columns?.map(({ id, title, additional }) => ({
-                  id,
-                  title,
-                  additional,
-                })),
-                id: NodeNetworkStateModelRef,
-                selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
-                type: t('NodeNetworkState'),
-              }}
-            />
+            <Flex>
+              <ListPageFilter
+                data={data}
+                loaded={statesLoaded}
+                rowFilters={filters}
+                rowSearchFilters={searchFilters}
+                hideLabelFilter
+                onFilterChange={(...args) => {
+                  onFilterChange(...args);
+                  onPaginationChange({
+                    endIndex: pagination?.perPage,
+                    page: 1,
+                    perPage: pagination?.perPage,
+                    startIndex: 0,
+                  });
+                }}
+                columnLayout={{
+                  columns: columns?.map(({ id, title, additional }) => ({
+                    id,
+                    title,
+                    additional,
+                  })),
+                  id: NodeNetworkStateModelRef,
+                  selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
+                  type: t('NodeNetworkState'),
+                }}
+              />
+              <Button onClick={() => setExpandAll(!expandAll)}>
+                {expandAll ? t('Collapse all') : t('Expand all')}
+              </Button>
+            </Flex>
             <Pagination
               onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
                 onPaginationChange({ endIndex, page, perPage, startIndex })
@@ -128,7 +135,7 @@ const StatesList: FC = () => {
                   key={nnstate?.metadata?.name}
                   obj={nnstate}
                   activeColumnIDs={new Set(activeColumns.map(({ id }) => id))}
-                  rowData={{ rowIndex: index, selectedFilters }}
+                  rowData={{ rowIndex: index, selectedFilters, expandAll }}
                 />
               ))}
             </Table>

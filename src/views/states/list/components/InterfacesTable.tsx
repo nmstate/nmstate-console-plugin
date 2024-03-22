@@ -12,9 +12,14 @@ import './interfaces-table.scss';
 interface InterfacesTableProps {
   interfacesByType: { [interfaceType in string]: NodeNetworkConfigurationInterface[] };
   nodeNetworkState: V1beta1NodeNetworkState;
+  expandAll: boolean;
 }
 
-const InterfacesTable: FC<InterfacesTableProps> = ({ interfacesByType, nodeNetworkState }) => {
+const InterfacesTable: FC<InterfacesTableProps> = ({
+  interfacesByType,
+  nodeNetworkState,
+  expandAll,
+}) => {
   const columns = useInterfaceColumns();
 
   return (
@@ -41,6 +46,7 @@ const InterfacesTable: FC<InterfacesTableProps> = ({ interfacesByType, nodeNetwo
               interfaceType={interfaceType}
               interfaces={interfacesByType[interfaceType]}
               nodeNetworkState={nodeNetworkState}
+              expandAll={expandAll}
             />
           ))}
       </Tbody>

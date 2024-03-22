@@ -22,21 +22,23 @@ interface InterfacesTypeSectionProps {
   interfaces: NodeNetworkConfigurationInterface[];
   interfaceType: string;
   nodeNetworkState: V1beta1NodeNetworkState;
+  expandAll: boolean;
 }
 
 const InterfacesTypeSection: FC<InterfacesTypeSectionProps> = memo(
-  ({ interfaceType, interfaces, nodeNetworkState }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+  ({ interfaceType, interfaces, nodeNetworkState, expandAll }) => {
+    const [expand, setExpand] = useState(false);
 
     const { setSelectedInterfaceName } = useDrawerInterface();
 
+    const isExpanded = expandAll || expand;
     return (
       <>
         <Tr className="interfaces-table__interface-type-row">
           <Td colSpan={6}>
             <ExpandableSectionToggle
               isExpanded={isExpanded}
-              onToggle={setIsExpanded}
+              onToggle={setExpand}
               className="expandable-section-interface-type"
               data-test={`${interfaceType}-expandable-section-toggle`}
             >
