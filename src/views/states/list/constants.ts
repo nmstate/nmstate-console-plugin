@@ -9,4 +9,8 @@ export const FILTER_TYPES = {
   INTERFACE_TYPE: 'interface-type',
   IP_FILTER: 'ip-filter',
   IP_ADDRESS: 'ip-address',
+  LLDP: 'lldp',
 } as const;
+
+export const LLDP_ENABLED = 'enabled';
+export const LLDP_DISABLED = 'disabled';

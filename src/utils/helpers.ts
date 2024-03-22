@@ -7,6 +7,9 @@ import {
 
 import { ALL_NAMESPACES_SESSION_KEY } from './constants';
 
+export const isEmpty = (obj) =>
+  [Array, Object].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;
+
 export const ensurePath = <T extends object>(data: T, paths: string | string[]) => {
   let current = data;
 

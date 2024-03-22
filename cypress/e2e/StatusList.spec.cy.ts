@@ -3,6 +3,8 @@ import {
   EXPAND_INTERFACES_LIST_TEST_ID,
   INTERFACE_DRAWER_TEST_ID,
   LLDP_DRAWER_DETAILS_SECTION_TEST_ID,
+  LLDP_ENABLED_FILTER,
+  ROW_FILTERS_BUTTON,
 } from '../support/selectors';
 
 describe('NodeNetworkState list', () => {
@@ -81,6 +83,44 @@ describe('NodeNetworkState list', () => {
         .should('contain', 'MAC address')
         .should('contain', 'Port')
         .should('contain', 'VLANS');
+    });
+  });
+
+  it('filter by lldp', () => {
+    cy.intercept('GET', '/api/kubernetes/apis/nmstate.io/v1beta1/nodenetworkstates*', {
+      fixture: 'NodeNetworkStatusWithLLDP.json',
+    }).as('getStatuses');
+
+    cy.fixture('NodeNetworkStatusWithLLDP.json').then((nnsResponse) => {
+      const nns = nnsResponse.items[0];
+      const ifaceWithLLDP = nns.status.currentState.interfaces.find((iface) => iface.lldp?.enabled);
+      const ifaceWithoutLLDP = nns.status.currentState.interfaces.find(
+        (iface) => !iface.lldp?.enabled,
+      );
+
+      cy.visit('/k8s/cluster/nmstate.io~v1beta1~NodeNetworkState');
+
+      cy.wait(['@getStatuses'], { timeout: 40000 });
+
+      cy.get('table').should('contain', nns.metadata.name);
+
+      // open filter toolbar
+      cy.get(ROW_FILTERS_BUTTON).click();
+
+      cy.get(LLDP_ENABLED_FILTER).check();
+
+      // close filter toolbar
+      cy.get(ROW_FILTERS_BUTTON).click();
+
+      cy.get('table').should('contain', nns.metadata.name);
+      cy.get(EXPAND_INTERFACES_LIST_TEST_ID).click();
+      cy.byTestID(EXPAND_INTERFACE_INFO).find('button').click();
+
+      cy.byTestID(`${ifaceWithLLDP.type}-${ifaceWithLLDP.name}-open-drawer`).contains(
+        ifaceWithLLDP.name,
+      );
+
+      cy.byTestID(`${ifaceWithoutLLDP.type}-expandable-section-toggle`).should('not.exist');
     });
   });
 });
