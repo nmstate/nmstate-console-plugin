@@ -1,4 +1,5 @@
 import { NodeNetworkConfigurationInterface } from '@types';
+import { isEmpty } from '@utils/helpers';
 import { getIPV4Address, getIPV6Address } from '@utils/interfaces/getters';
 
 const decimalToBinary = (decimalNumber: number) => (decimalNumber >>> 0).toString(2);
@@ -37,7 +38,7 @@ export const searchInterfaceByIP = (
   searchIPAddress: string,
   iface: NodeNetworkConfigurationInterface,
 ) => {
-  if (!searchIPAddress) return true;
+  if (isEmpty(searchIPAddress)) return true;
 
   const isSearchByIpv4 = searchIPAddress.includes('.');
 
@@ -56,4 +57,13 @@ export const searchInterfaceByIP = (
   const addresses = [getIPV4Address(iface), getIPV6Address(iface)].filter(Boolean);
 
   return addresses?.some((address) => address?.toLowerCase().includes(searchIPAddress));
+};
+
+export const searchInterfaceByMAC = (
+  searchMACAddress: string,
+  iface: NodeNetworkConfigurationInterface,
+) => {
+  if (isEmpty(searchMACAddress)) return true;
+
+  return iface?.['mac-address']?.includes(searchMACAddress) || false;
 };
