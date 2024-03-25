@@ -2,7 +2,12 @@ import { InterfaceType, NodeNetworkConfigurationInterface } from '@types';
 import { isEmpty } from '@utils/helpers';
 
 import { FILTER_TYPES, LLDP_ENABLED } from '../constants';
-import { searchInterfaceByIP, searchInterfaceByMAC } from '../utilts';
+import {
+  searchInterfaceByIP,
+  searchInterfaceByLLDPName,
+  searchInterfaceByLLDPSystemName,
+  searchInterfaceByMAC,
+} from '../utilts';
 
 export const interfaceFilters: Record<
   string,
@@ -28,6 +33,10 @@ export const interfaceFilters: Record<
     );
   },
   [FILTER_TYPES.MAC_ADDRESS]: (selectedInput, obj) => searchInterfaceByMAC(selectedInput?.[0], obj),
+  [FILTER_TYPES.LLDP_NAME]: (selectedInput, obj) =>
+    searchInterfaceByLLDPName(selectedInput?.[0], obj),
+  [FILTER_TYPES.LLDP_SYSTEM_NAME]: (selectedInput, obj) =>
+    searchInterfaceByLLDPSystemName(selectedInput?.[0], obj),
 } as const;
 
 export const filterInterfaces = (

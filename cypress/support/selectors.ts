@@ -6,3 +6,6 @@ export const LLDP_DRAWER_DETAILS_SECTION_TEST_ID = 'lldp-section';
 export const ROW_FILTERS_BUTTON = 'button.pf-v5-c-select__toggle';
 
 export const LLDP_ENABLED_FILTER = '#enabled[type="checkbox"]';
+
+export const SEARCH_FILTER_DROPDOWN =
+  'button.pf-v5-c-dropdown__toggle[data-test-id="dropdown-button"]';
