@@ -11,6 +11,8 @@ export const FILTER_TYPES = {
   IP_FILTER: 'ip-filter',
   IP_ADDRESS: 'ip-address',
   LLDP: 'lldp',
+  LLDP_NAME: 'lldp-name',
+  LLDP_SYSTEM_NAME: 'lldp-system-name',
 } as const;
 
 export const LLDP_ENABLED = 'enabled';
