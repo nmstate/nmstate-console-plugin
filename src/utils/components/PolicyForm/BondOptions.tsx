@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, FormEvent } from 'react';
 import { ensurePath } from 'src/utils/helpers';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
@@ -78,7 +78,9 @@ const BondOptions: FC<BondOptionsProps> = ({ id, onInterfaceChange, policyInterf
                 isRequired
                 type="text"
                 value={value}
-                onChange={(newValue) => onOptionValue(key, newValue)}
+                onChange={(event: FormEvent<HTMLInputElement>, newValue: string) =>
+                  onOptionValue(key, newValue)
+                }
                 aria-label={t('selector value')}
               />
             </FormGroup>
