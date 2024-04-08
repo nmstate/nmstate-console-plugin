@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, FormEvent } from 'react';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import { ExpandableSection, FormGroup, Text, TextInput } from '@patternfly/react-core';
@@ -15,7 +15,7 @@ type CopyMACProps = {
 const CopyMAC: FC<CopyMACProps> = ({ id, policyInterface, onInterfaceChange }) => {
   const { t } = useNMStateTranslation();
 
-  const onPortChange = (value) => {
+  const onPortChange = (event: FormEvent<HTMLInputElement>, value: string) => {
     onInterfaceChange((draftInterface) => {
       value ? (draftInterface['copy-mac-from'] = value) : delete draftInterface['copy-mac-from'];
     });
