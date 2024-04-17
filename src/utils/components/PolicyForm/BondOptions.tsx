@@ -64,7 +64,9 @@ const BondOptions: FC<BondOptionsProps> = ({ id, onInterfaceChange, policyInterf
                 isRequired
                 type="text"
                 value={key}
-                onChange={(newKey) => onKeyChange(key, newKey)}
+                onChange={(event: FormEvent<HTMLInputElement>, newKey: string) =>
+                  onKeyChange(key, newKey)
+                }
                 aria-label={t('selector key')}
               />
             </FormGroup>
