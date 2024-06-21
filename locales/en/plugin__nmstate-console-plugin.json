@@ -52,6 +52,7 @@
   "Enactment states": "Enactment states",
   "Enactments categorized by status": "Enactments categorized by status",
   "Enter name": "Enter name",
+  "Error details": "Error details",
   "Expand all": "Expand all",
   "Explore {{kind}} list": "Explore {{kind}} list",
   "Failing": "Failing",
@@ -110,6 +111,7 @@
   "Remove all dependencies between the new and existing polices": "Remove all dependencies between the new and existing polices",
   "Remove interface": "Remove interface",
   "Remove label selector": "Remove label selector",
+  "Restricted Access": "Restricted Access",
   "Save": "Save",
   "Scheduling will not be possible at this state": "Scheduling will not be possible at this state",
   "Search": "Search",
@@ -136,5 +138,6 @@
   "VLANS": "VLANS",
   "With YAML": "With YAML",
   "YAML": "YAML",
+  "You don't have access to this section due to cluster policy.": "You don't have access to this section due to cluster policy.",
   "You're in view-only mode": "You're in view-only mode"
 }

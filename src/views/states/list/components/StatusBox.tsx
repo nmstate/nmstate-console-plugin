@@ -2,6 +2,7 @@ import React, { FC, PropsWithChildren } from 'react';
 import { Trans } from 'react-i18next';
 
 import { Button, ButtonVariant } from '@patternfly/react-core';
+import AccessDenied from '@utils/components/AccessDenied/AccessDenied';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 import ListSkeleton from './ListSkeleton';
@@ -14,6 +15,8 @@ type StatusBoxProps = PropsWithChildren<{
 
 const StatusBox: FC<StatusBoxProps> = ({ loaded, error, children }) => {
   const { t } = useNMStateTranslation();
+
+  if (error && error?.response?.status === 403) return <AccessDenied message={error.message} />;
 
   if (error)
     return (
