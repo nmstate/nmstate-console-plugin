@@ -69,7 +69,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
 
       if (newType === InterfaceType.LINUX_BRIDGE) {
         delete draftInterface['link-aggregation'];
-        draftInterface.bridge = { port: [], options: {} };
+        draftInterface.bridge = { port: [], options: { stp: { enabled: false } } };
       }
 
       if (newType === InterfaceType.BOND) {
@@ -363,7 +363,7 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
               </Text>
             }
             id={`policy-interface-stp-${id}`}
-            isChecked={policyInterface?.bridge?.options?.stp?.enabled}
+            isChecked={policyInterface?.bridge?.options?.stp?.enabled !== false}
             onChange={(_, newValue) => onSTPChange(newValue)}
             isDisabled={isInterfaceCreated}
           />
