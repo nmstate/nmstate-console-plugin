@@ -49,7 +49,14 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
         type: InterfaceType.LINUX_BRIDGE,
         name: `interface-${draftPolicy.spec.desiredState.interfaces.length}`,
         state: 'up',
-      });
+        bridge: {
+          options: {
+            stp: {
+              enabled: false,
+            },
+          },
+        },
+      } as NodeNetworkConfigurationInterface);
     });
   };
 
