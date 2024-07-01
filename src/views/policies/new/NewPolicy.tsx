@@ -39,6 +39,13 @@ const initialPolicy: V1NodeNetworkConfigurationPolicy = {
           name: 'br0',
           type: InterfaceType.LINUX_BRIDGE,
           state: NETWORK_STATES.Up,
+          bridge: {
+            options: {
+              stp: {
+                enabled: false,
+              },
+            },
+          },
         } as NodeNetworkConfigurationInterface,
       ],
     },
