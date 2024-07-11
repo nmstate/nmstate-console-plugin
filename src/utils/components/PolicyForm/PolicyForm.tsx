@@ -76,7 +76,7 @@ const PolicyForm: FC<PolicyFormProps> = ({ policy, setPolicy, createForm = false
           <FormGroup fieldId="text">
             <Text>
               <Trans t={t} ns="plugin__nmstate-console-plugin">
-                Node network is configured and managed by NM state. Create a node netowrk
+                Node network is configured and managed by NM state. Create a node network
                 configuration policy to describe the requested network configuration on your nodes
                 in the cluster. The node network configuration enactment reports the netwrok
                 policies enacted upon each node.

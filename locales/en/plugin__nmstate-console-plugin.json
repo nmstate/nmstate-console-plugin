@@ -90,7 +90,7 @@
   "No matching Nodes found for the labels": "No matching Nodes found for the labels",
   "No node network configuration policies defined yet": "No node network configuration policies defined yet",
   "No NodeNetworkStates found": "No NodeNetworkStates found",
-  "Node network is configured and managed by NM state. Create a node netowrk configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.": "Node network is configured and managed by NM state. Create a node netowrk configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.",
+  "Node network is configured and managed by NM state. Create a node network configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.": "Node network is configured and managed by NM state. Create a node netowrk configuration policy to describe the requested network configuration on your nodes in the cluster. The node network configuration enactment reports the netwrok policies enacted upon each node.",
   "Node Selector": "Node Selector",
   "NodeNetworkConfigurationPolicy": "NodeNetworkConfigurationPolicy",
   "NodeNetworkState": "NodeNetworkState",

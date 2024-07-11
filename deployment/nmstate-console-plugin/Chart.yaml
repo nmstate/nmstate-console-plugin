@@ -1,6 +1,6 @@
 apiVersion: v2
 name: nmstate-console-plugin
-description: NMState  is a library that manages host netowrking settings in a declarative manner. This is its console ui plugin
+description: NMState  is a library that manages host networking settings in a declarative manner. This is its console ui plugin
 
 # A chart can be either an 'application' or a 'library' chart.
 #
