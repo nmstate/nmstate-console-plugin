@@ -1,4 +1,4 @@
-apiVersion: console.openshift.io/v1alpha1
+apiVersion: console.openshift.io/v1
 kind: ConsolePlugin
 metadata:
   name: {{ .Values.plugin }}
@@ -6,8 +6,10 @@ metadata:
     console.openshift.io/use-i18n: "true"
 spec:
   displayName: 'Console Plugin for NMState'
-  service:
-    name: {{ .Values.plugin }}
-    namespace: {{ .Values.namespace }}
-    port: 9443
-    basePath: '/'
+  backend:
+    type: Service
+    service:
+      name: {{ .Values.plugin }}
+      namespace: {{ .Values.namespace }}
+      port: 9443
+      basePath: '/'
