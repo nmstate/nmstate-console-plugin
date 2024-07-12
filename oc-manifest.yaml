@@ -90,7 +90,7 @@ objects:
         app: "${PLUGIN_NAME}"
       type: ClusterIP
       sessionAffinity: None
-  - apiVersion: console.openshift.io/v1alpha1
+  - apiVersion: console.openshift.io/v1
     kind: ConsolePlugin
     metadata:
       name: "${PLUGIN_NAME}"
@@ -98,11 +98,13 @@ objects:
         console.openshift.io/use-i18n: "true"
     spec:
       displayName: "Console Plugin NMState Template"
-      service:
-        name: "${PLUGIN_NAME}"
-        namespace: "${NAMESPACE}"
-        port: 9443
-        basePath: "/"
+      backend:
+        type: Service
+        service:
+          name: "${PLUGIN_NAME}"
+          namespace: "${NAMESPACE}"
+          port: 9443
+          basePath: "/"
   - apiVersion: v1
     kind: ConfigMap
     metadata:
