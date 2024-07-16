@@ -1,6 +1,10 @@
 import { TFunction } from 'react-i18next';
 
-import { NodeNetworkConfigurationInterface } from '@types';
+import {
+  InterfaceType,
+  NodeNetworkConfigurationInterface,
+  V1NodeNetworkConfigurationPolicy,
+} from '@types';
 import { t } from '@utils/hooks/useNMStateTranslation';
 
 import { INTERFACE_TYPE_OPTIONS } from './constants';
@@ -16,6 +20,11 @@ export const getExpandableTitle = (
 
   return t('Policy interface');
 };
+
+export const isOVSBridgeExisting = (policy: V1NodeNetworkConfigurationPolicy): boolean =>
+  policy?.spec?.desiredState?.interfaces?.some(
+    (iface: NodeNetworkConfigurationInterface) => iface?.type === InterfaceType.OVS_BRIDGE,
+  );
 
 export const validateInterfaceName = (name: string): string => {
   if (!name) return '';

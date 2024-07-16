@@ -13,7 +13,7 @@ import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
 
 import DeleteInterfaceModal from './DeleteInterfaceModal';
 import PolicyInterface, { onInterfaceChangeType } from './PolicyInterface';
-import { getExpandableTitle } from './utils';
+import { getExpandableTitle, isOVSBridgeExisting } from './utils';
 
 type PolicyInterfacesExpandableProps = {
   policy: V1NodeNetworkConfigurationPolicy;
@@ -47,6 +47,7 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
         interfaceIndex,
         1,
       );
+      !isOVSBridgeExisting(draftPolicy) && delete draftPolicy.spec.desiredState.ovn;
     });
   };
 
@@ -95,7 +96,7 @@ const PolicyInterfacesExpandable: FC<PolicyInterfacesExpandableProps> = ({
               policyInterface={policyInterface}
               onInterfaceChange={(updateInterface: onInterfaceChangeType) =>
                 setPolicy((draftPolicy) => {
-                  updateInterface(draftPolicy.spec.desiredState.interfaces[index]);
+                  updateInterface(draftPolicy.spec.desiredState.interfaces[index], draftPolicy);
                 })
               }
             />

@@ -7,7 +7,8 @@ export enum NETWORK_STATES {
 }
 
 export const INTERFACE_TYPE_OPTIONS = {
-  [InterfaceType.LINUX_BRIDGE]: 'Bridge',
+  [InterfaceType.LINUX_BRIDGE]: 'Linux bridge',
+  [InterfaceType.OVS_BRIDGE]: 'Open vSwitch bridge',
   [InterfaceType.BOND]: 'Bonding',
   [InterfaceType.ETHERNET]: 'Ethernet',
 };
