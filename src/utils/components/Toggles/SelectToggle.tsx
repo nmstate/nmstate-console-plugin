@@ -1,9 +1,9 @@
-import React, { Ref } from 'react';
+import React, { ReactNode, Ref } from 'react';
 
 import { MenuToggle, MenuToggleElement, MenuToggleProps } from '@patternfly/react-core';
 
 type SelectToggleProps = MenuToggleProps & {
-  selected: any;
+  selected: ReactNode | string;
 };
 
 const SelectToggle = ({ selected, ...menuProps }: SelectToggleProps) =>

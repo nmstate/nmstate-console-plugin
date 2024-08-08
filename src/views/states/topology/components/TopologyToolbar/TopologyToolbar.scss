@@ -1,0 +1,31 @@
+.pf-v5-c-toolbar__group.pf-topology-view__view-toolbar {
+  width: 100%;
+  .pf-v5-c-toolbar {
+    width: 100%;
+  }
+}
+
+div[id^='pf-topology-view-'] {
+  padding-bottom: 0;
+}
+
+.topology-toolbar {
+  padding: var(--pf-global--spacer--sm) 0;
+  &__content {
+    padding: 0 var(--pf-global--spacer--sm);
+  }
+}
+
+.list-view-btn {
+  position: absolute;
+  right: 0;
+}
+
+.topology-filter {
+  &__toggle {
+    width: 200px;
+  }
+  &__icon {
+    margin-right: var(--pf-global--spacer--sm);
+  }
+}

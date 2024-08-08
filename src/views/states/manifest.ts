@@ -1,20 +1,15 @@
 import type { EncodedExtension } from '@openshift/dynamic-plugin-sdk';
 import type {
-  ExtensionK8sModel,
   ResourceClusterNavItem,
   ResourceListPage,
+  RoutePage,
 } from '@openshift-console/dynamic-plugin-sdk';
 
-import NodeNetworkStateModel from '../../console-models/NodeNetworkStateModel';
-
-const StateExtensionModel: ExtensionK8sModel = {
-  group: NodeNetworkStateModel.apiGroup as string,
-  kind: NodeNetworkStateModel.kind,
-  version: NodeNetworkStateModel.apiVersion,
-};
+import { NodeNetworkStateModelGroupVersionKind } from '../../console-models';
 
 export const StateExposedModules = {
   StatesList: './views/states/list/StatesList',
+  Topology: './views/states/topology/Topology',
 };
 
 export const StateExtensions: EncodedExtension[] = [
@@ -25,7 +20,7 @@ export const StateExtensions: EncodedExtension[] = [
       perspective: 'admin',
       name: '%plugin__nmstate-console-plugin~NodeNetworkState%',
       section: 'networking',
-      model: StateExtensionModel,
+      model: NodeNetworkStateModelGroupVersionKind,
       dataAttributes: {
         'data-quickstart-id': 'qs-nav-state-list',
         'data-test-id': 'state-nav-list',
@@ -36,8 +31,17 @@ export const StateExtensions: EncodedExtension[] = [
     type: 'console.page/resource/list',
     properties: {
       perspective: 'admin',
-      model: StateExtensionModel,
+      model: NodeNetworkStateModelGroupVersionKind,
       component: { $codeRef: 'StatesList' },
     },
   } as EncodedExtension<ResourceListPage>,
+  {
+    type: 'console.page/route',
+    properties: {
+      path: ['nmstate-topology'],
+      component: {
+        $codeRef: 'Topology',
+      },
+    },
+  } as EncodedExtension<RoutePage>,
 ];

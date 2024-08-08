@@ -1,11 +1,12 @@
-import React, { FC, useState } from 'react';
-import {
-  NodeNetworkStateModelGroupVersionKind,
-  NodeNetworkStateModelRef,
-} from 'src/console-models';
-import NodeNetworkStateModel from 'src/console-models/NodeNetworkStateModel';
+import React, { FC, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
+import {
+  NodeNetworkStateModel,
+  NodeNetworkStateModelGroupVersionKind,
+  NodeNetworkStateModelRef,
+} from '@models';
 import {
   ListPageBody,
   ListPageFilter,
@@ -13,7 +14,8 @@ import {
   useK8sWatchResource,
   useListPageFilter,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Button, Flex, Pagination } from '@patternfly/react-core';
+import { Button, Flex, Icon, Pagination } from '@patternfly/react-core';
+import { TopologyIcon } from '@patternfly/react-icons';
 import { Table, TableGridBreakpoint, Th, Thead, Tr } from '@patternfly/react-table';
 import { V1beta1NodeNetworkState } from '@types';
 import usePagination from '@utils/hooks/usePagination/usePagination';
@@ -33,7 +35,17 @@ import './states-list.scss';
 
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
-  const { selectedInterfaceName, selectedStateName, selectedInterfaceType } = useDrawerInterface();
+  const navigate = useNavigate();
+  const {
+    selectedInterfaceName,
+    selectedStateName,
+    selectedInterfaceType,
+    setSelectedInterfaceName,
+  } = useDrawerInterface();
+
+  const onClose = useCallback(() => {
+    setSelectedInterfaceName();
+  }, []);
 
   const [expandAll, setExpandAll] = useState(false);
 
@@ -62,10 +74,15 @@ const StatesList: FC = () => {
   const { sortedStates, nameSortParams } = useSortStates(filteredData);
 
   const paginatedData = sortedStates.slice(pagination?.startIndex, pagination?.endIndex + 1);
-
   return (
     <>
-      <ListPageHeader title={t(NodeNetworkStateModel.label)}></ListPageHeader>
+      <ListPageHeader title={t(NodeNetworkStateModel.label)}>
+        <Button isInline variant="plain" onClick={() => navigate('/nmstate-topology')}>
+          <Icon>
+            <TopologyIcon />
+          </Icon>
+        </Button>
+      </ListPageHeader>
       <ListPageBody>
         <StatusBox loaded={statesLoaded} error={statesError}>
           <div className="nns-list-management-group">
@@ -144,7 +161,7 @@ const StatesList: FC = () => {
           )}
         </StatusBox>
       </ListPageBody>
-      <InterfaceDrawer selectedInterface={selectedInterface} />
+      <InterfaceDrawer onClose={onClose} selectedInterface={selectedInterface} />
     </>
   );
 };
