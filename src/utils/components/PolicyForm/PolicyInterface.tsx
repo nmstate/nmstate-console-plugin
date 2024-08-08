@@ -29,14 +29,18 @@ import {
   AUTO_ROUTES,
   InterfaceType,
   NodeNetworkConfigurationInterface,
+  V1NodeNetworkConfigurationPolicy,
 } from '@types';
 
 import BondOptions from './BondOptions';
 import { DEFAULT_PREFIX_LENGTH, INTERFACE_TYPE_OPTIONS, NETWORK_STATES } from './constants';
 import CopyMAC from './CopyMAC';
-import { validateInterfaceName } from './utils';
+import { isOVSBridgeExisting, validateInterfaceName } from './utils';
 
-export type onInterfaceChangeType = (policyInterface: NodeNetworkConfigurationInterface) => void;
+export type onInterfaceChangeType = (
+  policyInterface: NodeNetworkConfigurationInterface,
+  policy: V1NodeNetworkConfigurationPolicy,
+) => void;
 
 type HandleSelectChange = FormSelectProps['onChange'];
 
@@ -64,12 +68,28 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
   };
 
   const handleTypechange: HandleSelectChange = (event, newType: string) => {
-    onInterfaceChange((draftInterface) => {
+    onInterfaceChange((draftInterface, draftPolicy) => {
       draftInterface.type = newType as InterfaceType;
+      !isOVSBridgeExisting(draftPolicy) && delete draftPolicy.spec.desiredState.ovn;
 
       if (newType === InterfaceType.LINUX_BRIDGE) {
         delete draftInterface['link-aggregation'];
         draftInterface.bridge = { port: [], options: { stp: { enabled: false } } };
+      }
+
+      if (newType === InterfaceType.OVS_BRIDGE) {
+        delete draftInterface['link-aggregation'];
+        draftInterface.bridge = { port: [], options: {} };
+        if (!draftPolicy?.spec?.desiredState?.ovn) {
+          draftPolicy.spec.desiredState.ovn = {
+            'bridge-mapping': [],
+          };
+        }
+        draftPolicy.spec.desiredState.ovn['bridge-mapping'].push({
+          bridge: '',
+          localnet: '',
+          state: 'present',
+        });
       }
 
       if (newType === InterfaceType.BOND) {
@@ -155,7 +175,10 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           : delete draftInterface['link-aggregation'].port;
       }
 
-      if (draftInterface.type === InterfaceType.LINUX_BRIDGE) {
+      if (
+        draftInterface.type === InterfaceType.LINUX_BRIDGE ||
+        draftInterface.type === InterfaceType.OVS_BRIDGE
+      ) {
         ensurePath(draftInterface, 'bridge.port');
         value
           ? (draftInterface.bridge.port = [{ name: value }])
@@ -346,7 +369,8 @@ const PolicyInterface: FC<PolicyInterfaceProps> = ({
           )}
         </FormGroup>
       )}
-      {policyInterface.type === InterfaceType.LINUX_BRIDGE && (
+      {(policyInterface.type === InterfaceType.LINUX_BRIDGE ||
+        policyInterface.type === InterfaceType.OVS_BRIDGE) && (
         <FormGroup fieldId={`policy-interface-stp-${id}`}>
           <Checkbox
             label={

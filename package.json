@@ -26,11 +26,12 @@
     "helm:build": "mkdir -p tmp && helm package -d tmp deployment/nmstate-console-plugin/"
   },
   "devDependencies": {
-    "@kubevirt-ui/kubevirt-api": "^0.0.47",
-    "@openshift-console/dynamic-plugin-sdk": "1.1.0",
-    "@openshift-console/dynamic-plugin-sdk-webpack": "1.0.1",
-    "@openshift/dynamic-plugin-sdk": "~1.0.0",
-    "@openshift/dynamic-plugin-sdk-webpack": "~1.0.0",
+    "@kubevirt-ui/kubevirt-api": "^1.2.2",
+    "@openshift-console/dynamic-plugin-sdk": "1.4.0",
+    "@openshift-console/dynamic-plugin-sdk-webpack": "1.1.1",
+    "@openshift/dynamic-plugin-sdk": "~5.0.1",
+    "@openshift/dynamic-plugin-sdk-webpack": "~4.1.0",
+    "@patternfly/react-icons": "^5.1.1",
     "@patternfly/react-core": "5.1.1",
     "@patternfly/react-table": "^5.1.1",
     "@testing-library/jest-dom": "^5.16.5",
