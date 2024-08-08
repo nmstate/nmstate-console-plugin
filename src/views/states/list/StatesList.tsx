@@ -1,9 +1,5 @@
 import React, { FC, useState } from 'react';
-import {
-  NodeNetworkStateModelGroupVersionKind,
-  NodeNetworkStateModelRef,
-} from 'src/console-models';
-import NodeNetworkStateModel from 'src/console-models/NodeNetworkStateModel';
+
 import { useNMStateTranslation } from 'src/utils/hooks/useNMStateTranslation';
 
 import {
@@ -30,6 +26,11 @@ import useStateColumns, { COLUMN_NAME_ID } from './hooks/useStateColumns';
 import { useStateFilters, useStateSearchFilters } from './hooks/useStateFilters';
 
 import './states-list.scss';
+import {
+  NodeNetworkStateModelGroupVersionKind,
+  NodeNetworkStateModel,
+  NodeNetworkStateModelRef,
+} from '@models';
 
 const StatesList: FC = () => {
   const { t } = useNMStateTranslation();
