@@ -3,6 +3,7 @@ import type { ConsolePluginMetadata } from '@openshift-console/dynamic-plugin-sd
 
 import { PolicyExposedModules, PolicyExtensions } from './src/views/policies/manifest';
 import { StateExposedModules, StateExtensions } from './src/views/states/manifest';
+import { TopologyExposedModules, TopologyExtensions } from './src/views/topology/manifest';
 
 export const pluginMetadata = {
   name: 'nmstate-console-plugin',
@@ -13,10 +14,15 @@ export const pluginMetadata = {
   exposedModules: {
     ...PolicyExposedModules,
     ...StateExposedModules,
+    ...TopologyExposedModules,
   },
   dependencies: {
     '@console/pluginAPI': '*',
   },
 } as ConsolePluginMetadata;
 
-export const extensions: EncodedExtension[] = [...PolicyExtensions, ...StateExtensions];
+export const extensions: EncodedExtension[] = [
+  ...PolicyExtensions,
+  ...StateExtensions,
+  ...TopologyExtensions,
+];
