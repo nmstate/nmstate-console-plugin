@@ -9,7 +9,7 @@ export const pluginMetadata = {
   version: '0.0.1',
   displayName: 'OpenShift Console Plugin For NMState',
   description:
-    'NMState  is a library that manages host netowrking settings in a declarative manner.',
+    'NMState  is a library that manages host networking settings in a declarative manner.',
   exposedModules: {
     ...PolicyExposedModules,
     ...StateExposedModules,
