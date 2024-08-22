@@ -19,7 +19,7 @@ describe('Create new policy with form', () => {
   it('with bridge interface', () => {
     const testPolicyName = 'test-bridge-policy-name';
     cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
-    cy.contains('button[type="button"]', 'Create').click();
+    cy.byTestID('item-create').click();
 
     cy.contains('button', 'From Form').click();
 
@@ -42,7 +42,7 @@ describe('Create new policy with form', () => {
   it('with bridge and bond interface', () => {
     const testPolicyName = 'test-bridge-bond-policy-name';
     cy.visit('/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy');
-    cy.contains('button[type="button"]', 'Create').click();
+    cy.byTestID('item-create').click();
 
     cy.contains('button', 'From Form').click();
 

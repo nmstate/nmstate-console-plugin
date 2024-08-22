@@ -1,25 +1,21 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 
 import { Modal, Title } from '@patternfly/react-core';
 import { NodeNetworkConfigurationInterface } from '@types';
 import { useNMStateTranslation } from '@utils/hooks/useNMStateTranslation';
-
-import useDrawerInterface from '../../hooks/useDrawerInterface';
 
 import { InterfaceDrawerTabId, InterfaceDrawerTabProps } from './constants';
 import InterfaceDrawerDetailsTab from './InterfaceDrawerDetailsTab';
 import InterfaceDrawerYAMLFooter from './InterfaceDrawerFooter';
 import InterfaceDrawerYAMLTab from './InterfaceDrawerYAMLTab';
 
-const InterfaceDrawer: FC<{ selectedInterface: NodeNetworkConfigurationInterface }> = ({
-  selectedInterface,
-}) => {
-  const { t } = useNMStateTranslation();
-  const { setSelectedInterfaceName } = useDrawerInterface();
+type InterfaceDrawerProps = {
+  selectedInterface: NodeNetworkConfigurationInterface;
+  onClose: () => void;
+};
 
-  const onClose = useCallback(() => {
-    setSelectedInterfaceName();
-  }, []);
+const InterfaceDrawer: FC<InterfaceDrawerProps> = ({ selectedInterface, onClose }) => {
+  const { t } = useNMStateTranslation();
 
   const Tabs: InterfaceDrawerTabProps[] = [
     {

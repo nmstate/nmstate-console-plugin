@@ -2,7 +2,7 @@ import { K8sModel } from '@openshift-console/dynamic-plugin-sdk/lib/api/common-t
 
 import { modelToGroupVersionKind, modelToRef } from './modelUtils';
 
-const NodeNetworkStateModel: K8sModel = {
+export const NodeNetworkStateModel: K8sModel = {
   label: 'NodeNetworkState',
   labelPlural: 'NodeNetworkStates',
   apiVersion: 'v1beta1',
@@ -17,5 +17,3 @@ const NodeNetworkStateModel: K8sModel = {
 
 export const NodeNetworkStateModelGroupVersionKind = modelToGroupVersionKind(NodeNetworkStateModel);
 export const NodeNetworkStateModelRef = modelToRef(NodeNetworkStateModel);
-
-export default NodeNetworkStateModel;

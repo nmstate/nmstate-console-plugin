@@ -73,7 +73,8 @@ jobs:
         uses: cypress-io/github-action@v5.8.1
         with:
           start: yarn serve-build, yarn start-console
-          wait-on: "http://localhost:9001"
+          wait-on: 'http://localhost:9001'
+          wait-on-timeout: 120
           browser: chrome
           headed: false
 

@@ -42,4 +42,8 @@ export interface NodeNetworkConfigurationInterface {
     'base-iface': string;
     protocol?: string;
   };
+
+  patch?: {
+    peer?: string;
+  };
 }
