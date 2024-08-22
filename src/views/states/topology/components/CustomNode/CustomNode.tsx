@@ -8,7 +8,9 @@ import {
   WithSelectionProps,
 } from '@patternfly/react-topology';
 
-import { ICON_SIZE } from '../utils/constants';
+import { ICON_SIZE } from '../../utils/constants';
+
+import './CustomNode.scss';
 
 type CustomNodeProps = {
   element: Node;
@@ -16,7 +18,7 @@ type CustomNodeProps = {
   WithDragNodeProps &
   WithDndDropProps;
 
-const CustomNode: FC<CustomNodeProps> = ({ element, onSelect, selected }) => {
+const CustomNode: FC<CustomNodeProps> = ({ element, onSelect, selected, ...rest }) => {
   const data = element.getData();
   const Icon = data.icon;
   const { width, height } = element.getBounds();
@@ -26,11 +28,13 @@ const CustomNode: FC<CustomNodeProps> = ({ element, onSelect, selected }) => {
 
   return (
     <DefaultNode
+      className="custom-node"
       badge={data.badge}
       element={element}
       onSelect={onSelect}
       selected={selected}
       truncateLength={8}
+      {...rest}
     >
       <g transform={`translate(${xCenter}, ${yCenter})`}>
         <Icon width={ICON_SIZE} height={ICON_SIZE} />

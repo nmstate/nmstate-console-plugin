@@ -1,4 +1,4 @@
-import { NetworkIcon } from '@patternfly/react-icons';
+import { EthernetIcon, LinkIcon, NetworkIcon } from '@patternfly/react-icons';
 import {
   EdgeModel,
   Model,
@@ -7,7 +7,7 @@ import {
   NodeShape,
   NodeStatus,
 } from '@patternfly/react-topology';
-import { NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
+import { InterfaceType, NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
 
 import { GROUP, NODE_DIAMETER } from './constants';
 
@@ -17,29 +17,38 @@ const statusMap: { [key: string]: NodeStatus } = {
   absent: NodeStatus.warning,
 };
 
-export const getStatus = (iface: NodeNetworkConfigurationInterface): NodeStatus => {
+const getStatus = (iface: NodeNetworkConfigurationInterface): NodeStatus => {
   return statusMap[iface.state.toLowerCase()] || NodeStatus.default;
+};
+
+const getIcon = (iface: NodeNetworkConfigurationInterface) => {
+  if (iface.ethernet || iface.type === InterfaceType.ETHERNET) return EthernetIcon;
+  if (iface.type === InterfaceType.BOND) return LinkIcon;
+  return NetworkIcon;
 };
 
 const createNodes = (
   nnsName: string,
   interfaces: NodeNetworkConfigurationInterface[],
 ): NodeModel[] => {
-  return interfaces.map((iface) => ({
-    id: `${nnsName}~${iface.name}`,
-    type: ModelKind.node,
-    label: iface.name,
-    width: NODE_DIAMETER,
-    height: NODE_DIAMETER,
-    visible: !iface.patch,
-    shape: NodeShape.ellipse,
-    status: getStatus(iface),
-    data: {
-      badge: 'I',
-      icon: NetworkIcon,
-    },
-    parent: nnsName,
-  }));
+  return interfaces.map((iface) => {
+    const icon = getIcon(iface);
+    return {
+      id: `${nnsName}~${iface.name}`,
+      type: ModelKind.node,
+      label: iface.name,
+      width: NODE_DIAMETER,
+      height: NODE_DIAMETER,
+      visible: !iface.patch && iface.type !== InterfaceType.LOOPBACK,
+      shape: NodeShape.circle,
+      status: getStatus(iface),
+      data: {
+        badge: 'I',
+        icon,
+      },
+      parent: nnsName,
+    };
+  });
 };
 
 const createEdges = (
@@ -47,7 +56,7 @@ const createEdges = (
   interfaces: NodeNetworkConfigurationInterface[],
 ): EdgeModel[] => {
   const edges: EdgeModel[] = [];
-  const patchConnections: { [key: string]: string } = {}; // Track patch connections
+  const patchConnections: { [key: string]: string } = {};
 
   interfaces.forEach((iface: NodeNetworkConfigurationInterface) => {
     if (iface.patch?.peer) {
@@ -112,13 +121,14 @@ const createEdges = (
   return edges;
 };
 
-const createGroupNode = (nnsName: string, childNodeIds: string[]): NodeModel => {
+const createGroupNode = (nnsName: string, childNodeIds: string[], visible: boolean): NodeModel => {
   return {
     id: nnsName,
     type: GROUP,
     label: nnsName,
     group: true,
     children: childNodeIds,
+    visible,
     style: {
       padding: 40,
     },
@@ -128,7 +138,10 @@ const createGroupNode = (nnsName: string, childNodeIds: string[]): NodeModel => 
   };
 };
 
-export const transformDataToTopologyModel = (data: V1beta1NodeNetworkState[]): Model => {
+export const transformDataToTopologyModel = (
+  data: V1beta1NodeNetworkState[],
+  filteredData?: V1beta1NodeNetworkState[], // Optional filtered data parameter
+): Model => {
   const nodes: NodeModel[] = [];
   const edges: EdgeModel[] = [];
 
@@ -136,9 +149,16 @@ export const transformDataToTopologyModel = (data: V1beta1NodeNetworkState[]): M
     const nnsName = nodeState.metadata.name;
 
     const childNodes = createNodes(nnsName, nodeState.status.currentState.interfaces);
+
+    // Determine visibility based on whether filteredData includes this nodeState
+    const isVisible = filteredData
+      ? filteredData.some((filteredState) => filteredState.metadata.name === nnsName)
+      : true;
+
     const groupNode = createGroupNode(
       nnsName,
       childNodes.map((child) => child.id),
+      isVisible,
     );
     const nodeEdges = createEdges(nnsName, nodeState.status.currentState.interfaces);
 
