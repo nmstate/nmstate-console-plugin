@@ -8,6 +8,8 @@ import {
   WithSelectionProps,
 } from '@patternfly/react-topology';
 
+import './CustomGroup.scss';
+
 type CustomGroupProps = {
   element: Node;
 } & WithSelectionProps &
@@ -17,7 +19,7 @@ type CustomGroupProps = {
 const CustomGroup: FC<CustomGroupProps> = ({ element, ...rest }) => {
   const data = element.getData();
 
-  return <DefaultGroup badge={data?.badge} element={element} {...rest} />;
+  return <DefaultGroup className="custom-group" badge={data?.badge} element={element} {...rest} />;
 };
 
 export default CustomGroup;

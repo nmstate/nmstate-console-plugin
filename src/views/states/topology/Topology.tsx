@@ -17,13 +17,14 @@ import { V1beta1NodeNetworkState } from '@types';
 
 import TopologySidebar from './components/TopologySidebar/TopologySidebar';
 import TopologyToolbar from './components/TopologyToolbar/TopologyToolbar';
+import { GRAPH_POSITIONING_EVENT, NODE_POSITIONING_EVENT } from './utils/constants';
 import { componentFactory, layoutFactory } from './utils/factory';
+import { restoreNodePositions, saveNodePositions } from './utils/position';
 import { transformDataToTopologyModel } from './utils/utils';
 
 const Topology: FC = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [visualization, setVisualization] = useState<Visualization>(null);
-
   const [selectedNodeFilters, setSelectedNodeFilters] = useState<string[]>([]);
 
   const [states, loaded, error] = useK8sWatchResource<V1beta1NodeNetworkState[]>({
@@ -39,12 +40,12 @@ const Topology: FC = () => {
 
   useEffect(() => {
     if (loaded && !error) {
-      const topologyModel =
+      const filteredStates =
         selectedNodeFilters.length > 0
-          ? transformDataToTopologyModel(
-              states.filter((state) => selectedNodeFilters.includes(state.metadata.name)),
-            )
-          : transformDataToTopologyModel(states);
+          ? states.filter((state) => selectedNodeFilters.includes(state.metadata.name))
+          : undefined;
+
+      const topologyModel = transformDataToTopologyModel(states, filteredStates);
 
       if (!visualization) {
         const newVisualization = new Visualization();
@@ -53,12 +54,26 @@ const Topology: FC = () => {
         newVisualization.addEventListener(SELECTION_EVENT, setSelectedIds);
         newVisualization.setFitToScreenOnLayout(true);
         newVisualization.fromModel(topologyModel);
+        restoreNodePositions(newVisualization);
+
         setVisualization(newVisualization);
       } else {
         visualization.fromModel(topologyModel);
+        restoreNodePositions(visualization);
       }
     }
   }, [states, loaded, error, selectedNodeFilters]);
+
+  useEffect(() => {
+    if (visualization) {
+      visualization.addEventListener(NODE_POSITIONING_EVENT, () =>
+        saveNodePositions(visualization),
+      );
+      visualization.addEventListener(GRAPH_POSITIONING_EVENT, () =>
+        saveNodePositions(visualization),
+      );
+    }
+  }, [visualization]);
 
   return (
     <TopologyView
