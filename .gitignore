@@ -109,3 +109,4 @@ cypress/screenshots
 ## Helm gitignore
 
 tmp/
+.DS_Store
