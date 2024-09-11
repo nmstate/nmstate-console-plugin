@@ -1,0 +1,1 @@
+export const FLAG_NMSTATE_DYNAMIC = 'NMSTATE_DYNAMIC';

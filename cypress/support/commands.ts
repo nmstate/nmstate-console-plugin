@@ -18,6 +18,7 @@ declare global {
         options?: Partial<Loggable & Timeoutable & Withinable & Shadow>,
       ): Chainable;
       byLegacyTestID(selector: string): Chainable;
+      clickOutside(): Chainable;
     }
   }
 }
@@ -83,3 +84,7 @@ Cypress.Commands.add('byTestID', (selector, options) =>
 );
 
 Cypress.Commands.add('byLegacyTestID', (selector) => cy.get(`[data-test-id="${selector}"]`));
+
+Cypress.Commands.add('clickOutside', () => {
+  return cy.get('body').click(0, 0); //0,0 here are the x and y coordinates
+});
