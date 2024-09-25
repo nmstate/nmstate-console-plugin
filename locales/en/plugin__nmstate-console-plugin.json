@@ -138,6 +138,7 @@
   "Server": "Server",
   "System Description": "System Description",
   "System Name": "System Name",
+  "Tech preview": "Tech preview",
   "The Open vSwitch bridge mapping is a list of Open vSwitch bridges and the physical interfaces that are connected to them.": "The Open vSwitch bridge mapping is a list of Open vSwitch bridges and the physical interfaces that are connected to them.",
   "This is the list of ports to copy MAC address from. Select one of the matched ports this policy will apply to": "This is the list of ports to copy MAC address from. Select one of the matched ports this policy will apply to",
   "This node already has a policy matching it": "This node already has a policy matching it",

@@ -2,14 +2,14 @@ import type { EncodedExtension } from '@openshift/dynamic-plugin-sdk';
 import type {
   ResourceClusterNavItem,
   ResourceListPage,
-  // RoutePage,
+  RoutePage,
 } from '@openshift-console/dynamic-plugin-sdk';
 
 import { NodeNetworkStateModelGroupVersionKind } from '../../console-models';
 
 export const StateExposedModules = {
   StatesList: './views/states/list/StatesList',
-  // Topology: './views/states/topology/Topology',
+  Topology: './views/states/topology/Topology',
 };
 
 export const StateExtensions: EncodedExtension[] = [
@@ -35,13 +35,13 @@ export const StateExtensions: EncodedExtension[] = [
       component: { $codeRef: 'StatesList' },
     },
   } as EncodedExtension<ResourceListPage>,
-  // {
-  //   type: 'console.page/route',
-  //   properties: {
-  //     path: ['nmstate-topology'],
-  //     component: {
-  //       $codeRef: 'Topology',
-  //     },
-  //   },
-  // } as EncodedExtension<RoutePage>,
+  {
+    type: 'console.page/route',
+    properties: {
+      path: ['nmstate-topology'],
+      component: {
+        $codeRef: 'Topology',
+      },
+    },
+  } as EncodedExtension<RoutePage>,
 ];
