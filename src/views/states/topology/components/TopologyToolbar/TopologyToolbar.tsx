@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 import { NodeNetworkStateModelRef } from '@models';
 import { Button, Toolbar, ToolbarContent, ToolbarGroup, ToolbarItem } from '@patternfly/react-core';
 import { ListIcon } from '@patternfly/react-icons';
+import TechPreview from '@utils/components/TechPreview/TechPreview';
 
 import TopologyToolbarFilter from './TopologyToolbarFilter';
 
@@ -24,6 +25,7 @@ const TopologyButton: FC<TopologyToolbarProps> = (props) => {
       <ToolbarContent className="topology-toolbar__content">
         <ToolbarGroup>
           <TopologyToolbarFilter {...props} />
+          <TechPreview />
         </ToolbarGroup>
         <ToolbarGroup>
           <ToolbarItem className="list-view-btn">

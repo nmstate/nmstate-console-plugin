@@ -8,6 +8,9 @@ import {
   NodeStatus,
 } from '@patternfly/react-topology';
 import { InterfaceType, NodeNetworkConfigurationInterface, V1beta1NodeNetworkState } from '@types';
+import { isEmpty } from '@utils/helpers';
+
+import BridgeIcon from '../components/BridgeIcon';
 
 import { GROUP, NODE_DIAMETER } from './constants';
 
@@ -22,6 +25,7 @@ const getStatus = (iface: NodeNetworkConfigurationInterface): NodeStatus => {
 };
 
 const getIcon = (iface: NodeNetworkConfigurationInterface) => {
+  if (!isEmpty(iface.bridge)) return BridgeIcon;
   if (iface.ethernet || iface.type === InterfaceType.ETHERNET) return EthernetIcon;
   if (iface.type === InterfaceType.BOND) return LinkIcon;
   return NetworkIcon;
@@ -95,7 +99,7 @@ const createEdges = (
       });
     }
 
-    if (iface.vlan?.['base-iface'] && iface.name !== iface.vlan?.['base-iface']) {
+    if (iface.vlan?.['base-iface'] && iface.name === iface.vlan?.['base-iface']) {
       edges.push({
         id: `${nodeId}~${iface.vlan['base-iface']}-edge`,
         type: ModelKind.edge,
