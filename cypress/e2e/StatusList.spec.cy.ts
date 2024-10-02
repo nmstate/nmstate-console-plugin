@@ -3,7 +3,6 @@ import {
   EXPAND_INTERFACES_LIST_TEST_ID,
   INTERFACE_DRAWER_TEST_ID,
   LLDP_DRAWER_DETAILS_SECTION_TEST_ID,
-  LLDP_ENABLED_FILTER,
   SEARCH_FILTER_DROPDOWN,
 } from '../support/selectors';
 
@@ -105,9 +104,10 @@ describe('NodeNetworkState list', () => {
       cy.get('table').should('contain', nns.metadata.name);
 
       // open filter toolbar
-      cy.get('button').contains('Filter').click();
+      cy.get('button').contains('Filter').click({ force: true });
 
-      cy.get(LLDP_ENABLED_FILTER).check();
+      // filter by lldp enabled
+      cy.contains('label', 'Enabled').find('input[type="checkbox"]').check();
 
       // close filter toolbar by clicking outside
       cy.clickOutside();
