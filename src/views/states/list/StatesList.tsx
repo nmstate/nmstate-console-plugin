@@ -18,6 +18,7 @@ import { Button, Flex, Icon, Pagination } from '@patternfly/react-core';
 import { TopologyIcon } from '@patternfly/react-icons';
 import { Table, TableGridBreakpoint, Th, Thead, Tr } from '@patternfly/react-table';
 import { V1beta1NodeNetworkState } from '@types';
+import { isEmpty } from '@utils/helpers';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 
@@ -77,11 +78,13 @@ const StatesList: FC = () => {
   return (
     <>
       <ListPageHeader title={t(NodeNetworkStateModel.label)}>
-        <Button isInline variant="plain" onClick={() => navigate('/nmstate-topology')}>
-          <Icon>
-            <TopologyIcon />
-          </Icon>
-        </Button>
+        {!isEmpty(states) && (
+          <Button isInline variant="plain" onClick={() => navigate('/nmstate-topology')}>
+            <Icon>
+              <TopologyIcon />
+            </Icon>
+          </Button>
+        )}
       </ListPageHeader>
       <ListPageBody>
         <StatusBox loaded={statesLoaded} error={statesError}>

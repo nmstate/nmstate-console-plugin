@@ -25,7 +25,12 @@ const getStatus = (iface: NodeNetworkConfigurationInterface): NodeStatus => {
 };
 
 const getIcon = (iface: NodeNetworkConfigurationInterface) => {
-  if (!isEmpty(iface.bridge)) return BridgeIcon;
+  if (
+    iface.bridge ||
+    iface.type === InterfaceType.OVS_BRIDGE ||
+    iface.type === InterfaceType.LINUX_BRIDGE
+  )
+    return BridgeIcon;
   if (iface.ethernet || iface.type === InterfaceType.ETHERNET) return EthernetIcon;
   if (iface.type === InterfaceType.BOND) return LinkIcon;
   return NetworkIcon;
@@ -34,91 +39,82 @@ const getIcon = (iface: NodeNetworkConfigurationInterface) => {
 const createNodes = (
   nnsName: string,
   interfaces: NodeNetworkConfigurationInterface[],
-): NodeModel[] => {
-  return interfaces.map((iface) => {
-    const icon = getIcon(iface);
-    return {
-      id: `${nnsName}~${iface.name}`,
-      type: ModelKind.node,
-      label: iface.name,
-      width: NODE_DIAMETER,
-      height: NODE_DIAMETER,
-      visible: !iface.patch && iface.type !== InterfaceType.LOOPBACK,
-      shape: NodeShape.circle,
-      status: getStatus(iface),
-      data: {
-        badge: 'I',
-        icon,
-      },
-      parent: nnsName,
-    };
-  });
-};
+): NodeModel[] =>
+  interfaces.map((iface) => ({
+    id: `${nnsName}~${iface.name}~${iface.type}`,
+    type: ModelKind.node,
+    label: iface.name,
+    width: NODE_DIAMETER,
+    height: NODE_DIAMETER,
+    visible: !iface.patch && iface.type !== InterfaceType.LOOPBACK,
+    shape: NodeShape.circle,
+    status: getStatus(iface),
+    data: {
+      icon: getIcon(iface),
+      type: iface.type,
+      bridgePorts: iface.bridge?.port,
+      bondPorts: iface['link-aggregation']?.port,
+      vlanBaseInterface: iface.vlan?.['base-iface'],
+    },
+    parent: nnsName,
+  }));
 
-const createEdges = (
-  nnsName: string,
-  interfaces: NodeNetworkConfigurationInterface[],
-): EdgeModel[] => {
+const createEdges = (childNodes: NodeModel[]): EdgeModel[] => {
   const edges: EdgeModel[] = [];
-  const patchConnections: { [key: string]: string } = {};
 
-  interfaces.forEach((iface: NodeNetworkConfigurationInterface) => {
-    if (iface.patch?.peer) {
-      patchConnections[iface.name] = iface.patch.peer;
-    }
-  });
+  childNodes.forEach((sourceNode) => {
+    // Find bridge connections
+    if (!isEmpty(sourceNode.data?.bridgePorts)) {
+      sourceNode.data?.bridgePorts.forEach((port) => {
+        const targetNode = childNodes.find(
+          (target) => target.label === port.name && target.id !== sourceNode.id,
+        );
 
-  interfaces.forEach((iface: NodeNetworkConfigurationInterface) => {
-    const nodeId = `${nnsName}~${iface.name}`;
-
-    if (iface.bridge?.port) {
-      iface.bridge.port.forEach((prt) => {
-        if (patchConnections[prt.name]) {
-          const peerPatch = patchConnections[prt.name];
-          const peerBridge = interfaces.find((intf) =>
-            intf.bridge?.port.some((p) => p.name === peerPatch),
-          );
-
-          if (peerBridge) {
-            const peerBridgeId = `${nnsName}~${peerBridge.name}`;
-            edges.push({
-              id: `${nodeId}~${peerBridgeId}-edge`,
-              type: ModelKind.edge,
-              source: nodeId,
-              target: peerBridgeId,
-            });
-          }
-        } else if (prt.name && iface.name !== prt.name) {
+        if (!isEmpty(targetNode)) {
           edges.push({
-            id: `${nodeId}~${prt.name}-edge`,
+            id: `${sourceNode.id}~${targetNode.id}-edge`,
             type: ModelKind.edge,
-            source: nodeId,
-            target: `${nnsName}~${prt.name}`,
+            source: sourceNode.id,
+            target: targetNode.id,
           });
         }
       });
     }
 
-    if (iface.vlan?.['base-iface'] && iface.name === iface.vlan?.['base-iface']) {
-      edges.push({
-        id: `${nodeId}~${iface.vlan['base-iface']}-edge`,
-        type: ModelKind.edge,
-        source: nodeId,
-        target: `${nnsName}~${iface.vlan['base-iface']}`,
-      });
-    }
+    // Find bond connections
+    if (!isEmpty(sourceNode.data?.vlanBaseInterface)) {
+      sourceNode.data?.bondPorts.forEach((port) => {
+        const targetNode = childNodes.find(
+          (target) => target.label === port && target.id !== sourceNode.id,
+        );
 
-    if (iface['link-aggregation']?.port) {
-      iface['link-aggregation'].port.forEach((prt: string) => {
-        if (iface.name !== prt) {
+        if (!isEmpty(targetNode)) {
           edges.push({
-            id: `${nodeId}~${prt}-edge`,
+            id: `${sourceNode.id}~${targetNode.id}-edge`,
             type: ModelKind.edge,
-            source: nodeId,
-            target: `${nnsName}~${prt}`,
+            source: sourceNode.id,
+            target: targetNode.id,
           });
         }
       });
+    }
+
+    // Find vlan connections
+    if (!isEmpty(sourceNode.data?.bondPorts)) {
+      const baseInterface = sourceNode.data?.vlanBaseInterface;
+
+      const targetNode = childNodes.find(
+        (target) => target.label === baseInterface && target.id !== sourceNode.id,
+      );
+
+      if (!isEmpty(targetNode)) {
+        edges.push({
+          id: `${sourceNode.id}~${targetNode.id}-edge`,
+          type: ModelKind.edge,
+          source: sourceNode.id,
+          target: targetNode.id,
+        });
+      }
     }
   });
 
@@ -144,7 +140,7 @@ const createGroupNode = (nnsName: string, childNodeIds: string[], visible: boole
 
 export const transformDataToTopologyModel = (
   data: V1beta1NodeNetworkState[],
-  filteredData?: V1beta1NodeNetworkState[], // Optional filtered data parameter
+  filteredData?: V1beta1NodeNetworkState[],
 ): Model => {
   const nodes: NodeModel[] = [];
   const edges: EdgeModel[] = [];
@@ -154,7 +150,6 @@ export const transformDataToTopologyModel = (
 
     const childNodes = createNodes(nnsName, nodeState.status.currentState.interfaces);
 
-    // Determine visibility based on whether filteredData includes this nodeState
     const isVisible = filteredData
       ? filteredData.some((filteredState) => filteredState.metadata.name === nnsName)
       : true;
@@ -164,9 +159,10 @@ export const transformDataToTopologyModel = (
       childNodes.map((child) => child.id),
       isVisible,
     );
-    const nodeEdges = createEdges(nnsName, nodeState.status.currentState.interfaces);
-
     nodes.push(groupNode, ...childNodes);
+
+    const nodeEdges = createEdges(childNodes);
+
     edges.push(...nodeEdges);
   });
 

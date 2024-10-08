@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import { NodeNetworkStateModelGroupVersionKind } from '@models';
-import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { ListPageBody, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import {
   action,
   createTopologyControlButtons,
@@ -14,6 +14,8 @@ import {
   VisualizationSurface,
 } from '@patternfly/react-topology';
 import { V1beta1NodeNetworkState } from '@types';
+import AccessDenied from '@utils/components/AccessDenied/AccessDenied';
+import { isEmpty } from '@utils/helpers';
 
 import TopologySidebar from './components/TopologySidebar/TopologySidebar';
 import TopologyToolbar from './components/TopologyToolbar/TopologyToolbar';
@@ -39,84 +41,83 @@ const Topology: FC = () => {
   );
 
   useEffect(() => {
-    if (loaded && !error) {
-      const filteredStates =
-        selectedNodeFilters.length > 0
-          ? states.filter((state) => selectedNodeFilters.includes(state.metadata.name))
-          : undefined;
+    if (!loaded || error || isEmpty(states)) return;
 
-      const topologyModel = transformDataToTopologyModel(states, filteredStates);
+    const filteredStates = !isEmpty(selectedNodeFilters)
+      ? states.filter((state) => selectedNodeFilters.includes(state.metadata.name))
+      : undefined;
 
-      if (!visualization) {
-        const newVisualization = new Visualization();
-        newVisualization.registerLayoutFactory(layoutFactory);
-        newVisualization.registerComponentFactory(componentFactory);
-        newVisualization.addEventListener(SELECTION_EVENT, setSelectedIds);
-        newVisualization.setFitToScreenOnLayout(true);
-        newVisualization.fromModel(topologyModel);
-        restoreNodePositions(newVisualization);
+    const topologyModel = transformDataToTopologyModel(states, filteredStates);
 
-        setVisualization(newVisualization);
-      } else {
-        visualization.fromModel(topologyModel);
-        restoreNodePositions(visualization);
-      }
+    if (!visualization) {
+      const newVisualization = new Visualization();
+      newVisualization.registerLayoutFactory(layoutFactory);
+      newVisualization.registerComponentFactory(componentFactory);
+      newVisualization.addEventListener(SELECTION_EVENT, setSelectedIds);
+      newVisualization.addEventListener(NODE_POSITIONING_EVENT, () =>
+        saveNodePositions(newVisualization),
+      );
+      newVisualization.addEventListener(GRAPH_POSITIONING_EVENT, () =>
+        saveNodePositions(newVisualization),
+      );
+      newVisualization.setFitToScreenOnLayout(true);
+      newVisualization.fromModel(topologyModel, false);
+      restoreNodePositions(newVisualization);
+      setVisualization(newVisualization);
+    } else {
+      visualization.fromModel(topologyModel);
     }
   }, [states, loaded, error, selectedNodeFilters]);
 
-  useEffect(() => {
-    if (visualization) {
-      visualization.addEventListener(NODE_POSITIONING_EVENT, () =>
-        saveNodePositions(visualization),
-      );
-      visualization.addEventListener(GRAPH_POSITIONING_EVENT, () =>
-        saveNodePositions(visualization),
-      );
-    }
-  }, [visualization]);
+  if (error && error?.response?.status === 403)
+    return (
+      <ListPageBody>
+        <AccessDenied message={error.message} />
+      </ListPageBody>
+    );
 
   return (
-    <TopologyView
-      sideBar={
-        <TopologySidebar
-          states={states}
-          selectedIds={selectedIds}
-          setSelectedIds={setSelectedIds}
-        />
-      }
-      viewToolbar={
-        <TopologyToolbar
-          nodeNames={nodeNames}
-          selectedNodeFilters={selectedNodeFilters}
-          setSelectedNodeFilters={setSelectedNodeFilters}
-        />
-      }
-      controlBar={
-        <TopologyControlBar
-          controlButtons={createTopologyControlButtons({
-            ...defaultControlButtonsOptions,
-            zoomInCallback: action(() => {
-              visualization.getGraph().scaleBy(4 / 3);
-            }),
-            zoomOutCallback: action(() => {
-              visualization.getGraph().scaleBy(0.75);
-            }),
-            fitToScreenCallback: action(() => {
-              visualization.getGraph().fit(40);
-            }),
-            resetViewCallback: action(() => {
-              visualization.getGraph().reset();
-              visualization.getGraph().layout();
-            }),
-            legend: false,
-          })}
-        />
-      }
-    >
-      <VisualizationProvider controller={visualization}>
+    <VisualizationProvider controller={visualization}>
+      <TopologyView
+        sideBar={
+          <TopologySidebar
+            states={states}
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+          />
+        }
+        viewToolbar={
+          <TopologyToolbar
+            nodeNames={nodeNames}
+            selectedNodeFilters={selectedNodeFilters}
+            setSelectedNodeFilters={setSelectedNodeFilters}
+          />
+        }
+        controlBar={
+          <TopologyControlBar
+            controlButtons={createTopologyControlButtons({
+              ...defaultControlButtonsOptions,
+              zoomInCallback: action(() => {
+                visualization.getGraph().scaleBy(4 / 3);
+              }),
+              zoomOutCallback: action(() => {
+                visualization.getGraph().scaleBy(0.75);
+              }),
+              fitToScreenCallback: action(() => {
+                visualization.getGraph().fit(40);
+              }),
+              resetViewCallback: action(() => {
+                visualization.getGraph().reset();
+                visualization.getGraph().layout();
+              }),
+              legend: false,
+            })}
+          />
+        }
+      >
         <VisualizationSurface state={{ selectedIds }} />
-      </VisualizationProvider>
-    </TopologyView>
+      </TopologyView>
+    </VisualizationProvider>
   );
 };
 
