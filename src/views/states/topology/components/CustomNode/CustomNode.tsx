@@ -18,24 +18,15 @@ type CustomNodeProps = {
   WithDragNodeProps &
   WithDndDropProps;
 
-const CustomNode: FC<CustomNodeProps> = ({ element, onSelect, selected, ...rest }) => {
+const CustomNode: FC<CustomNodeProps> = ({ element, ...rest }) => {
   const data = element.getData();
   const Icon = data.icon;
   const { width, height } = element.getBounds();
 
   const xCenter = (width - ICON_SIZE) / 2;
   const yCenter = (height - ICON_SIZE) / 2;
-
   return (
-    <DefaultNode
-      className="custom-node"
-      badge={data.badge}
-      element={element}
-      onSelect={onSelect}
-      selected={selected}
-      truncateLength={8}
-      {...rest}
-    >
+    <DefaultNode className="custom-node" element={element} truncateLength={8} {...rest}>
       <g transform={`translate(${xCenter}, ${yCenter})`}>
         <Icon width={ICON_SIZE} height={ICON_SIZE} />
       </g>
