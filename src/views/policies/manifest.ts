@@ -54,7 +54,6 @@ export const PolicyExtensions: EncodedExtension[] = [
         '/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy/~new/form',
         '/k8s/cluster/nmstate.io~v1~NodeNetworkConfigurationPolicy/~new/yaml',
       ],
-      perspective: 'admin',
       id: 'networking',
       name: '%plugin__nmstate-console-plugin~NodeNetworkConfigurationPolicy%',
       dataAttributes: {
