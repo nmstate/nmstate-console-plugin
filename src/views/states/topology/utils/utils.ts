@@ -62,10 +62,10 @@ const createNodes = (
 const createEdges = (childNodes: NodeModel[]): EdgeModel[] => {
   const edges: EdgeModel[] = [];
 
-  childNodes.forEach((sourceNode) => {
+  childNodes?.forEach((sourceNode) => {
     // Find bridge connections
     if (!isEmpty(sourceNode.data?.bridgePorts)) {
-      sourceNode.data?.bridgePorts.forEach((port) => {
+      sourceNode.data?.bridgePorts?.forEach((port) => {
         const targetNode = childNodes.find(
           (target) => target.label === port.name && target.id !== sourceNode.id,
         );
@@ -83,7 +83,7 @@ const createEdges = (childNodes: NodeModel[]): EdgeModel[] => {
 
     // Find bond connections
     if (!isEmpty(sourceNode.data?.vlanBaseInterface)) {
-      sourceNode.data?.bondPorts.forEach((port) => {
+      sourceNode.data?.bondPorts?.forEach((port) => {
         const targetNode = childNodes.find(
           (target) => target.label === port && target.id !== sourceNode.id,
         );
@@ -145,7 +145,7 @@ export const transformDataToTopologyModel = (
   const nodes: NodeModel[] = [];
   const edges: EdgeModel[] = [];
 
-  data.forEach((nodeState) => {
+  data?.forEach((nodeState) => {
     const nnsName = nodeState.metadata.name;
 
     const childNodes = createNodes(nnsName, nodeState.status.currentState.interfaces);
