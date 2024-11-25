@@ -63,7 +63,8 @@ jobs:
           sudo install kubectl /usr/local/bin/kubectl
       - name: Install podman
         run: |
-          sudo apt-get -y install podman
+          sudo apt-get update
+          sudo apt-get -y install podman --fix-missing
 
       - name: Create Cluster
         run: |
